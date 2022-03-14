@@ -8,6 +8,7 @@ class SignUpPage extends StatelessWidget {
     return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text("Привет!"),
           Text("Введите данные"),

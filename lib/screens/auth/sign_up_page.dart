@@ -1,30 +1,63 @@
+import 'package:crm_merchant/components/input_field.dart';
 import 'package:crm_merchant/constants/exports.dart';
+import 'package:crm_merchant/screens/auth/sms_checker_page.dart';
 
 class SignUpPage extends StatelessWidget {
   const SignUpPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text("Привет!"),
-          Text("Введите данные"),
-          Form(
-            child: Column(
-              children: [
-                TextFormField(),
-                TextFormField(),
-              ],
+    SignUpProvider contexPro = context.watch<SignUpProvider>();
+    return SafeArea(
+      child: Scaffold(
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: kHeight(72.0).h),
+            Padding(
+              padding: EdgeInsets.only(left: kWidth(140.0).w),
+              child: Text(
+                "Привет!",
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
             ),
-          ),
-          MainButton(
-            "Продолжить",
-            () {},
-          ),
-        ],
+            SizedBox(height: kHeight(80.0).h),
+            Padding(
+              padding: const EdgeInsets.only(left: kMainPadding),
+              child: Text(
+                "Введите данные",
+                style: Theme.of(context).textTheme.labelMedium,
+              ),
+            ),
+            SizedBox(height: kHeight(10.5).h),
+            Form(
+              key: contexPro.formKey,
+              child: Column(
+                children: [
+                  InputField(
+                    contexPro.nameController,
+                    "Введите ваше имя",
+                    TextInputType.name,
+                  ),
+                  InputField(
+                    contexPro.phoneController,
+                    "Введите ваш номер телефона",
+                    TextInputType.number,
+                    hasPrefix: true,
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: kHeight(100.0).h),
+            Padding(
+              padding: const EdgeInsets.only(left: kButHorPad),
+              child: MainButton(
+                "Продолжить",
+                () => Get.to(const SmsCheckerPage()),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

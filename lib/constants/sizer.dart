@@ -1,2 +1,2 @@
-double kHeight(double heigh) => heigh / 926;
-double kWidth(double widt) => widt / 428;
+double kHeight(double heigh) => heigh / 9.26;
+double kWidth(double widt) => widt / 4.28;

@@ -1,6 +1,11 @@
 export 'package:flutter/material.dart';
 export 'package:crm_merchant/components/main_button.dart';
 export 'package:sizer/sizer.dart';
+export 'package:provider/provider.dart';
 export 'package:crm_merchant/constants/paddings.dart';
 export 'package:crm_merchant/constants/sizer.dart';
 export 'package:crm_merchant/constants/colors.dart';
+export 'package:crm_merchant/providers/sign_up_providers.dart';
+export 'package:crm_merchant/providers/theme_provider.dart';
+export 'package:get/get_navigation/get_navigation.dart';
+export 'package:get/get.dart';

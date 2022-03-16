@@ -38,11 +38,21 @@ class SignUpPage extends StatelessWidget {
                     contexPro.nameController,
                     "Введите ваше имя",
                     TextInputType.name,
+                    (v) {
+                      if (v!.length < 2) return "";
+                      return null;
+                    },
+                    30,
                   ),
                   InputField(
                     contexPro.phoneController,
                     "Введите ваш номер телефона",
                     TextInputType.number,
+                    (v) {
+                      if (v!.length < 6) return "";
+                      return null;
+                    },
+                    7,
                     hasPrefix: true,
                   ),
                 ],
@@ -53,7 +63,9 @@ class SignUpPage extends StatelessWidget {
               padding: const EdgeInsets.only(left: kButHorPad),
               child: MainButton(
                 "Продолжить",
-                () => Get.to(const SmsCheckerPage()),
+                () => context.read<SignUpProvider>().isValidateFunc() == true
+                    ? Get.to(const SmsCheckerPage())
+                    : () {},
               ),
             ),
           ],

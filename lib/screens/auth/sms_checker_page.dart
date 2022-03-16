@@ -1,7 +1,5 @@
 import 'package:crm_merchant/constants/exports.dart';
 import 'package:crm_merchant/screens/home/home_page.dart';
-import 'package:flutter_countdown_timer/countdown.dart';
-import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 import 'package:pinput/pinput.dart';
 
 class SmsCheckerPage extends StatefulWidget {
@@ -11,8 +9,31 @@ class SmsCheckerPage extends StatefulWidget {
   State<SmsCheckerPage> createState() => _SmsCheckerPageState();
 }
 
-class _SmsCheckerPageState extends State<SmsCheckerPage> {
-  final CountdownTimer _leftTime = CountdownTimer(endTime: 30);
+class _SmsCheckerPageState extends State<SmsCheckerPage>
+    with SingleTickerProviderStateMixin {
+  TextEditingController smsChecker = TextEditingController();
+  AnimationController? _controller;
+  int levelClock = 30;
+
+  @override
+  void dispose() {
+    _controller!.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(
+        seconds: levelClock,
+      ),
+    );
+
+    _controller!.forward();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,72 +58,107 @@ class _SmsCheckerPageState extends State<SmsCheckerPage> {
                 style: Theme.of(context).textTheme.labelMedium,
               ),
             ),
-            _smsInputField(context),
+            _smsCode(context),
             Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: kWidth(157.0),
+              padding: EdgeInsets.only(
+                left: kWidth(140.0).w,
               ),
-              child: TextButton(
-                child: Text(
-                  "${_leftTime.endTime} сек Не пришло SMS ?",
-                  style: TextStyle(
-                    color: kBlackTextColor.withOpacity(0.5),
-                    fontSize: 12.0,
-                    fontWeight: FontWeight.w400,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Countdown(
+                    animation: StepTween(
+                      begin: levelClock,
+                      end: 0,
+                    ).animate(_controller!),
                   ),
-                ),
-                onPressed: () {},
+                  InkWell(
+                    child: Text(
+                      "Не пришло SMS ?",
+                      style: TextStyle(
+                        color: kBlackTextColor.withOpacity(0.5),
+                        fontSize: 12.0,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+
+                    // unreceived sms function
+                    onTap: () {},
+                  ),
+                ],
               ),
             ),
             SizedBox(height: kHeight(140.0).h),
-            Padding(
-              padding: const EdgeInsets.only(left: kButHorPad),
-              child: MainButton(
-                "Продолжить",
-                () => context
-                        .watch<SignUpProvider>()
-                        .pinputKey
-                        .currentState!
-                        .validate()
-                    ? Get.to(const HomePage())
-                    : () {},
-              ),
-            ),
+            _button(),
           ],
         ),
       ),
     );
   }
+
+  Padding _smsCode(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(
+        left: kWidth(99.0).w,
+        bottom: kHeight(15.0).h,
+        top: kHeight(15.0).h,
+      ),
+      child: Pinput(
+        controller: smsChecker,
+        preFilledWidget: Text(
+          "*",
+          style: TextStyle(
+            color: kBlackTextColor.withOpacity(0.5),
+            fontSize: 64.0,
+          ),
+        ),
+        closeKeyboardWhenCompleted: false,
+        defaultPinTheme: PinTheme(
+          width: kWidth(50.0).w,
+          height: kHeight(60.0).h,
+          decoration: BoxDecoration(
+            color: kWhiteColor,
+            borderRadius: BorderRadius.circular(10.0),
+            border: Border.all(
+              color: kBlackTextColor,
+              width: 1.0,
+            ),
+          ),
+          textStyle:
+              Theme.of(context).textTheme.titleMedium!.copyWith(fontSize: 48.0),
+        ),
+      ),
+    );
+  }
+
+  Padding _button() {
+    return Padding(
+      padding: const EdgeInsets.only(left: kButHorPad),
+      child: MainButton(
+        "Продолжить",
+        () => smsChecker.length == 4 ? Get.to(const HomePage()) : () {},
+      ),
+    );
+  }
 }
 
-Padding _smsInputField(BuildContext context) {
-  return Padding(
-    padding: EdgeInsets.only(
-      left: kWidth(99.0).w,
-      bottom: kHeight(15.0).h,
-      top: kHeight(15.0).h,
-    ),
-    child: Pinput(
-      key: context.watch<SignUpProvider>().pinputKey,
-      controller: context.watch<SignUpProvider>().smsChecker,
-      preFilledWidget: Text(
-        "*",
-        style: TextStyle(
-          color: kBlackTextColor.withOpacity(0.5),
-          fontSize: 64.0,
-        ),
+// ignore: must_be_immutable
+class Countdown extends AnimatedWidget {
+  Countdown({Key? key, required this.animation})
+      : super(key: key, listenable: animation);
+  Animation<int> animation;
+
+  @override
+  build(BuildContext context) {
+    Duration clockTimer = Duration(seconds: animation.value);
+    String timerText = clockTimer.inSeconds.remainder(60).toString();
+    return Text(
+      timerText + " сек  ",
+      style: TextStyle(
+        color: kBlackTextColor.withOpacity(0.5),
+        fontSize: 12.0,
+        fontWeight: FontWeight.w400,
       ),
-      closeKeyboardWhenCompleted: false,
-      defaultPinTheme: PinTheme(
-        width: kWidth(50.0).w,
-        height: kHeight(60.0).h,
-        decoration: BoxDecoration(
-          color: kWhiteColor,
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        textStyle:
-            Theme.of(context).textTheme.titleMedium!.copyWith(fontSize: 48.0),
-      ),
-    ),
-  );
+    );
+  }
 }

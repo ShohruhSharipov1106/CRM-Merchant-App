@@ -1,4 +1,3 @@
-import 'package:crm_merchant/components/input_field.dart';
 import 'package:crm_merchant/constants/exports.dart';
 import 'package:crm_merchant/screens/auth/sms_checker_page.dart';
 
@@ -43,16 +42,22 @@ class SignUpPage extends StatelessWidget {
                       return null;
                     },
                     30,
+                    "* * * * * * * * * * * * * * *",
+                    "##############################",
+                    {"#": RegExp(r'[A-Za-z]')},
                   ),
                   InputField(
                     contexPro.phoneController,
                     "Введите ваш номер телефона",
                     TextInputType.number,
                     (v) {
-                      if (v!.length < 6) return "";
+                      if (v!.length < 11) return "";
                       return null;
                     },
-                    7,
+                    12,
+                    "** *** ** ** ",
+                    "## ### ## ##",
+                    {"#": RegExp(r'[0-9]')},
                     hasPrefix: true,
                   ),
                 ],

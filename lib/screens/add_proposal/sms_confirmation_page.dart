@@ -46,87 +46,118 @@ class _AddProposalSmsConfirmationPageState
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: kHeight(50.0).h),
-          Stack(
-            children: [
-              SizedBox(
-                height: kHeight(123).h,
-                width: kWidth(175.0).w,
-                child: SvgPicture.asset(
-                  "assets/icons/main_icon.svg",
-                  height: kHeight(122.06).h,
-                  width: kWidth(131.12).w,
-                ),
-              ),
-              Positioned(
-                child: BounceInDown(
-                  duration: const Duration(seconds: 5),
-                  child: SvgPicture.asset(
-                    "assets/icons/sms.svg",
-                    height: kHeight(80.0).h,
-                    width: kWidth(110.0).w,
-                  ),
-                ),
-                left: 0,
-                bottom: 0,
-              ),
-            ],
-          ),
-          SizedBox(height: kHeight(50.0).h),
-          Padding(
-            padding: const EdgeInsets.only(left: kMainPadding),
+          SizedBox(height: kHeight(20.0).h),
+          _animationField(),
+          SizedBox(height: kHeight(20.0).h),
+          const Padding(
+            padding: EdgeInsets.only(left: kInpHorPad),
             child: Text(
-              "Введите код SMS подтверждения  ",
-              style: Theme.of(context).textTheme.labelMedium,
+              "Введите код, отправленный на номер телефона (*3929), привязанный к \nкарте",
+              style: TextStyle(
+                fontSize: 10.0,
+                fontWeight: FontWeight.w400,
+                color: kBlackTextColor,
+              ),
             ),
           ),
-          _smsCode(context),
-          Padding(
-            padding: EdgeInsets.only(
-              left: kWidth(140.0).w,
-            ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Countdown(
-                  animation: StepTween(
-                    begin: levelClock,
-                    end: 0,
-                  ).animate(_controller!),
-                ),
-                InkWell(
-                  child: Text(
-                    "Не пришло SMS ?",
-                    style: TextStyle(
-                      color: kBlackTextColor.withOpacity(0.5),
-                      fontSize: 12.0,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-
-                  // unreceived sms function
-                  onTap: () {},
-                ),
-              ],
-            ),
-          ),
+          SizedBox(height: kHeight(25.0).h),
+          _headText(context),
+          _smsCodeField(context),
+          _unreceivedSmsField(),
           SizedBox(height: kHeight(61.0).h),
-          Padding(
-            padding: const EdgeInsets.only(left: kButHorPad),
-            child: MainButton(
-              "Продолжить",
-              () => smsChecker.length == 4
-                  ? Get.to(const AddProposalPassportPage())
-                  : () {},
-            ),
-          ),
+          _buttonField(),
           SizedBox(height: kHeight(53.0).h),
         ],
       ),
     );
   }
 
-  Padding _smsCode(BuildContext context) {
+  Padding _unreceivedSmsField() {
+    return Padding(
+      padding: EdgeInsets.only(
+        left: kWidth(140.0).w,
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Countdown(
+            animation: StepTween(
+              begin: levelClock,
+              end: 0,
+            ).animate(_controller!),
+          ),
+          InkWell(
+            child: Text(
+              "Не пришло SMS ?",
+              style: TextStyle(
+                color: kBlackTextColor.withOpacity(0.5),
+                fontSize: 12.0,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+
+            // unreceived sms function
+            onTap: () {},
+          ),
+        ],
+      ),
+    );
+  }
+
+  Padding _buttonField() {
+    return Padding(
+      padding: const EdgeInsets.only(left: kButHorPad),
+      child: MainButton(
+        "Продолжить",
+        () => smsChecker.length == 4
+            ? Get.to(const AddProposalPassportPage())
+            : () {},
+      ),
+    );
+  }
+
+  Padding _headText(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: kMainPadding),
+      child: Text(
+        "Введите код SMS подтверждения  ",
+        style: Theme.of(context).textTheme.labelMedium,
+      ),
+    );
+  }
+
+  Padding _animationField() {
+    return Padding(
+      padding: EdgeInsets.only(left: kWidth(125.0).w),
+      child: Stack(
+        children: [
+          SizedBox(
+            height: kHeight(123).h,
+            width: kWidth(175.0).w,
+            child: SvgPicture.asset(
+              "assets/icons/main_icon.svg",
+              height: kHeight(122.06).h,
+              width: kWidth(131.12).w,
+            ),
+          ),
+          Positioned(
+            child: BounceInDown(
+              duration: const Duration(seconds: 5),
+              child: SvgPicture.asset(
+                "assets/icons/sms.svg",
+                height: kHeight(80.0).h,
+                width: kWidth(110.0).w,
+              ),
+            ),
+            left: 0,
+            bottom: 0,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Padding _smsCodeField(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(
         left: kWidth(99.0).w,

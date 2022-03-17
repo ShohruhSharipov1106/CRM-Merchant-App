@@ -13,3 +13,6 @@ export 'package:crm_merchant/screens/add_proposal/components/add_proposal_app_ba
 export 'package:flutter_svg/flutter_svg.dart';
 export 'package:animate_do/animate_do.dart';
 export 'package:pinput/pinput.dart';
+export 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+export 'package:crm_merchant/components/input_field.dart';
+export 'package:crm_merchant/providers/add_proposal_provider.dart';

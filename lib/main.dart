@@ -1,11 +1,9 @@
 import 'package:crm_merchant/constants/exports.dart';
+import 'package:crm_merchant/providers/add_proposal_provider.dart';
 import 'package:crm_merchant/screens/add_proposal/card_page.dart';
 import 'package:crm_merchant/screens/add_proposal/passport_page.dart';
 import 'package:crm_merchant/screens/add_proposal/phone_number_page.dart';
-import 'package:crm_merchant/screens/add_proposal/sms_confirmation_page.dart';
 import 'package:crm_merchant/screens/auth/sign_up_page.dart';
-import 'package:crm_merchant/screens/auth/sms_checker_page.dart';
-import 'package:crm_merchant/screens/home/home_page.dart';
 
 void main() {
   runApp(
@@ -13,6 +11,7 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (_) => SignUpProvider()),
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
+        ChangeNotifierProvider(create: (_) => AddProposalProvider()),
       ],
       child: const MyApp(),
     ),

@@ -4,6 +4,7 @@ import 'package:crm_merchant/screens/add_proposal/card_page.dart';
 import 'package:crm_merchant/screens/add_proposal/passport_page.dart';
 import 'package:crm_merchant/screens/add_proposal/phone_number_page.dart';
 import 'package:crm_merchant/screens/auth/sign_up_page.dart';
+import 'package:crm_merchant/screens/tariff/tariff_main_page.dart';
 
 void main() {
   runApp(
@@ -45,6 +46,11 @@ class MyApp extends StatelessWidget {
               color: kBlackTextColor,
               fontWeight: FontWeight.w400,
             ),
+            displayLarge: TextStyle(
+              fontSize: 96.0,
+              color: kWhiteColor,
+              fontWeight: FontWeight.w400,
+            ),
           ),
           scaffoldBackgroundColor: kBackgroundColor,
           appBarTheme: const AppBarTheme(
@@ -52,7 +58,7 @@ class MyApp extends StatelessWidget {
             backgroundColor: Colors.transparent,
           ),
         ),
-        home: AddProposalPassportPage(),
+        home: TariffMainPage(),
       );
     });
   }

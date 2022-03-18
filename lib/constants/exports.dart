@@ -16,3 +16,4 @@ export 'package:pinput/pinput.dart';
 export 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 export 'package:crm_merchant/components/input_field.dart';
 export 'package:crm_merchant/providers/add_proposal_provider.dart';
+export 'package:flutter_sequence_animation/flutter_sequence_animation.dart';

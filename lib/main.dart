@@ -4,6 +4,7 @@ import 'package:crm_merchant/screens/add_proposal/card_page.dart';
 import 'package:crm_merchant/screens/add_proposal/passport_page.dart';
 import 'package:crm_merchant/screens/add_proposal/phone_number_page.dart';
 import 'package:crm_merchant/screens/auth/sign_up_page.dart';
+import 'package:crm_merchant/screens/splash/splash_screen_page.dart';
 import 'package:crm_merchant/screens/tariff/tariff_main_page.dart';
 
 void main() {
@@ -58,7 +59,7 @@ class MyApp extends StatelessWidget {
             backgroundColor: Colors.transparent,
           ),
         ),
-        home: TariffMainPage(),
+        home: SplashScreenPage(),
       );
     });
   }

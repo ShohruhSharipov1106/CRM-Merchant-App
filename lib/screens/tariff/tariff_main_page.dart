@@ -88,9 +88,39 @@ class _TariffMainPageState extends State<TariffMainPage> {
                           ),
                           color: kWhiteColor,
                         ),
-                        child: Text(
-                          "3",
-                          style: Theme.of(context).textTheme.titleLarge,
+                        child: Center(
+                          child: Text.rich(
+                            TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: "Предоплата ${prepayments[__]}%\n\n",
+                                  style:
+                                      Theme.of(context).textTheme.labelMedium,
+                                ),
+                                TextSpan(
+                                  text: "Без переплат\n\n",
+                                  style:
+                                      Theme.of(context).textTheme.labelMedium,
+                                ),
+                                TextSpan(
+                                  text:
+                                      "${summs[__].toString().replaceRange(3, 4, " 0")}\n",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .labelMedium!
+                                      .copyWith(fontSize: 36.0),
+                                ),
+                                TextSpan(
+                                  text: "UZS в месяц",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .labelMedium!
+                                      .copyWith(fontSize: 14.0),
+                                ),
+                              ],
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
                         ),
                       ),
                     ],

@@ -1,5 +1,6 @@
 import 'package:crm_merchant/constants/exports.dart';
 import 'package:crm_merchant/screens/home/home_page.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:pinput/pinput.dart';
 
 class SmsCheckerPage extends StatefulWidget {
@@ -134,10 +135,12 @@ class _SmsCheckerPageState extends State<SmsCheckerPage>
   Padding _button() {
     return Padding(
       padding: const EdgeInsets.only(left: kButHorPad),
-      child: MainButton(
-        "Продолжить",
-        () => smsChecker.length == 4 ? Get.to(const HomePage()) : () {},
-      ),
+      child: MainButton("Продолжить", () {
+        if (smsChecker.length == 4) {
+          GetStorage().write("signUpDone", "signUpDone");
+          Get.to(const HomePage());
+        }
+      }),
     );
   }
 }

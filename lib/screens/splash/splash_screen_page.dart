@@ -1,4 +1,8 @@
+import 'dart:async';
+
 import 'package:crm_merchant/constants/exports.dart';
+import 'package:crm_merchant/screens/auth/sign_up_page.dart';
+import 'package:get_storage/get_storage.dart';
 
 class SplashScreenPage extends StatefulWidget {
   const SplashScreenPage({Key? key}) : super(key: key);
@@ -99,6 +103,16 @@ class _SplashScreenPageState extends State<SplashScreenPage>
         .animate(_animationController!);
 
     _animationController!.forward();
+
+    Timer(const Duration(seconds: 10), () {
+      GetStorage().write("splashDone", "splashDone");
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (_) => const SignUpPage(),
+        ),
+      );
+    });
   }
 
   @override

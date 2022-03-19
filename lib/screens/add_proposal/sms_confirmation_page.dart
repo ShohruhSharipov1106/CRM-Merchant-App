@@ -39,14 +39,11 @@ class _AddProposalSmsConfirmationPageState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: addProposalAppBar(
-        context,
-        "Подтверждение",
-      ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(height: kHeight(20.0).h),
+        children: [ SizedBox(height: kHeight(20.0)),
+          TitleOfPage("Подтверждение", kWidth(123.0)),
+          SizedBox(height: kHeight(5.0).h),
           _animationField(),
           SizedBox(height: kHeight(20.0).h),
           const Padding(

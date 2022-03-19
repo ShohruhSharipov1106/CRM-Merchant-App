@@ -9,7 +9,7 @@ export 'package:crm_merchant/providers/sign_up_providers.dart';
 export 'package:crm_merchant/providers/theme_provider.dart';
 export 'package:get/get_navigation/get_navigation.dart';
 export 'package:get/get.dart';
-export 'package:crm_merchant/screens/add_proposal/components/add_proposal_app_bar.dart';
+export 'package:crm_merchant/screens/add_proposal/components/title_of_page.dart';
 export 'package:flutter_svg/flutter_svg.dart';
 export 'package:animate_do/animate_do.dart';
 export 'package:pinput/pinput.dart';

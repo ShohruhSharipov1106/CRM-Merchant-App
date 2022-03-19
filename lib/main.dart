@@ -4,8 +4,10 @@ import 'package:crm_merchant/screens/add_proposal/card_page.dart';
 import 'package:crm_merchant/screens/add_proposal/passport_page.dart';
 import 'package:crm_merchant/screens/add_proposal/phone_number_page.dart';
 import 'package:crm_merchant/screens/auth/sign_up_page.dart';
+import 'package:crm_merchant/screens/home/home_page.dart';
 import 'package:crm_merchant/screens/splash/splash_screen_page.dart';
 import 'package:crm_merchant/screens/tariff/tariff_main_page.dart';
+import 'package:get_storage/get_storage.dart';
 
 void main() {
   runApp(
@@ -59,7 +61,11 @@ class MyApp extends StatelessWidget {
             backgroundColor: Colors.transparent,
           ),
         ),
-        home: SplashScreenPage(),
+        home: GetStorage().read("splashDone") == "splashDone"
+            ? (GetStorage().read("signUpDone") == "signUpDone"
+                ? const HomePage()
+                : const SignUpPage())
+            : const SplashScreenPage(),
       );
     });
   }

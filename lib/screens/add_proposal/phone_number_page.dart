@@ -9,14 +9,11 @@ class AddProposalPhoneNumberPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: addProposalAppBar(
-          context,
-          "Создать заявку",
-        ),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: kHeight(40.0).h),
+          children: [ SizedBox(height: kHeight(20.0)),
+            TitleOfPage("Создать заявку", kWidth(126.0)),
+            SizedBox(height: kHeight(25.0).h),
             _titleAnimation(),
             SizedBox(height: kHeight(50.0).h),
             _titleField(context),

@@ -6,4 +6,13 @@ class AddProposalProvider extends ChangeNotifier {
   TextEditingController cardExpirationDate = TextEditingController();
   TextEditingController serialNumberOfpassport = TextEditingController();
   TextEditingController dateOfBirth = TextEditingController();
+  int indexPage = 1;
+
+  nextPage() {
+    indexPage < 9 ? indexPage += 1 : indexPage = 8;
+  }
+
+  previousPage() {
+    indexPage < 1 ? indexPage -= 1 : indexPage = 1;
+  }
 }

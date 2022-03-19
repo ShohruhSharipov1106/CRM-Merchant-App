@@ -7,14 +7,11 @@ class AddProposalCardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: addProposalAppBar(
-        context,
-        "Введите ваши данные",
-      ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(height: kHeight(20.0).h),
+        children: [ SizedBox(height: kHeight(20.0)),
+          TitleOfPage("Введите ваши данные", kWidth(88.0)),
+          SizedBox(height: kHeight(5.0).h),
           _titleAnimation(),
           SizedBox(height: kHeight(20.0).h),
           _subtitleField(),

@@ -37,9 +37,9 @@ class _OfferConfirmationPageState extends State<OfferConfirmationPage>
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: Column(
+    return Scaffold(
+      body: SafeArea(
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: kHeight(72.0).h),
@@ -81,7 +81,7 @@ class _OfferConfirmationPageState extends State<OfferConfirmationPage>
                         fontWeight: FontWeight.w400,
                       ),
                     ),
-
+      
                     // unreceived sms function
                     onTap: () {},
                   ),

@@ -41,8 +41,8 @@ class _AddProposalSmsConfirmationPageState
     return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [ SizedBox(height: kHeight(20.0)),
-          TitleOfPage("Подтверждение", kWidth(123.0)),
+        children: [ SizedBox(height: kHeight(20.0).h),
+          TitleOfPage("Подтверждение", kWidth(123.0).w),
           SizedBox(height: kHeight(5.0).h),
           _animationField(),
           SizedBox(height: kHeight(20.0).h),

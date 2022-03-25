@@ -1,18 +1,22 @@
 import 'package:crm_merchant/constants/exports.dart';
 
 import 'package:crm_merchant/screens/add_proposal/card_page.dart';
+import 'package:crm_merchant/screens/add_proposal/components/steps_field.dart';
 
 class AddProposalPhoneNumberPage extends StatelessWidget {
   const AddProposalPhoneNumberPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: Column(
+    return Scaffold(
+      body: SafeArea(
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [ SizedBox(height: kHeight(20.0)),
-            TitleOfPage("Создать заявку", kWidth(126.0)),
+          children: [
+            SizedBox(height: kHeight(20.0).h),
+            const StepsField(),
+            SizedBox(height: kHeight(20.0).h),
+            TitleOfPage("Создать заявку", kWidth(126.0).w),
             SizedBox(height: kHeight(25.0).h),
             _titleAnimation(),
             SizedBox(height: kHeight(50.0).h),

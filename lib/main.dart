@@ -2,6 +2,7 @@ import 'package:crm_merchant/constants/exports.dart';
 import 'package:crm_merchant/providers/add_proposal_provider.dart';
 import 'package:crm_merchant/providers/home_page_provider.dart';
 import 'package:crm_merchant/screens/add_proposal/card_page.dart';
+import 'package:crm_merchant/screens/add_proposal/identification_page.dart';
 import 'package:crm_merchant/screens/add_proposal/passport_page.dart';
 import 'package:crm_merchant/screens/add_proposal/phone_number_page.dart';
 import 'package:crm_merchant/screens/auth/sign_up_page.dart';
@@ -18,6 +19,7 @@ void main() {
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (_) => AddProposalProvider()),
         ChangeNotifierProvider(create: (_) => HomePageProvider()),
+        ChangeNotifierProvider(create: (_) => StepsProvider()),
       ],
       child: const MyApp(),
     ),
@@ -63,7 +65,7 @@ class MyApp extends StatelessWidget {
               backgroundColor: Colors.transparent,
             ),
           ),
-          home: HomePage()
+          home: IdentificationPage()
           // home: GetStorage().read("splashDone") == "splashDone"
           //     ? (GetStorage().read("signUpDone") == "signUpDone"
           //         ? const HomePage()

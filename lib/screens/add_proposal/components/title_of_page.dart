@@ -9,7 +9,7 @@ class TitleOfPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(
-        left: leftPadding!.w,
+        left: leftPadding!,
       ),
       child: Text(
         titleText.toString(),

@@ -11,7 +11,10 @@ import 'package:crm_merchant/screens/home/home_page.dart';
 import 'package:crm_merchant/screens/splash/splash_screen_page.dart';
 import 'package:crm_merchant/screens/tariff/tariff_confirmation_page.dart';
 import 'package:crm_merchant/screens/tariff/tariff_main_page.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 
 void main() {
   runApp(
@@ -26,6 +29,10 @@ void main() {
       child: const MyApp(),
     ),
   );
+  SystemChrome.setSystemUIOverlayStyle(
+    SystemUiOverlayStyle.dark.copyWith(statusBarColor: Colors.transparent),
+  );
+  AssetPicker.registerObserve();
 }
 
 class MyApp extends StatelessWidget {
@@ -33,8 +40,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Sizer(builder: (context, orientation, deviceType) {
-      return GetMaterialApp(
+    return Sizer(
+      builder: (context, orientation, deviceType) {
+        return GetMaterialApp(
           title: 'CRM Merchant',
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
@@ -72,13 +80,43 @@ class MyApp extends StatelessWidget {
               backgroundColor: Colors.transparent,
             ),
           ),
-          home: MakeProposalPage()
+          home: SignUpPage()
           // home: GetStorage().read("splashDone") == "splashDone"
           //     ? (GetStorage().read("signUpDone") == "signUpDone"
           //         ? const HomePage()
           //         : const SignUpPage())
           //     : const SplashScreenPage(),
-          );
-    });
+          ,
+          builder: (BuildContext c, Widget? w) {
+            return ScrollConfiguration(
+              behavior: const NoGlowScrollBehavior(),
+              child: w!,
+            );
+          },
+          localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
+            GlobalWidgetsLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: const <Locale>[
+            Locale('zh'), // Chinese
+            // Locale('iw'), // Hebrew
+          ],
+          locale: const Locale('zh'),
+        );
+      },
+    );
   }
+}
+
+class NoGlowScrollBehavior extends ScrollBehavior {
+  const NoGlowScrollBehavior();
+
+  @override
+  Widget buildViewportChrome(
+    BuildContext context,
+    Widget child,
+    AxisDirection axisDirection,
+  ) =>
+      child;
 }

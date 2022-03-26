@@ -55,11 +55,10 @@ class SignUpPage extends StatelessWidget {
                         if (v!.length < 12) return "";
                         return null;
                       },
-                      12,
-                      "** *** ** ** ",
-                      "## ### ## ##",
+                      17,
+                      "+ 998** *** ** ** ",
+                      "+ 998## ### ## ##",
                       {"#": RegExp(r'[0-9]')},
-                      hasPrefix: true,
                     ),
                   ],
                 ),
@@ -75,6 +74,7 @@ class SignUpPage extends StatelessWidget {
                         ? Get.to(const SmsCheckerPage())
                         : () {};
                   },
+                  contexPro.isValidate,
                 ),
               ),
             ],

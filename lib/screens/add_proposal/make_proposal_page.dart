@@ -11,65 +11,6 @@ class MakeProposalPage extends StatefulWidget {
 }
 
 class _MakeProposalPageState extends State<MakeProposalPage> {
-  List<Asset> images = <Asset>[];
-
-  String _error = 'No Error Dectected';
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
-  Widget buildGridView() {
-    return GridView.count(
-      crossAxisCount: 3,
-      children: List.generate(images.length, (index) {
-        Asset asset = images[index];
-        return AssetThumb(
-          asset: asset,
-          width: 300,
-          height: 300,
-        );
-      }),
-    );
-  }
-
-  Future<void> loadAssets() async {
-    List<Asset> resultList = <Asset>[];
-    String error = 'No Error Detected';
-
-    try {
-      resultList = await MultiImagePicker.pickImages(
-        maxImages: 5,
-        enableCamera: true,
-        selectedAssets: images,
-        cupertinoOptions: const CupertinoOptions(
-          takePhotoIcon: "chat",
-          doneButtonTitle: "Fatto",
-        ),
-        materialOptions: const MaterialOptions(
-          actionBarColor: "abcdef",
-          actionBarTitle: "Example App",
-          allViewTitle: "All Photos",
-          useDetailsView: false,
-          selectCircleStrokeColor: "#000000",
-        ),
-      );
-    } on Exception catch (e) {
-      error = e.toString();
-    }
-
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) return;
-
-    setState(() {
-      images = resultList;
-      _error = error;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -107,33 +48,33 @@ class _MakeProposalPageState extends State<MakeProposalPage> {
                 physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (_, __) => InkWell(
                   child: Container(
-                      foregroundDecoration: BoxDecoration(
-                        border: Border.all(
-                          color: kBlackTextColor,
-                          width: 1.0,
-                        ),
-                        borderRadius: BorderRadius.circular(10.0),
+                    foregroundDecoration: BoxDecoration(
+                      border: Border.all(
+                        color: kBlackTextColor,
+                        width: 1.0,
                       ),
-                      child: buildGridView()
-                      // Center(
-                      //   child: __ == 0
-                      //       ? const Icon(
-                      //           Icons.add,
-                      //           size: 40.0,
-                      //         )
-                      //       : SvgPicture.asset(
-                      //           "assets/icons/camera.svg",
-                      //           height: kHeight(20.0).h,
-                      //           width: kWidth(26.0).w,
-                      //           fit: BoxFit.cover,
-                      //         ),
-                      // ),
-                      ),
-                  onTap: loadAssets,
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: Center(
+                      child: __ == 0
+                          ? const Icon(
+                              Icons.add,
+                              size: 40.0,
+                            )
+                          : SvgPicture.asset(
+                              "assets/icons/camera.svg",
+                              height: kHeight(20.0).h,
+                              width: kWidth(26.0).w,
+                              fit: BoxFit.cover,
+                            ),
+                    ),
+                  ),
+                  onTap: () {},
                 ),
                 itemCount: 5,
               ),
             ),
+
             SizedBox(height: kHeight(90.0).h),
             // ADD IF VALIDATE THEN NEXT PAGE
             _button(context),

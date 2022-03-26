@@ -5,7 +5,6 @@ class InputField extends StatefulWidget {
   TextEditingController kontroller;
   String labelTitle;
   TextInputType keyboardingType;
-  bool hasPrefix;
   String? Function(String?) validateFunc;
   int maxLen;
   String hintTitle;
@@ -20,7 +19,6 @@ class InputField extends StatefulWidget {
     this.hintTitle,
     this.maskText,
     this.maskFilter, {
-    this.hasPrefix = false,
     Key? key,
   }) : super(key: key);
 
@@ -45,7 +43,6 @@ class _InputFieldState extends State<InputField> {
         validator: widget.validateFunc,
         textAlign: TextAlign.start,
         focusNode: _focusNode,
-        enabled: true,
         maxLength: widget.maxLen,
         maxLengthEnforcement: MaxLengthEnforcement.enforced,
         textAlignVertical: TextAlignVertical.top,
@@ -57,6 +54,7 @@ class _InputFieldState extends State<InputField> {
         ],
         style: Theme.of(context).textTheme.titleMedium,
         decoration: InputDecoration(
+          floatingLabelBehavior: FloatingLabelBehavior.always,
           labelText: widget.labelTitle,
           errorStyle: _focusNode.hasFocus
               ? null
@@ -64,7 +62,7 @@ class _InputFieldState extends State<InputField> {
           labelStyle:
               Theme.of(context).textTheme.titleMedium!.copyWith(fontSize: 12.0),
           prefixIcon: Text(
-            widget.hasPrefix ? "  + 998 " : "   ",
+            "   ",
             style: Theme.of(context).textTheme.titleMedium,
           ),
           counterText: "",
@@ -79,6 +77,13 @@ class _InputFieldState extends State<InputField> {
             top: kHeight(15.0).h,
           ),
           prefixStyle: Theme.of(context).textTheme.titleMedium,
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10.0),
+            borderSide: const BorderSide(
+              color: kBlackTextColor,
+              width: 1.0,
+            ),
+          ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
             borderSide: const BorderSide(

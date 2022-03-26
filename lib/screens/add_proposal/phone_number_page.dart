@@ -50,11 +50,10 @@ class AddProposalPhoneNumberPage extends StatelessWidget {
         if (v!.length < 11) return "";
         return null;
       },
-      12,
-      "** *** ** ** ",
-      "## ### ## ##",
+      17,
+      "+ 998** *** ** ** ",
+      "+ 998## ### ## ##",
       {"#": RegExp(r'[0-9]')},
-      hasPrefix: true,
     );
   }
 
@@ -67,6 +66,7 @@ class AddProposalPhoneNumberPage extends StatelessWidget {
           Get.to(AddProposalCardPage());
           context.read<StepsProvider>().incrementStep();
         },
+        
       ),
     );
   }

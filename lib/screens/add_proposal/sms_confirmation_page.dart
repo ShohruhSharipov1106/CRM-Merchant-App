@@ -39,32 +39,37 @@ class _AddProposalSmsConfirmationPageState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [ SizedBox(height: kHeight(20.0).h),
-          TitleOfPage("Подтверждение", kWidth(123.0).w),
-          SizedBox(height: kHeight(5.0).h),
-          _animationField(),
-          SizedBox(height: kHeight(20.0).h),
-          const Padding(
-            padding: EdgeInsets.only(left: kInpHorPad),
-            child: Text(
-              "Введите код, отправленный на номер телефона (*3929), привязанный к \nкарте",
-              style: TextStyle(
-                fontSize: 10.0,
-                fontWeight: FontWeight.w400,
-                color: kBlackTextColor,
+      body: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: kHeight(20.0).h),
+            const StepsField(),
+            SizedBox(height: kHeight(20.0).h),
+            TitleOfPage("Подтверждение", kWidth(123.0).w),
+            SizedBox(height: kHeight(5.0).h),
+            _animationField(),
+            SizedBox(height: kHeight(20.0).h),
+            const Padding(
+              padding: EdgeInsets.only(left: kInpHorPad),
+              child: Text(
+                "Введите код, отправленный на номер телефона (*3929), привязанный к \nкарте",
+                style: TextStyle(
+                  fontSize: 10.0,
+                  fontWeight: FontWeight.w400,
+                  color: kBlackTextColor,
+                ),
               ),
             ),
-          ),
-          SizedBox(height: kHeight(25.0).h),
-          _headText(context),
-          _smsCodeField(context),
-          _unreceivedSmsField(),
-          SizedBox(height: kHeight(61.0).h),
-          _buttonField(),
-          SizedBox(height: kHeight(53.0).h),
-        ],
+            SizedBox(height: kHeight(25.0).h),
+            _headText(context),
+            _smsCodeField(context),
+            _unreceivedSmsField(),
+            SizedBox(height: kHeight(61.0).h),
+            _buttonField(context),
+            SizedBox(height: kHeight(53.0).h),
+          ],
+        ),
       ),
     );
   }
@@ -101,14 +106,17 @@ class _AddProposalSmsConfirmationPageState
     );
   }
 
-  Padding _buttonField() {
+  Padding _buttonField(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: kButHorPad),
       child: MainButton(
         "Продолжить",
         () => smsChecker.length == 4
-            ? Get.to(const AddProposalPassportPage())
-            : () {},
+            ?  {
+                Get.to(const AddProposalPassportPage()),
+                context.read<StepsProvider>().incrementStep(),
+              }
+            :  {},
       ),
     );
   }

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:crm_merchant/constants/exports.dart';
 import 'package:crm_merchant/screens/tariff/components/parametrs_lists.dart';
+import 'package:crm_merchant/screens/tariff/tariff_confirmation_page.dart';
 
 class TariffMainPage extends StatefulWidget {
   const TariffMainPage({Key? key}) : super(key: key);
@@ -16,148 +17,156 @@ class _TariffMainPageState extends State<TariffMainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(height: kHeight(20.0)),
-          TitleOfPage("Выбрать тариф", kWidth(117.0)),
-          Stack(
-            children: [
-              SizedBox(
-                height: 90.h,
-                child: ListView.builder(
-                  itemBuilder: (_, __) => InkWell(
-                    child: Container(
-                      margin: EdgeInsets.symmetric(
-                        horizontal: kWidth(kInpHorPad).w,
-                        vertical: kHeight(7.5).h,
-                      ),
-                      height: kHeight(228.0).h,
-                      width: kWidth(368.0).w,
-                      foregroundDecoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30.0),
-                        color: _whichTariff != __ && _oneTapped
-                            ? kBlackTextColor.withOpacity(0.2)
-                            : Colors.transparent,
-                        border: Border.all(
-                          color: kMainColor,
-                          width: 2.0,
-                        ),
-                      ),
-                      child: Row(
+      body: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: kHeight(20.0).h),
+            const StepsField(),
+            SizedBox(height: kHeight(20.0).h),
+            TitleOfPage("Выбрать тариф", kWidth(117.0).w),
+            Stack(
+              children: [
+                SizedBox(
+                  height: kHeight(768).h,
+                  child: ListView.builder(
+                    itemBuilder: (_, __) => InkWell(
+                      child: Stack(
                         children: [
                           Container(
-                            height: kHeight(228.0).h,
-                            width: kWidth(184.0).w,
-                            alignment: Alignment.center,
-                            decoration: const BoxDecoration(
-                              borderRadius: BorderRadius.horizontal(
-                                left: Radius.circular(30.0),
-                              ),
-                              color: kMainColor,
+                            margin: EdgeInsets.symmetric(
+                              horizontal: kWidth(kInpHorPad).w,
+                              vertical: kHeight(7.5).h,
                             ),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "${months[__]}",
-                                  style:
-                                      Theme.of(context).textTheme.displayLarge,
-                                ),
-                                Flexible(
-                                  fit: FlexFit.loose,
-                                  child: Text(
-                                    "месяца",
+                            padding: EdgeInsets.only(
+                              left: kWidth(25.0).w,
+                              top: kHeight(10.0).h,
+                            ),
+                            height: kHeight(228.0).h,
+                            width: kWidth(368.0).w,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(30.0),
+                              color: _whichTariff != __ && _oneTapped
+                                  ? kBlackTextColor.withOpacity(0.2)
+                                  : kWhiteColor,
+                            ),
+                            child: Text.rich(
+                              TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: "Тариф (Выгодный)\n\n",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headlineLarge,
+                                  ),
+                                  TextSpan(
+                                    text:
+                                        "${summs[__].toString().replaceRange(3, 4, " 0")}\t",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headlineLarge,
+                                  ),
+                                  TextSpan(
+                                    text: "UZS в месяц\n\n",
                                     style: Theme.of(context)
                                         .textTheme
                                         .labelMedium!
-                                        .copyWith(
-                                          color: kWhiteColor,
-                                        ),
-                                    overflow: TextOverflow.clip,
-                                    softWrap: false,
-                                    maxLines: 1,
+                                        .copyWith(fontSize: 13.0),
                                   ),
-                                ),
-                              ],
+                                  TextSpan(
+                                    text: "Предоплата ${prepayments[__]}%\t\t",
+                                    style:
+                                        Theme.of(context).textTheme.labelMedium,
+                                  ),
+                                  TextSpan(
+                                    text: "Без переплат",
+                                    style:
+                                        Theme.of(context).textTheme.labelMedium,
+                                  ),
+                                ],
+                              ),
+                              textAlign: TextAlign.left,
                             ),
                           ),
-                          Container(
-                            height: kHeight(228.0).h,
-                            width: kWidth(184.0).w,
-                            alignment: Alignment.center,
-                            decoration: const BoxDecoration(
-                              borderRadius: BorderRadius.horizontal(
-                                right: Radius.circular(30.0),
-                              ),
-                              color: kWhiteColor,
-                            ),
-                            child: Center(
-                              child: Text.rich(
-                                TextSpan(
-                                  children: [
+                          Positioned(
+                            child: _whichTariff == __ || !_oneTapped
+                                ? SvgPicture.asset(
+                                    "assets/icons/opened-ribbon.svg",
+                                    width: kWidth(52.0).w,
+                                    height: kHeight(91.0).h,
+                                    fit: BoxFit.cover,
+                                  )
+                                : SvgPicture.asset(
+                                    "assets/icons/closed-ribbon.svg",
+                                    width: kWidth(52.0).w,
+                                    height: kHeight(16.0).h,
+                                    fit: BoxFit.cover,
+                                  ),
+                            top: 0,
+                            right: 40,
+                          ),
+                          Positioned(
+                            child: _whichTariff == __ || !_oneTapped
+                                ? Text.rich(
                                     TextSpan(
-                                      text:
-                                          "Предоплата ${prepayments[__]}%\n\n",
+                                      text: "${months[__]}",
                                       style: Theme.of(context)
                                           .textTheme
-                                          .labelMedium,
+                                          .headlineLarge!
+                                          .copyWith(
+                                            color: kWhiteColor,
+                                          ),
+                                      children: [
+                                        TextSpan(
+                                          text: months[__] < 4
+                                              ? "\nмесяца"
+                                              : "\nмесяцев",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .labelMedium!
+                                              .copyWith(
+                                                color: kWhiteColor,
+                                                fontSize: 10.0,
+                                              ),
+                                        ),
+                                      ],
                                     ),
-                                    TextSpan(
-                                      text: "Без переплат\n\n",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .labelMedium,
-                                    ),
-                                    TextSpan(
-                                      text:
-                                          "${summs[__].toString().replaceRange(3, 4, " 0")}\n",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .labelMedium!
-                                          .copyWith(fontSize: 36.0),
-                                    ),
-                                    TextSpan(
-                                      text: "UZS в месяц",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .labelMedium!
-                                          .copyWith(fontSize: 14.0),
-                                    ),
-                                  ],
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
+                                    textAlign: TextAlign.center,
+                                  )
+                                : Text(""),
+                            top: 25,
+                            right: 40,
                           ),
                         ],
                       ),
+                      onTap: () {
+                        setState(() {
+                          _whichTariff = __;
+                          _oneTapped = true;
+                        });
+                      },
                     ),
-                    onTap: () {
-                      setState(() {
-                        _whichTariff = __;
-                        _oneTapped = true;
-                      });
-                    },
+                    itemCount: months.length,
                   ),
-                  itemCount: months.length,
                 ),
-              ),
-              Positioned(
-                child: Visibility(
-                  child: MainButton(
-                    "Перейти к оформлению",
-                    () {},
+                Positioned(
+                  child: Visibility(
+                    child: MainButton(
+                      "Перейти к оформлению",
+                      () {
+                        context.read<StepsProvider>().incrementStep();
+                        Get.to(const TariffConfirmationPage());
+                      },
+                    ),
+                    visible: _oneTapped,
                   ),
-                  visible: _oneTapped,
+                  bottom: kHeight(30.0).h,
+                  left: kWidth(80.0).w,
                 ),
-                bottom: kHeight(30.0).h,
-                left: kWidth(80.0).w,
-              ),
-            ],
-          ),
-        ],
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

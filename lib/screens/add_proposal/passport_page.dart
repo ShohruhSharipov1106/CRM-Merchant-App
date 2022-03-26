@@ -7,34 +7,42 @@ class AddProposalPassportPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [ SizedBox(height: kHeight(20.0).h),
-          TitleOfPage("Введите ваши данные", kWidth(88.0)),
-          SizedBox(height: kHeight(5.0).h),
-          _animationField(),
-          SizedBox(height: kHeight(20.0).h),
-          _subtitleField(),
-          SizedBox(height: kHeight(25.0).h),
-          _titleField(context),
-          SizedBox(height: kHeight(4.0).h),
-          _serialNumberOfpassport(context),
-          _dateOfBirth(context),
-          SizedBox(height: kHeight(7.0).h),
-          // ADD IF VALIDATE THEN NEXT PAGE
-          _buttonField(),
-          SizedBox(height: kHeight(53.0).h),
-        ],
+      body: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: kHeight(20.0).h),
+            const StepsField(),
+            SizedBox(height: kHeight(20.0).h),
+            TitleOfPage("Введите ваши данные", kWidth(88.0).w),
+            SizedBox(height: kHeight(5.0).h),
+            _animationField(),
+            SizedBox(height: kHeight(20.0).h),
+            _subtitleField(),
+            SizedBox(height: kHeight(25.0).h),
+            _titleField(context),
+            SizedBox(height: kHeight(4.0).h),
+            _serialNumberOfpassport(context),
+            _dateOfBirth(context),
+            SizedBox(height: kHeight(7.0).h),
+            // ADD IF VALIDATE THEN NEXT PAGE
+            _buttonField(context),
+            SizedBox(height: kHeight(53.0).h),
+          ],
+        ),
       ),
     );
   }
 
-  Padding _buttonField() {
+  Padding _buttonField(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: kButHorPad),
       child: MainButton(
         "Аутентификация по лицу",
-        () => Get.to(const AuthFacePage()),
+        () {
+          Get.to(const AuthFacePage());
+          context.read<StepsProvider>().incrementStep();
+        },
       ),
     );
   }

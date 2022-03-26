@@ -19,3 +19,4 @@ export 'package:crm_merchant/providers/add_proposal_provider.dart';
 export 'package:flutter_sequence_animation/flutter_sequence_animation.dart';
 export 'package:crm_merchant/providers/home_page_provider.dart';
 export 'package:crm_merchant/providers/steps_provider.dart';
+export 'package:crm_merchant/screens/add_proposal/components/steps_field.dart';

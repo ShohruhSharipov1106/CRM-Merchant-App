@@ -1,4 +1,5 @@
 import 'package:crm_merchant/constants/exports.dart';
+import 'package:crm_merchant/screens/add_proposal/make_proposal_page.dart';
 
 class IdentificationPage extends StatelessWidget {
   const IdentificationPage({Key? key}) : super(key: key);
@@ -11,7 +12,27 @@ class IdentificationPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: kHeight(20.0).h),
-            TitleOfPage("Идентификация", kWidth(126.0).w),
+            Container(
+              height: kHeight(32.0).h,
+              padding: EdgeInsets.only(left: kWidth(kMainPadding).w),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  InkWell(
+                    child: const Icon(
+                      Icons.arrow_back_ios_outlined,
+                      size: 21.0,
+                    ),
+                    onTap: () {
+                      Get.back();
+                      context.read<StepsProvider>().decrementStep();
+                    },
+                  ),
+                  TitleOfPage("Идентификация", kWidth(90.0).w),
+                ],
+              ),
+            ),
             SizedBox(height: kHeight(10.0).h),
             _titleAnimation(),
             SizedBox(height: kHeight(11.0).h),
@@ -65,7 +86,7 @@ class IdentificationPage extends StatelessWidget {
               ),
             ),
             SizedBox(height: kHeight(310.0).h),
-            _button(),
+            _button(context),
             SizedBox(height: kHeight(20.0).h),
           ],
         ),
@@ -108,12 +129,15 @@ class IdentificationPage extends StatelessWidget {
     );
   }
 
-  Padding _button() {
+  Padding _button(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: kButHorPad),
       child: MainButton(
         "Продолжить",
-        () {},
+        () {
+          Get.to(const MakeProposalPage());
+          context.read<StepsProvider>().incrementStep();
+        },
       ),
     );
   }

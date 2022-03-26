@@ -7,25 +7,29 @@ class AddProposalCardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(height: kHeight(20.0).h),
-          TitleOfPage("Введите ваши данные", kWidth(88.0).w),
-          SizedBox(height: kHeight(5.0).h),
-          _titleAnimation(),
-          SizedBox(height: kHeight(20.0).h),
-          _subtitleField(),
-          SizedBox(height: kHeight(25.0).h),
-          _headlineText(context),
-          SizedBox(height: kHeight(15.0).h),
-          _cardNumber(context),
-          _cardExpirationDate(context),
-          SizedBox(height: kHeight(22.0).h),
-          // ADD IF VALIDATE THEN NEXT PAGE
-          _button(),
-          SizedBox(height: kHeight(53.0).h),
-        ],
+      body: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: kHeight(20.0).h),
+            const StepsField(),
+            SizedBox(height: kHeight(20.0).h),
+            TitleOfPage("Введите ваши данные", kWidth(88.0).w),
+            SizedBox(height: kHeight(5.0).h),
+            _titleAnimation(),
+            SizedBox(height: kHeight(20.0).h),
+            _subtitleField(),
+            SizedBox(height: kHeight(25.0).h),
+            _headlineText(context),
+            SizedBox(height: kHeight(15.0).h),
+            _cardNumber(context),
+            _cardExpirationDate(context),
+            SizedBox(height: kHeight(22.0).h),
+            // ADD IF VALIDATE THEN NEXT PAGE
+            _button(context),
+            SizedBox(height: kHeight(53.0).h),
+          ],
+        ),
       ),
     );
   }
@@ -62,12 +66,15 @@ class AddProposalCardPage extends StatelessWidget {
     );
   }
 
-  Padding _button() {
+  Padding _button(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: kButHorPad),
       child: MainButton(
         "Выслать код",
-        () => Get.to(AddProposalSmsConfirmationPage()),
+        () {
+          Get.to(const AddProposalSmsConfirmationPage());
+          context.read<StepsProvider>().incrementStep();
+        },
       ),
     );
   }

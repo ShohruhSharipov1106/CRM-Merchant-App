@@ -6,6 +6,8 @@ class AddProposalProvider extends ChangeNotifier {
   TextEditingController cardExpirationDate = TextEditingController();
   TextEditingController serialNumberOfpassport = TextEditingController();
   TextEditingController dateOfBirth = TextEditingController();
+  TextEditingController namingThings = TextEditingController();
+  TextEditingController summThings = TextEditingController();
   int indexPage = 1;
 
   nextPage() {

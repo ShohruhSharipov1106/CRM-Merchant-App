@@ -1,7 +1,5 @@
 import 'package:crm_merchant/constants/exports.dart';
-
 import 'package:crm_merchant/screens/add_proposal/card_page.dart';
-import 'package:crm_merchant/screens/add_proposal/components/steps_field.dart';
 
 class AddProposalPhoneNumberPage extends StatelessWidget {
   const AddProposalPhoneNumberPage({Key? key}) : super(key: key);
@@ -25,7 +23,7 @@ class AddProposalPhoneNumberPage extends StatelessWidget {
             _inputField(context),
             SizedBox(height: kHeight(52.0).h),
             // ADD IF VALIDATE THEN NEXT PAGE
-            _button(),
+            _button(context),
             SizedBox(height: kHeight(53.0).h),
           ],
         ),
@@ -60,12 +58,15 @@ class AddProposalPhoneNumberPage extends StatelessWidget {
     );
   }
 
-  Padding _button() {
+  Padding _button(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: kButHorPad),
       child: MainButton(
         "Продолжить",
-        () => Get.to(AddProposalCardPage()),
+        () {
+          Get.to(AddProposalCardPage());
+          context.read<StepsProvider>().incrementStep();
+        },
       ),
     );
   }

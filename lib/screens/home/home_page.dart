@@ -32,22 +32,28 @@ class HomePage extends StatelessWidget {
                           child: Column(
                             children: ctxWatchHomeProvider.listOfAllInformation,
                           ),
+                          physics: const BouncingScrollPhysics(),
                         ),
                         SingleChildScrollView(
                           child: Column(
-                            children: ctxWatchHomeProvider.listOfDoneInformation,
+                            children:
+                                ctxWatchHomeProvider.listOfDoneInformation,
                           ),
+                          physics: const BouncingScrollPhysics(),
                         ),
                         SingleChildScrollView(
                           child: Column(
                             children:
                                 ctxWatchHomeProvider.listOfWaitingInformation,
                           ),
+                          physics: const BouncingScrollPhysics(),
                         ),
                         SingleChildScrollView(
                           child: Column(
-                            children: ctxWatchHomeProvider.listOfErrorInformation,
+                            children:
+                                ctxWatchHomeProvider.listOfErrorInformation,
                           ),
+                          physics: const BouncingScrollPhysics(),
                         ),
                       ],
                     ),

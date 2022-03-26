@@ -3,11 +3,13 @@ import 'package:crm_merchant/providers/add_proposal_provider.dart';
 import 'package:crm_merchant/providers/home_page_provider.dart';
 import 'package:crm_merchant/screens/add_proposal/card_page.dart';
 import 'package:crm_merchant/screens/add_proposal/identification_page.dart';
+import 'package:crm_merchant/screens/add_proposal/make_proposal_page.dart';
 import 'package:crm_merchant/screens/add_proposal/passport_page.dart';
 import 'package:crm_merchant/screens/add_proposal/phone_number_page.dart';
 import 'package:crm_merchant/screens/auth/sign_up_page.dart';
 import 'package:crm_merchant/screens/home/home_page.dart';
 import 'package:crm_merchant/screens/splash/splash_screen_page.dart';
+import 'package:crm_merchant/screens/tariff/tariff_confirmation_page.dart';
 import 'package:crm_merchant/screens/tariff/tariff_main_page.dart';
 import 'package:get_storage/get_storage.dart';
 
@@ -58,6 +60,11 @@ class MyApp extends StatelessWidget {
                 color: kWhiteColor,
                 fontWeight: FontWeight.w400,
               ),
+              headlineLarge: TextStyle(
+                fontSize: 24.0,
+                color: kBlackTextColor,
+                fontWeight: FontWeight.w700,
+              ),
             ),
             scaffoldBackgroundColor: kBackgroundColor,
             appBarTheme: const AppBarTheme(
@@ -65,7 +72,7 @@ class MyApp extends StatelessWidget {
               backgroundColor: Colors.transparent,
             ),
           ),
-          home: IdentificationPage()
+          home: MakeProposalPage()
           // home: GetStorage().read("splashDone") == "splashDone"
           //     ? (GetStorage().read("signUpDone") == "signUpDone"
           //         ? const HomePage()

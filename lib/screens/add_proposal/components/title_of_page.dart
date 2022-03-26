@@ -14,7 +14,7 @@ class TitleOfPage extends StatelessWidget {
       child: Text(
         titleText.toString(),
         style:
-            Theme.of(context).textTheme.labelMedium!.copyWith(fontSize: 24.0),
+            Theme.of(context).textTheme.headlineLarge,
       ),
     );
   }

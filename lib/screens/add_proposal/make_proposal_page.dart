@@ -126,6 +126,7 @@ class _MakeProposalPageState extends State<MakeProposalPage> {
           Get.to(const TariffMainPage());
           context.read<StepsProvider>().incrementStep();
         },
+        true,
       ),
     );
   }

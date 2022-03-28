@@ -1,5 +1,5 @@
 import 'package:crm_merchant/constants/exports.dart';
-import 'package:crm_merchant/screens/face_confirm/auth_face_page.dart';
+import 'package:crm_merchant/screens/face_id/auth_face_page.dart';
 
 class AddProposalPassportPage extends StatelessWidget {
   const AddProposalPassportPage({Key? key}) : super(key: key);
@@ -22,8 +22,15 @@ class AddProposalPassportPage extends StatelessWidget {
             SizedBox(height: kHeight(25.0).h),
             _titleField(context),
             SizedBox(height: kHeight(4.0).h),
-            _serialNumberOfpassport(context),
-            _dateOfBirth(context),
+            Form(
+              key: context.watch<AddProposalProvider>().formKey,
+              child: Column(
+                children: [
+                  _serialNumberOfpassport(context),
+                  _dateOfBirth(context),
+                ],
+              ),
+            ),
             SizedBox(height: kHeight(7.0).h),
             // ADD IF VALIDATE THEN NEXT PAGE
             _buttonField(context),
@@ -43,6 +50,7 @@ class AddProposalPassportPage extends StatelessWidget {
           Get.to(const AuthFacePage());
           context.read<StepsProvider>().incrementStep();
         },
+        context.watch<AddProposalProvider>().formKey.currentState!.validate(),
       ),
     );
   }

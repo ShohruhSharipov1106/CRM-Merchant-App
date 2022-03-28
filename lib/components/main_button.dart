@@ -3,7 +3,7 @@ import 'package:crm_merchant/constants/exports.dart';
 class MainButton extends StatelessWidget {
   String buttonTitle;
   Function buttonFunc;
-  dynamic buttonValidation;
+  bool buttonValidation;
   MainButton(this.buttonTitle, this.buttonFunc, this.buttonValidation,
       {Key? key})
       : super(key: key);

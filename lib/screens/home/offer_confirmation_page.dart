@@ -1,7 +1,6 @@
 import 'package:crm_merchant/constants/exports.dart';
 import 'package:crm_merchant/screens/home/home_page.dart';
 
-
 class OfferConfirmationPage extends StatefulWidget {
   const OfferConfirmationPage({Key? key}) : super(key: key);
 
@@ -81,7 +80,7 @@ class _OfferConfirmationPageState extends State<OfferConfirmationPage>
                         fontWeight: FontWeight.w400,
                       ),
                     ),
-      
+
                     // unreceived sms function
                     onTap: () {},
                   ),
@@ -136,7 +135,12 @@ class _OfferConfirmationPageState extends State<OfferConfirmationPage>
       padding: const EdgeInsets.only(left: kButHorPad),
       child: MainButton(
         "Продолжить",
-        () => smsChecker.length == 4 ? Get.to(const HomePage()) : () {},
+        () => smsChecker.length == 4
+            ? Get.to(
+                const HomePage(),
+              )
+            : () {},
+        smsChecker.length == 4,
       ),
     );
   }

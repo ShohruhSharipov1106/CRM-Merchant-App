@@ -47,12 +47,12 @@ class _TariffConfirmationPageState extends State<TariffConfirmationPage> {
                           .copyWith(fontSize: 18.0),
                       children: [
                         _informationTitle(context, "Номер паспорта"),
-                        TextSpan(text: "АА1564457\n\n"),
+                        const TextSpan(text: "АА1564457\n\n"),
                         _informationTitle(context, "Дата рождения"),
-                        TextSpan(text: "11.04.2020\n\n"),
+                        const TextSpan(text: "11.04.2020\n\n"),
                         _informationTitle(context,
                             "Первоначальный взнос\n(будет списан с карты)"),
-                        TextSpan(text: "16 000 сум\n\n"),
+                        const TextSpan(text: "16 000 сум\n\n"),
                       ],
                     ),
                   ),
@@ -96,7 +96,7 @@ class _TariffConfirmationPageState extends State<TariffConfirmationPage> {
             ),
             Container(
               width: kWidth(340.0).w,
-              height: kHeight(300.0).h,
+              height: kHeight(220.0).h,
               decoration: const BoxDecoration(
                 borderRadius:
                     BorderRadius.vertical(bottom: Radius.circular(30.0)),
@@ -104,12 +104,29 @@ class _TariffConfirmationPageState extends State<TariffConfirmationPage> {
               ),
               padding: EdgeInsets.only(
                 top: kHeight(8.0).h,
-                bottom: kHeight(20.0).h,
               ),
-              child: ListView.builder(
-                itemBuilder: (_, __) => _paymentSchedule(context, __ + 1),
-                itemCount: 9,
-                physics: const BouncingScrollPhysics(),
+              child: Column(
+                children: [
+                  SizedBox(
+                    width: kWidth(340.0).w,
+                    height: kHeight(175.0).h,
+                    child: ListView.builder(
+                      itemBuilder: (_, __) => _paymentSchedule(context, __ + 1),
+                      itemCount: 10,
+                      physics: const BouncingScrollPhysics(),
+                    ),
+                  ),
+                  SizedBox(height: kHeight(10.0).h),
+                  InkWell(
+                    child: Image.asset(
+                      "assets/icons/down.png",
+                      width: kWidth(25.0).w,
+                      height: kHeight(25.0).h,
+                      fit: BoxFit.cover,
+                    ),
+                    onTap: () {},
+                  ),
+                ],
               ),
             ),
           ],
@@ -151,11 +168,16 @@ class _TariffConfirmationPageState extends State<TariffConfirmationPage> {
                   style: Theme.of(context).textTheme.labelMedium,
                 ),
                 SizedBox(height: kHeight(20.0).h),
-                MainButton("Завершить", () {}),
+                MainButton(
+                  "Завершить",
+                  () {},
+                  true,
+                ),
               ],
             ),
           ),
         ),
+        true,
       ),
     );
   }

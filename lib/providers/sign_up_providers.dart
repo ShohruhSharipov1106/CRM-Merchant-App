@@ -4,7 +4,7 @@ class SignUpProvider extends ChangeNotifier {
   TextEditingController nameController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   bool isValidate = false;
-  final formKey = GlobalKey<FormState>();
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
   isValidateFunc() {
     if (formKey.currentState!.validate()) {
       isValidate = true;

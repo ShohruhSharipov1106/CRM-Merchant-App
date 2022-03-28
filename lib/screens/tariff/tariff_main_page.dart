@@ -30,6 +30,7 @@ class _TariffMainPageState extends State<TariffMainPage> {
                 SizedBox(
                   height: kHeight(768).h,
                   child: ListView.builder(
+                    physics: const BouncingScrollPhysics(),
                     itemBuilder: (_, __) => InkWell(
                       child: Stack(
                         children: [
@@ -46,9 +47,7 @@ class _TariffMainPageState extends State<TariffMainPage> {
                             width: kWidth(368.0).w,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(30.0),
-                              color: _whichTariff != __ && _oneTapped
-                                  ? kBlackTextColor.withOpacity(0.2)
-                                  : kWhiteColor,
+                              color:  kWhiteColor,
                             ),
                             child: Text.rich(
                               TextSpan(
@@ -157,6 +156,7 @@ class _TariffMainPageState extends State<TariffMainPage> {
                         context.read<StepsProvider>().incrementStep();
                         Get.to(const TariffConfirmationPage());
                       },
+                      _oneTapped,
                     ),
                     visible: _oneTapped,
                   ),

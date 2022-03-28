@@ -138,6 +138,7 @@ class IdentificationPage extends StatelessWidget {
           Get.to(const MakeProposalPage());
           context.read<StepsProvider>().incrementStep();
         },
+        true,
       ),
     );
   }

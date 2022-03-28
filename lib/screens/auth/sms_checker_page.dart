@@ -113,6 +113,9 @@ class _SmsCheckerPageState extends State<SmsCheckerPage>
             fontSize: 64.0,
           ),
         ),
+        onChanged: (v) {
+          setState(() {});
+        },
         closeKeyboardWhenCompleted: false,
         defaultPinTheme: PinTheme(
           width: kWidth(50.0).w,
@@ -135,12 +138,16 @@ class _SmsCheckerPageState extends State<SmsCheckerPage>
   Padding _button() {
     return Padding(
       padding: const EdgeInsets.only(left: kButHorPad),
-      child: MainButton("Продолжить", () {
-        if (smsChecker.length == 4) {
-          GetStorage().write("signUpDone", "signUpDone");
-          Get.to(const HomePage());
-        }
-      }),
+      child: MainButton(
+        "Продолжить",
+        () {
+          if (smsChecker.length == 4) {
+            GetStorage().write("signUpDone", "signUpDone");
+            Get.to(const HomePage());
+          }
+        },
+        smsChecker.length == 4,
+      ),
     );
   }
 }

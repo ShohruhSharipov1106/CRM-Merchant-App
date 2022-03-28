@@ -22,11 +22,18 @@ class AddProposalCardPage extends StatelessWidget {
             SizedBox(height: kHeight(25.0).h),
             _headlineText(context),
             SizedBox(height: kHeight(15.0).h),
-            _cardNumber(context),
-            _cardExpirationDate(context),
+            Form(
+              key: context.watch<AddProposalProvider>().formKey,
+              child: Column(
+                children: [
+                  _cardNumber(context),
+                  _cardExpirationDate(context),
+                ],
+              ),
+            ),
             SizedBox(height: kHeight(22.0).h),
             // ADD IF VALIDATE THEN NEXT PAGE
-            _button(context),
+            // _button(context),
             SizedBox(height: kHeight(53.0).h),
           ],
         ),
@@ -75,6 +82,7 @@ class AddProposalCardPage extends StatelessWidget {
           Get.to(const AddProposalSmsConfirmationPage());
           context.read<StepsProvider>().incrementStep();
         },
+        context.watch<AddProposalProvider>().formKey.currentState!.validate(),
       ),
     );
   }

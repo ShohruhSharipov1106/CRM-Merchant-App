@@ -7,6 +7,9 @@ import 'package:crm_merchant/screens/add_proposal/make_proposal_page.dart';
 import 'package:crm_merchant/screens/add_proposal/passport_page.dart';
 import 'package:crm_merchant/screens/add_proposal/phone_number_page.dart';
 import 'package:crm_merchant/screens/auth/sign_up_page.dart';
+import 'package:crm_merchant/screens/auth/sms_checker_page.dart';
+import 'package:crm_merchant/screens/face_id/camera_face_id_page.dart';
+import 'package:crm_merchant/screens/face_id/face_not_match_page.dart';
 import 'package:crm_merchant/screens/home/home_page.dart';
 import 'package:crm_merchant/screens/splash/splash_screen_page.dart';
 import 'package:crm_merchant/screens/tariff/tariff_confirmation_page.dart';
@@ -29,10 +32,6 @@ void main() {
       child: const MyApp(),
     ),
   );
-  SystemChrome.setSystemUIOverlayStyle(
-    SystemUiOverlayStyle.dark.copyWith(statusBarColor: Colors.transparent),
-  );
-  AssetPicker.registerObserve();
 }
 
 class MyApp extends StatelessWidget {
@@ -80,43 +79,16 @@ class MyApp extends StatelessWidget {
               backgroundColor: Colors.transparent,
             ),
           ),
-          home: SignUpPage()
+          home: const CameraFaceIDPage()
           // home: GetStorage().read("splashDone") == "splashDone"
           //     ? (GetStorage().read("signUpDone") == "signUpDone"
           //         ? const HomePage()
           //         : const SignUpPage())
           //     : const SplashScreenPage(),
           ,
-          builder: (BuildContext c, Widget? w) {
-            return ScrollConfiguration(
-              behavior: const NoGlowScrollBehavior(),
-              child: w!,
-            );
-          },
-          localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
-            GlobalWidgetsLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: const <Locale>[
-            Locale('zh'), // Chinese
-            // Locale('iw'), // Hebrew
-          ],
-          locale: const Locale('zh'),
+         
         );
       },
     );
   }
-}
-
-class NoGlowScrollBehavior extends ScrollBehavior {
-  const NoGlowScrollBehavior();
-
-  @override
-  Widget buildViewportChrome(
-    BuildContext context,
-    Widget child,
-    AxisDirection axisDirection,
-  ) =>
-      child;
 }

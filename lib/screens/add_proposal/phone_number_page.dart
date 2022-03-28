@@ -1,12 +1,20 @@
 import 'package:crm_merchant/constants/exports.dart';
 import 'package:crm_merchant/screens/add_proposal/card_page.dart';
 
-class AddProposalPhoneNumberPage extends StatelessWidget {
+class AddProposalPhoneNumberPage extends StatefulWidget {
   const AddProposalPhoneNumberPage({Key? key}) : super(key: key);
 
   @override
+  State<AddProposalPhoneNumberPage> createState() =>
+      _AddProposalPhoneNumberPageState();
+}
+
+class _AddProposalPhoneNumberPageState
+    extends State<AddProposalPhoneNumberPage> {
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -63,10 +71,11 @@ class AddProposalPhoneNumberPage extends StatelessWidget {
       child: MainButton(
         "Продолжить",
         () {
-          Get.to(AddProposalCardPage());
+          Get.to(const AddProposalCardPage());
           context.read<StepsProvider>().incrementStep();
         },
-        
+        context.watch<AddProposalProvider>().addProposalPhoneNumber.length >=
+            17,
       ),
     );
   }

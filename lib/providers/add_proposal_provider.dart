@@ -8,6 +8,7 @@ class AddProposalProvider extends ChangeNotifier {
   TextEditingController dateOfBirth = TextEditingController();
   TextEditingController namingThings = TextEditingController();
   TextEditingController summThings = TextEditingController();
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
   int indexPage = 1;
 
   nextPage() {

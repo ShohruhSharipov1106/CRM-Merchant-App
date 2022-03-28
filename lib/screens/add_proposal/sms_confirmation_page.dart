@@ -112,11 +112,12 @@ class _AddProposalSmsConfirmationPageState
       child: MainButton(
         "Продолжить",
         () => smsChecker.length == 4
-            ?  {
+            ? {
                 Get.to(const AddProposalPassportPage()),
                 context.read<StepsProvider>().incrementStep(),
               }
-            :  {},
+            : {},
+        smsChecker.length == 4,
       ),
     );
   }

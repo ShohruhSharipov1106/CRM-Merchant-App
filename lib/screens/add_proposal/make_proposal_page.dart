@@ -19,7 +19,7 @@ class _MakeProposalPageState extends State<MakeProposalPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: kHeight(20.0).h),
-            const StepsField(),
+            StepsField(6),
             SizedBox(height: kHeight(20.0).h),
             TitleOfPage("Создание заявки", kWidth(88.0).w),
             SizedBox(height: kHeight(20.0).h),
@@ -124,7 +124,7 @@ class _MakeProposalPageState extends State<MakeProposalPage> {
         "Продолжить",
         () {
           Get.to(const TariffMainPage());
-          context.read<StepsProvider>().incrementStep();
+         
         },
         true,
       ),

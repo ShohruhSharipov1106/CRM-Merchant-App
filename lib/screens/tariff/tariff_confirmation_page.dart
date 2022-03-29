@@ -19,7 +19,7 @@ class _TariffConfirmationPageState extends State<TariffConfirmationPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: kHeight(20.0).h),
-            const StepsField(),
+            StepsField(8),
             SizedBox(height: kHeight(20.0).h),
             TitleOfPage("Подтверджение ", kWidth(123.0).w),
             SizedBox(height: kHeight(50.0).h),

@@ -20,7 +20,7 @@ class _AddProposalPhoneNumberPageState
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: kHeight(20.0).h),
-            const StepsField(),
+            StepsField(1),
             SizedBox(height: kHeight(20.0).h),
             TitleOfPage("Создать заявку", kWidth(126.0).w),
             SizedBox(height: kHeight(25.0).h),
@@ -30,11 +30,24 @@ class _AddProposalPhoneNumberPageState
             SizedBox(height: kHeight(15.0).h),
             _inputField(context),
             SizedBox(height: kHeight(52.0).h),
-            // ADD IF VALIDATE THEN NEXT PAGE
             _button(context),
             SizedBox(height: kHeight(53.0).h),
           ],
         ),
+      ),
+    );
+  }
+
+  Padding _button(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: kButHorPad),
+      child: MainButton(
+        "Продолжить",
+        () {
+          Get.to(const AddProposalCardPage());
+        },
+        context.watch<AddProposalProvider>().addProposalPhoneNumber.length >=
+            10,
       ),
     );
   }
@@ -55,28 +68,13 @@ class _AddProposalPhoneNumberPageState
       "Введите ваш номер телефона",
       TextInputType.number,
       (v) {
-        if (v!.length < 11) return "";
+        if (v!.length < 16) return "";
         return null;
       },
       17,
       "+ 998** *** ** ** ",
       "+ 998## ### ## ##",
       {"#": RegExp(r'[0-9]')},
-    );
-  }
-
-  Padding _button(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: kButHorPad),
-      child: MainButton(
-        "Продолжить",
-        () {
-          Get.to(const AddProposalCardPage());
-          context.read<StepsProvider>().incrementStep();
-        },
-        context.watch<AddProposalProvider>().addProposalPhoneNumber.length >=
-            17,
-      ),
     );
   }
 

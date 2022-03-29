@@ -44,7 +44,7 @@ class _AddProposalSmsConfirmationPageState
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: kHeight(20.0).h),
-            const StepsField(),
+            StepsField(3),
             SizedBox(height: kHeight(20.0).h),
             TitleOfPage("Подтверждение", kWidth(123.0).w),
             SizedBox(height: kHeight(5.0).h),
@@ -114,7 +114,7 @@ class _AddProposalSmsConfirmationPageState
         () => smsChecker.length == 4
             ? {
                 Get.to(const AddProposalPassportPage()),
-                context.read<StepsProvider>().incrementStep(),
+                
               }
             : {},
         smsChecker.length == 4,
@@ -179,6 +179,9 @@ class _AddProposalSmsConfirmationPageState
             fontSize: 64.0,
           ),
         ),
+        onChanged: (v) {
+          setState(() {});
+        },
         closeKeyboardWhenCompleted: false,
         defaultPinTheme: PinTheme(
           width: kWidth(50.0).w,

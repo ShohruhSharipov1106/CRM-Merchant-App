@@ -74,7 +74,7 @@ class SignUpPage extends StatelessWidget {
                         ? Get.to(const SmsCheckerPage())
                         : () {};
                   },
-                  contexPro.isValidate,
+                 contexPro.nameController.length>2 && contexPro.phoneController.length > 8,
                 ),
               ),
             ],

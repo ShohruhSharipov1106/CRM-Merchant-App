@@ -22,7 +22,7 @@ class _TariffMainPageState extends State<TariffMainPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: kHeight(20.0).h),
-            const StepsField(),
+            StepsField(7),
             SizedBox(height: kHeight(20.0).h),
             TitleOfPage("Выбрать тариф", kWidth(117.0).w),
             Stack(
@@ -153,7 +153,7 @@ class _TariffMainPageState extends State<TariffMainPage> {
                     child: MainButton(
                       "Перейти к оформлению",
                       () {
-                        context.read<StepsProvider>().incrementStep();
+                     
                         Get.to(const TariffConfirmationPage());
                       },
                       _oneTapped,

@@ -63,7 +63,7 @@ class HomePage extends StatelessWidget {
             ),
             MainButton(
               "Создать заявку",
-              () => ctxReadHomeProvider.addCheckout(kGreenLabelColor),
+              () => ctxReadHomeProvider.addCheckout(kGreyLabelColor),
               true,
             ),
           ],

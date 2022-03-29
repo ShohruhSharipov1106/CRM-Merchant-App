@@ -26,7 +26,7 @@ class IdentificationPage extends StatelessWidget {
                     ),
                     onTap: () {
                       Get.back();
-                      context.read<StepsProvider>().decrementStep();
+                    
                     },
                   ),
                   TitleOfPage("Идентификация", kWidth(90.0).w),
@@ -136,7 +136,7 @@ class IdentificationPage extends StatelessWidget {
         "Продолжить",
         () {
           Get.to(const MakeProposalPage());
-          context.read<StepsProvider>().incrementStep();
+        
         },
         true,
       ),

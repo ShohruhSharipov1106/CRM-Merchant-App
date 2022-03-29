@@ -27,7 +27,7 @@ void main() {
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (_) => AddProposalProvider()),
         ChangeNotifierProvider(create: (_) => HomePageProvider()),
-        ChangeNotifierProvider(create: (_) => StepsProvider()),
+     
       ],
       child: const MyApp(),
     ),
@@ -79,14 +79,13 @@ class MyApp extends StatelessWidget {
               backgroundColor: Colors.transparent,
             ),
           ),
-          home: const CameraFaceIDPage()
+          home: AddProposalPhoneNumberPage()
           // home: GetStorage().read("splashDone") == "splashDone"
           //     ? (GetStorage().read("signUpDone") == "signUpDone"
           //         ? const HomePage()
           //         : const SignUpPage())
           //     : const SplashScreenPage(),
           ,
-         
         );
       },
     );

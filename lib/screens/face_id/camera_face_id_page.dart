@@ -92,7 +92,7 @@ class BorderPainter extends CustomPainter {
       ..strokeCap = StrokeCap.round;
 
     Path path = Path()
-      ..moveTo(cornerSide, cornerSide)
+      ..moveTo(cornerSide, 0)
       ..quadraticBezierTo(0, 0, 0, cornerSide)
       ..moveTo(sw - cornerSide, sh)
       ..quadraticBezierTo(sw, sh, sw, sh - cornerSide);

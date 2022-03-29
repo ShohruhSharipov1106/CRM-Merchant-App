@@ -12,7 +12,7 @@ class AddProposalCardPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: kHeight(20.0).h),
-            const StepsField(),
+            StepsField(2),
             SizedBox(height: kHeight(20.0).h),
             TitleOfPage("Введите ваши данные", kWidth(88.0).w),
             SizedBox(height: kHeight(5.0).h),
@@ -32,8 +32,7 @@ class AddProposalCardPage extends StatelessWidget {
               ),
             ),
             SizedBox(height: kHeight(22.0).h),
-            // ADD IF VALIDATE THEN NEXT PAGE
-            // _button(context),
+            _button(context),
             SizedBox(height: kHeight(53.0).h),
           ],
         ),
@@ -80,9 +79,9 @@ class AddProposalCardPage extends StatelessWidget {
         "Выслать код",
         () {
           Get.to(const AddProposalSmsConfirmationPage());
-          context.read<StepsProvider>().incrementStep();
         },
-        context.watch<AddProposalProvider>().formKey.currentState!.validate(),
+        context.watch<AddProposalProvider>().cardNumber.length > 21 &&
+            context.watch<AddProposalProvider>().cardExpirationDate.length > 5,
       ),
     );
   }

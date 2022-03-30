@@ -32,29 +32,33 @@ class CameraFaceIDPage extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
           ),
-          Padding(
-            padding: EdgeInsets.symmetric(
-              vertical: kHeight(50.0).h,
-              horizontal: kWidth(kMainPadding).w,
+          Container(
+            height: kHeight(565.0).h,
+            width: kWidth(396.0).w,
+            margin: EdgeInsets.symmetric(
+              vertical: kHeight(42.0).h,
+              horizontal: kWidth(16.0).w,
             ),
-            child: CustomPaint(
-              foregroundPainter: BorderPainter(),
-              child: Container(
-                height: kHeight(515.0).h,
-                width: kWidth(360.0).w,
-                margin: EdgeInsets.symmetric(
-                  vertical: kHeight(15.0).h,
-                  horizontal: kWidth(14.0).w,
-                ),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(
-                    Radius.elliptical(
-                      kWidth(360.0).w,
-                      kHeight(515.0).h,
-                    ),
+            padding: EdgeInsets.symmetric(
+              vertical: kHeight(25.0).h,
+              horizontal: kWidth(34.0).w,
+            ),
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("assets/images/unselected-oval-frame.png"),
+                fit: BoxFit.cover,
+              ),
+              color: kBlackTextColor,
+            ),
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(
+                  Radius.elliptical(
+                    kWidth(360.0).w,
+                    kHeight(515.0).h,
                   ),
-                  color: kWhiteColor,
                 ),
+                color: kWhiteColor,
               ),
             ),
           ),
@@ -76,33 +80,4 @@ class CameraFaceIDPage extends StatelessWidget {
       ),
     );
   }
-}
-
-class BorderPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    double sh = size.height; // for convenient shortage
-    double sw = size.width; // for convenient shortage
-    double cornerSide = sh * 0.5; // desirable value for corners side
-
-    Paint paint = Paint()
-      ..color = kWhiteColor
-      ..strokeWidth = 2.0
-      ..style = PaintingStyle.stroke
-      ..strokeCap = StrokeCap.round;
-
-    Path path = Path()
-      ..moveTo(cornerSide, 0)
-      ..quadraticBezierTo(0, 0, 0, cornerSide)
-      ..moveTo(sw - cornerSide, sh)
-      ..quadraticBezierTo(sw, sh, sw, sh - cornerSide);
-
-    canvas.drawPath(path, paint);
-  }
-
-  @override
-  bool shouldRepaint(BorderPainter oldDelegate) => false;
-
-  @override
-  bool shouldRebuildSemantics(BorderPainter oldDelegate) => false;
 }

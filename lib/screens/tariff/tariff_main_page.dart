@@ -47,7 +47,7 @@ class _TariffMainPageState extends State<TariffMainPage> {
                             width: kWidth(368.0).w,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(30.0),
-                              color:  kWhiteColor,
+                              color: kWhiteColor,
                             ),
                             child: Text.rich(
                               TextSpan(
@@ -132,7 +132,7 @@ class _TariffMainPageState extends State<TariffMainPage> {
                                     ),
                                     textAlign: TextAlign.center,
                                   )
-                                : Text(""),
+                                : const Text(""),
                             top: 25,
                             right: 40,
                           ),
@@ -153,8 +153,9 @@ class _TariffMainPageState extends State<TariffMainPage> {
                     child: MainButton(
                       "Перейти к оформлению",
                       () {
-                     
-                        Get.to(const TariffConfirmationPage());
+                        Get.to(
+                          TariffConfirmationPage(months[_whichTariff!]),
+                        );
                       },
                       _oneTapped,
                     ),

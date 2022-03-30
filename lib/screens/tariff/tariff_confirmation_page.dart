@@ -1,7 +1,10 @@
 import 'package:crm_merchant/constants/exports.dart';
+import 'package:crm_merchant/screens/tariff/components/parametrs_lists.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class TariffConfirmationPage extends StatefulWidget {
-  const TariffConfirmationPage({Key? key}) : super(key: key);
+  int tarifCount;
+  TariffConfirmationPage(this.tarifCount, {Key? key}) : super(key: key);
 
   @override
   State<TariffConfirmationPage> createState() => _TariffConfirmationPageState();
@@ -9,7 +12,10 @@ class TariffConfirmationPage extends StatefulWidget {
 
 class _TariffConfirmationPageState extends State<TariffConfirmationPage> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-
+  final ItemScrollController _itemScrollController = ItemScrollController();
+  final ItemPositionsListener _itemPositionsListener =
+      ItemPositionsListener.create();
+  int _currentCount = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,9 +66,8 @@ class _TariffConfirmationPageState extends State<TariffConfirmationPage> {
               ),
             ),
             SizedBox(height: kHeight(20.0).h),
-            _graficPaymentCard(context),
+            _graficPayment(context),
             SizedBox(height: kHeight(47.0).h),
-            // ADD IF VALIDATE THEN NEXT PAGE
             _showModalBottom(),
           ],
         ),
@@ -70,67 +75,93 @@ class _TariffConfirmationPageState extends State<TariffConfirmationPage> {
     );
   }
 
-  Padding _graficPaymentCard(BuildContext context) {
+  Padding _graficPayment(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: kWidth(44.0).w),
       child: SizedBox(
         width: kWidth(340.0).w,
         child: Column(
           children: [
-            Container(
-              height: kHeight(43.0).h,
-              width: kWidth(340.0).w,
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.vertical(top: Radius.circular(30.0)),
-                color: kMainColor,
-              ),
-              child: Center(
-                child: Text(
-                  "График платежей",
-                  style: Theme.of(context)
-                      .textTheme
-                      .labelMedium!
-                      .copyWith(color: kWhiteColor),
-                ),
-              ),
-            ),
-            Container(
-              width: kWidth(340.0).w,
-              height: kHeight(220.0).h,
-              decoration: const BoxDecoration(
-                borderRadius:
-                    BorderRadius.vertical(bottom: Radius.circular(30.0)),
-                color: kWhiteColor,
-              ),
-              padding: EdgeInsets.only(
-                top: kHeight(8.0).h,
-              ),
-              child: Column(
-                children: [
-                  SizedBox(
-                    width: kWidth(340.0).w,
-                    height: kHeight(175.0).h,
-                    child: ListView.builder(
-                      itemBuilder: (_, __) => _paymentSchedule(context, __ + 1),
-                      itemCount: 10,
-                      physics: const BouncingScrollPhysics(),
-                    ),
-                  ),
-                  SizedBox(height: kHeight(10.0).h),
-                  InkWell(
-                    child: Image.asset(
-                      "assets/icons/down.png",
-                      width: kWidth(25.0).w,
-                      height: kHeight(25.0).h,
-                      fit: BoxFit.cover,
-                    ),
-                    onTap: () {},
-                  ),
-                ],
-              ),
-            ),
+            _graficPaymentTitleBody(context),
+            _graficPaymentMainBody(context),
           ],
         ),
+      ),
+    );
+  }
+
+  Container _graficPaymentTitleBody(BuildContext context) {
+    return Container(
+      height: kHeight(43.0).h,
+      width: kWidth(340.0).w,
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(30.0)),
+        color: kMainColor,
+      ),
+      child: Center(
+        child: Text(
+          "График платежей",
+          style: Theme.of(context)
+              .textTheme
+              .labelMedium!
+              .copyWith(color: kWhiteColor),
+        ),
+      ),
+    );
+  }
+
+  Container _graficPaymentMainBody(BuildContext context) {
+    return Container(
+      width: kWidth(340.0).w,
+      height: kHeight(220.0).h,
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.vertical(bottom: Radius.circular(30.0)),
+        color: kWhiteColor,
+      ),
+      padding: EdgeInsets.only(
+        top: kHeight(8.0).h,
+      ),
+      child: Column(
+        children: [
+          SizedBox(
+            width: kWidth(340.0).w,
+            height: kHeight(175.0).h,
+            child: ScrollablePositionedList.builder(
+              itemScrollController: _itemScrollController,
+              itemPositionsListener: _itemPositionsListener,
+              itemBuilder: (_, __) => _paymentSchedule(context, __ + 1),
+              itemCount: widget.tarifCount,
+              physics: _currentCount < widget.tarifCount - 5
+                  ? const BouncingScrollPhysics()
+                  : const NeverScrollableScrollPhysics(),
+            ),
+          ),
+          SizedBox(height: kHeight(10.0).h),
+          GestureDetector(
+            child: Visibility(
+              visible: widget.tarifCount > 6 ? true : false,
+              child: Image.asset(
+                _currentCount < widget.tarifCount - 5
+                    ? "assets/icons/down.png"
+                    : "assets/icons/up.png",
+                width: kWidth(25.0).w,
+                height: kHeight(25.0).h,
+                fit: BoxFit.cover,
+              ),
+            ),
+            onTap: () {
+              setState(() {
+                _currentCount < widget.tarifCount - 5
+                    ? _currentCount += 1
+                    : _currentCount = 0;
+              });
+              _itemScrollController.scrollTo(
+                index: _currentCount == 0 ? 0 : _currentCount,
+                duration: const Duration(milliseconds: 300),
+              );
+            },
+          ),
+        ],
       ),
     );
   }

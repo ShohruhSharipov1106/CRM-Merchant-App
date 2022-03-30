@@ -21,7 +21,7 @@ class InputField extends StatefulWidget {
     this.maskFilter, {
     Key? key,
   }) : super(key: key);
-
+  
   @override
   State<InputField> createState() => _InputFieldState();
 }
@@ -46,6 +46,7 @@ class _InputFieldState extends State<InputField> {
         maxLength: widget.maxLen,
         maxLengthEnforcement: MaxLengthEnforcement.enforced,
         textAlignVertical: TextAlignVertical.top,
+
         inputFormatters: [
           MaskTextInputFormatter(
             mask: widget.maskText,

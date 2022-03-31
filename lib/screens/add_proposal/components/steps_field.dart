@@ -1,12 +1,12 @@
 import 'package:crm_merchant/constants/exports.dart';
 
 class StepsField extends StatelessWidget {
+  BuildContext kontext;
   int step;
-  StepsField(this.step, {Key? key}) : super(key: key);
+  StepsField(this.kontext, this.step, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
- 
     return SizedBox(
       height: kHeight(30.0).h,
       child: Column(
@@ -25,12 +25,28 @@ class StepsField extends StatelessWidget {
                   ),
                   onTap: () {
                     Get.back();
-                    
                   },
                 ),
                 SizedBox(width: kWidth(150.0).w),
-                Text(
-                  "$step/8",
+                Text.rich(
+                  TextSpan(
+                    children: [
+                      TextSpan(
+                        text: "$step",
+                        style: Theme.of(context)
+                            .textTheme
+                            .labelMedium!
+                            .copyWith(
+                              fontWeight: FontWeight.w900,
+                              color:
+                                  kontext.watch<AddProposalProvider>().isError
+                                      ? kMainColor
+                                      : kBlackTextColor,
+                            ),
+                      ),
+                      const TextSpan(text: "/8"),
+                    ],
+                  ),
                   style: Theme.of(context).textTheme.labelMedium!.copyWith(
                         fontWeight: FontWeight.w900,
                       ),
@@ -74,8 +90,7 @@ class StepsField extends StatelessWidget {
       height: kHeight(2.0).h,
       width: kWidth(47.0).w,
       decoration: BoxDecoration(
-        color:
-           qadam  >= steps ? kMainColor : kUnSelectedStepColor,
+        color: qadam >= steps ? kMainColor : kUnSelectedStepColor,
         borderRadius: BorderRadius.circular(1.0),
       ),
     );

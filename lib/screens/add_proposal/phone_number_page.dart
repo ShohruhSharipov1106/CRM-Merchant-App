@@ -20,11 +20,11 @@ class _AddProposalPhoneNumberPageState
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: kHeight(20.0).h),
-            StepsField(1),
+            StepsField(context, 1),
             SizedBox(height: kHeight(20.0).h),
             TitleOfPage("Создать заявку", kWidth(126.0).w),
             SizedBox(height: kHeight(25.0).h),
-            _titleAnimation(),
+            _titleAnimation(context),
             SizedBox(height: kHeight(50.0).h),
             _titleField(context),
             SizedBox(height: kHeight(15.0).h),
@@ -44,10 +44,32 @@ class _AddProposalPhoneNumberPageState
       child: MainButton(
         "Продолжить",
         () {
-          Get.to(const AddProposalCardPage());
+          if (context
+                  .read<AddProposalProvider>()
+                  .addProposalPhoneNumber
+                  .text
+                  .length ==
+              17) {
+            Get.to(
+              AddProposalCardPage(
+                context
+                    .read<AddProposalProvider>()
+                    .addProposalPhoneNumber
+                    .text
+                    .substring(12),
+              ),
+            );
+            context.read<AddProposalProvider>().hasnotError();
+          } else {
+            context.read<AddProposalProvider>().hasError();
+          }
         },
-        context.watch<AddProposalProvider>().addProposalPhoneNumber.length >=
-            10,
+        context
+                .read<AddProposalProvider>()
+                .addProposalPhoneNumber
+                .text
+                .length ==
+            17,
       ),
     );
   }
@@ -56,21 +78,25 @@ class _AddProposalPhoneNumberPageState
     return Padding(
       padding: const EdgeInsets.only(left: kMainPadding),
       child: Text(
-        "Введите номер телефона клиента ",
-        style: Theme.of(context).textTheme.labelMedium,
+        context.watch<AddProposalProvider>().isError
+            ? "Недопустимый номер телефона"
+            : "Введите номер телефона клиента ",
+        style: Theme.of(context).textTheme.labelMedium!.copyWith(
+              color: context.watch<AddProposalProvider>().isError
+                  ? kMainColor
+                  : kBlackTextColor,
+            ),
       ),
     );
   }
 
   InputField _inputField(BuildContext context) {
     return InputField(
+      context,
       context.watch<AddProposalProvider>().addProposalPhoneNumber,
       "Введите ваш номер телефона",
+      "Недопустимый номер телефона",
       TextInputType.number,
-      (v) {
-        if (v!.length < 16) return "";
-        return null;
-      },
       17,
       "+ 998** *** ** ** ",
       "+ 998## ### ## ##",
@@ -78,7 +104,7 @@ class _AddProposalPhoneNumberPageState
     );
   }
 
-  Padding _titleAnimation() {
+  Padding _titleAnimation(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(left: kWidth(100.0).w),
       child: Stack(
@@ -90,13 +116,18 @@ class _AddProposalPhoneNumberPageState
               "assets/icons/main_icon.svg",
               height: kHeight(168.88).h,
               width: kWidth(194.0).w,
+              color: context.watch<AddProposalProvider>().isError
+                  ? kErrorAnimationColor
+                  : kMainColor,
             ),
           ),
           Positioned(
             child: ElasticInRight(
               duration: const Duration(seconds: 5),
               child: SvgPicture.asset(
-                "assets/icons/document.svg",
+                context.watch<AddProposalProvider>().isError
+                    ? "assets/icons/error-document.svg"
+                    : "assets/icons/document.svg",
                 height: kHeight(174.21).h,
                 width: kWidth(156.0).w,
               ),

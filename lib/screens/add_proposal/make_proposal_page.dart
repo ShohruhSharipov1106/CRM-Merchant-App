@@ -1,7 +1,8 @@
-import 'dart:html';
+import 'dart:io';
 
 import 'package:crm_merchant/constants/exports.dart';
 import 'package:crm_merchant/screens/tariff/tariff_main_page.dart';
+import 'package:flutter/services.dart';
 
 class MakeProposalPage extends StatefulWidget {
   const MakeProposalPage({Key? key}) : super(key: key);
@@ -11,9 +12,19 @@ class MakeProposalPage extends StatefulWidget {
 }
 
 class _MakeProposalPageState extends State<MakeProposalPage> {
-  Future pickImage() async {
-    final image = await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (image == null) final imageTemporary = File(image.path);
+  File? image;
+
+  Future pickImage(ImageSource source) async {
+    try {
+      final image = await ImagePicker().pickImage(source: source);
+      if (image == null) return;
+      final imageTemporary = File(image.path);
+      setState(() {
+        this.image = imageTemporary;
+      });
+    } on PlatformException catch (e) {
+      debugPrint("Failed to pick image: $e");
+    }
   }
 
   @override
@@ -24,7 +35,7 @@ class _MakeProposalPageState extends State<MakeProposalPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: kHeight(20.0).h),
-            StepsField(6),
+            StepsField(context,6),
             SizedBox(height: kHeight(20.0).h),
             Expanded(
               child: SingleChildScrollView(
@@ -69,19 +80,29 @@ class _MakeProposalPageState extends State<MakeProposalPage> {
                             ),
                             child: Center(
                               child: __ == 0
-                                  ? const Icon(
-                                      Icons.add,
-                                      size: 40.0,
-                                    )
-                                  : SvgPicture.asset(
-                                      "assets/icons/camera.svg",
-                                      height: kHeight(20.0).h,
-                                      width: kWidth(26.0).w,
-                                      fit: BoxFit.cover,
-                                    ),
+                                  ? image != null
+                                      ? Image.file(
+                                          image!,
+                                          fit: BoxFit.cover,
+                                        )
+                                      : const Icon(
+                                          Icons.add,
+                                          size: 40.0,
+                                        )
+                                  : image != null
+                                      ? Image.file(
+                                          image!,
+                                          fit: BoxFit.cover,
+                                        )
+                                      : SvgPicture.asset(
+                                          "assets/icons/camera.svg",
+                                          height: kHeight(20.0).h,
+                                          width: kWidth(26.0).w,
+                                          fit: BoxFit.cover,
+                                        ),
                             ),
                           ),
-                          onTap: () => pickImage(),
+                          onTap: () => pickImage(ImageSource.gallery),
                         ),
                         itemCount: 5,
                       ),
@@ -102,13 +123,11 @@ class _MakeProposalPageState extends State<MakeProposalPage> {
 
   InputField _summ(BuildContext context) {
     return InputField(
+      context,
       context.watch<AddProposalProvider>().summThings,
       "Сумма",
+      "Недопустимая сумма",
       TextInputType.number,
-      (v) {
-        if (v!.length < 4) return "";
-        return null;
-      },
       29,
       "* * * * * * * * * * * * * * *",
       "* * * * * * * * * * * * * * *",
@@ -118,13 +137,11 @@ class _MakeProposalPageState extends State<MakeProposalPage> {
 
   InputField _naming(BuildContext context) {
     return InputField(
+      context,
       context.watch<AddProposalProvider>().namingThings,
       "Наименование товара",
+      "Недопустимые символы для товара",
       TextInputType.text,
-      (v) {
-        if (v!.length < 2) return "";
-        return null;
-      },
       29,
       "* * * * * * * * * * * * * * *",
       "* * * * * * * * * * * * * * *",

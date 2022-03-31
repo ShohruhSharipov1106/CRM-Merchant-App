@@ -11,6 +11,7 @@ class MainButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
+   
       child: Text(
         buttonTitle,
         textAlign: TextAlign.center,
@@ -19,7 +20,6 @@ class MainButton extends StatelessWidget {
       style: ElevatedButton.styleFrom(
         primary:
             buttonValidation ? kYellowButtonColor : kLightYellowButtonColor,
-        
         fixedSize: Size(
           kWidth(269.0).w,
           kHeight(60.0).h,
@@ -34,7 +34,6 @@ class MainButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(30.0),
         ),
       ),
-    
       onPressed: () => buttonFunc(),
     );
   }

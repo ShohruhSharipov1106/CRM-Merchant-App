@@ -10,3 +10,4 @@ const Color kUnselectedLabelColor = Color(0xff888888);
 const Color kGreenLabelColor = Color(0xff328E3C);
 const Color kGreyLabelColor = Color(0xffBFBFBF);
 const Color kUnSelectedStepColor = Color(0xffEBEBEB);
+const Color kErrorAnimationColor = Color(0xffE6E6E6);

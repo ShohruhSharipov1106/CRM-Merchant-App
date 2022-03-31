@@ -27,7 +27,6 @@ void main() {
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (_) => AddProposalProvider()),
         ChangeNotifierProvider(create: (_) => HomePageProvider()),
-     
       ],
       child: const MyApp(),
     ),
@@ -79,7 +78,7 @@ class MyApp extends StatelessWidget {
               backgroundColor: Colors.transparent,
             ),
           ),
-          home: MakeProposalPage()
+          home: const AddProposalPassportPage()
           // home: GetStorage().read("splashDone") == "splashDone"
           //     ? (GetStorage().read("signUpDone") == "signUpDone"
           //         ? const HomePage()

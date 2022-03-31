@@ -1,5 +1,6 @@
 import 'package:crm_merchant/constants/exports.dart';
 import 'package:crm_merchant/screens/face_id/auth_face_page.dart';
+import 'package:flutter/material.dart';
 
 class AddProposalPassportPage extends StatelessWidget {
   const AddProposalPassportPage({Key? key}) : super(key: key);
@@ -7,32 +8,25 @@ class AddProposalPassportPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: kHeight(20.0).h),
-       StepsField(4),
+            StepsField(context, 4),
             SizedBox(height: kHeight(20.0).h),
             TitleOfPage("Введите ваши данные", kWidth(88.0).w),
             SizedBox(height: kHeight(5.0).h),
-            _animationField(),
+            _animationField(context),
             SizedBox(height: kHeight(20.0).h),
             _subtitleField(),
             SizedBox(height: kHeight(25.0).h),
             _titleField(context),
             SizedBox(height: kHeight(4.0).h),
-            Form(
-              key: context.watch<AddProposalProvider>().formKey,
-              child: Column(
-                children: [
-                  _serialNumberOfpassport(context),
-                  _dateOfBirth(context),
-                ],
-              ),
-            ),
+            _serialNumberOfpassport(context),
+            _dateOfBirth(context),
             SizedBox(height: kHeight(7.0).h),
-            // ADD IF VALIDATE THEN NEXT PAGE
             _buttonField(context),
             SizedBox(height: kHeight(53.0).h),
           ],
@@ -47,46 +41,65 @@ class AddProposalPassportPage extends StatelessWidget {
       child: MainButton(
         "Аутентификация по лицу",
         () {
-          Get.to(const AuthFacePage());
-          
+          if (context.read<AddProposalProvider>().dateOfBirth.text.length ==
+                  10 &&
+              context
+                      .read<AddProposalProvider>()
+                      .serialNumberOfpassport
+                      .text
+                      .length ==
+                  10) {
+            Get.to(const AuthFacePage());
+            context.read<AddProposalProvider>().hasnotError();
+          } else {
+            context.read<AddProposalProvider>().hasError();
+          }
         },
-        context.watch<AddProposalProvider>().formKey.currentState!.validate(),
+        context.read<AddProposalProvider>().dateOfBirth.text.length == 10 &&
+            context
+                    .read<AddProposalProvider>()
+                    .serialNumberOfpassport
+                    .text
+                    .length ==
+                10,
       ),
     );
   }
 
   InputField _dateOfBirth(BuildContext context) {
     return InputField(
+      context,
       context.watch<AddProposalProvider>().dateOfBirth,
       "Дата рождения ",
+      "Недопустимая дата рождения",
       TextInputType.number,
-      (v) {
-        if (v!.length < 8) return "";
-        return null;
+      16,
+      "**/**/****",
+      "**/%%/####",
+      {
+        // "@": RegExp(r'[0-3]'),
+        "*": RegExp(r'[1-9]|1[0-2]'),
+        "%": RegExp(r'[1-9]|1[0-2]'),
+        "#": RegExp(r'[1-9]|1[0-2]')
       },
-      10,
-      "**/**/****",
-      "**/**/****",
-      {"*": RegExp(r'[0-9]')},
     );
   }
 
   InputField _serialNumberOfpassport(BuildContext context) {
     return InputField(
+      context,
       context.watch<AddProposalProvider>().serialNumberOfpassport,
       "Введите серийный номер паспорта",
-      TextInputType.streetAddress,
-      (v) {
-        if (v!.length < 9) return "";
-        return null;
-      },
-      25,
+      "Неверный срок действия карты ",
+      TextInputType.visiblePassword,
+      26,
       "*  *  *  *  *  *  *  *  * ",
       "#  #  *  *  *  *  *  *  *",
       {
-        "#": RegExp(r'[A-Z]'),
+        "#": RegExp(r'[A-Za-z]'),
         "*": RegExp(r'[0-9]'),
       },
+      capitalText: true,
     );
   }
 
@@ -94,8 +107,14 @@ class AddProposalPassportPage extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(left: kMainPadding),
       child: Text(
-        "Введите паспортные данные",
-        style: Theme.of(context).textTheme.labelMedium,
+        context.watch<AddProposalProvider>().isError
+            ? "Неверные паспортные данные"
+            : "Введите паспортные данные",
+        style: Theme.of(context).textTheme.labelMedium!.copyWith(
+              color: context.watch<AddProposalProvider>().isError
+                  ? kMainColor
+                  : kBlackTextColor,
+            ),
       ),
     );
   }
@@ -114,7 +133,7 @@ class AddProposalPassportPage extends StatelessWidget {
     );
   }
 
-  Padding _animationField() {
+  Padding _animationField(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(left: kWidth(130.0).w),
       child: Stack(
@@ -126,13 +145,18 @@ class AddProposalPassportPage extends StatelessWidget {
               "assets/icons/main_icon.svg",
               height: kHeight(122.06).h,
               width: kWidth(131.12).w,
+              color: context.watch<AddProposalProvider>().isError
+                  ? kErrorAnimationColor
+                  : kMainColor,
             ),
           ),
           Positioned(
             child: FadeInRight(
               duration: const Duration(seconds: 5),
               child: SvgPicture.asset(
-                "assets/icons/passport.svg",
+                context.watch<AddProposalProvider>().isError
+                    ? "assets/icons/error-passport.svg"
+                    : "assets/icons/passport.svg",
                 height: kHeight(88.87).h,
                 width: kWidth(88.16).w,
               ),

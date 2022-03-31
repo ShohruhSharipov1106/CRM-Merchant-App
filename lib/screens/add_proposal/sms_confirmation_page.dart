@@ -2,7 +2,9 @@ import 'package:crm_merchant/constants/exports.dart';
 import 'package:crm_merchant/screens/add_proposal/passport_page.dart';
 
 class AddProposalSmsConfirmationPage extends StatefulWidget {
-  const AddProposalSmsConfirmationPage({Key? key}) : super(key: key);
+  String last4PhoneNumber;
+  AddProposalSmsConfirmationPage(this.last4PhoneNumber, {Key? key})
+      : super(key: key);
 
   @override
   State<AddProposalSmsConfirmationPage> createState() =>
@@ -39,22 +41,23 @@ class _AddProposalSmsConfirmationPageState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+    
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: kHeight(20.0).h),
-            StepsField(3),
+            StepsField(context, 3),
             SizedBox(height: kHeight(20.0).h),
             TitleOfPage("Подтверждение", kWidth(123.0).w),
             SizedBox(height: kHeight(5.0).h),
-            _animationField(),
+            _animationField(context),
             SizedBox(height: kHeight(20.0).h),
-            const Padding(
-              padding: EdgeInsets.only(left: kInpHorPad),
+            Padding(
+              padding: const EdgeInsets.only(left: kInpHorPad),
               child: Text(
-                "Введите код, отправленный на номер телефона (*3929), привязанный к \nкарте",
-                style: TextStyle(
+                "Введите код, отправленный на номер телефона (*${widget.last4PhoneNumber}), привязанный к \nкарте",
+                style: const TextStyle(
                   fontSize: 10.0,
                   fontWeight: FontWeight.w400,
                   color: kBlackTextColor,
@@ -82,15 +85,23 @@ class _AddProposalSmsConfirmationPageState
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Countdown(
-            animation: StepTween(
-              begin: levelClock,
-              end: 0,
-            ).animate(_controller!),
+          Visibility(
+            visible: context.watch<AddProposalProvider>().isError ||
+                    _controller!.isCompleted
+                ? false
+                : true,
+            child: Countdown(
+              animation: StepTween(
+                begin: levelClock,
+                end: 0,
+              ).animate(_controller!),
+            ),
           ),
           InkWell(
             child: Text(
-              "Не пришло SMS ?",
+              context.watch<AddProposalProvider>().isError
+                  ? "Отправить заново"
+                  : "Не пришло SMS ?",
               style: TextStyle(
                 color: kBlackTextColor.withOpacity(0.5),
                 fontSize: 12.0,
@@ -111,12 +122,14 @@ class _AddProposalSmsConfirmationPageState
       padding: const EdgeInsets.only(left: kButHorPad),
       child: MainButton(
         "Продолжить",
-        () => smsChecker.length == 4
-            ? {
-                Get.to(const AddProposalPassportPage()),
-                
-              }
-            : {},
+        () {
+          if (smsChecker.length == 4) {
+            Get.to(const AddProposalPassportPage());
+            context.read<AddProposalProvider>().hasnotError();
+          } else {
+            context.read<AddProposalProvider>().hasError();
+          }
+        },
         smsChecker.length == 4,
       ),
     );
@@ -126,13 +139,19 @@ class _AddProposalSmsConfirmationPageState
     return Padding(
       padding: const EdgeInsets.only(left: kMainPadding),
       child: Text(
-        "Введите код SMS подтверждения  ",
-        style: Theme.of(context).textTheme.labelMedium,
+        context.watch<AddProposalProvider>().isError
+            ? "Неверный код SMS   "
+            : "Введите код SMS подтверждения  ",
+        style: Theme.of(context).textTheme.labelMedium!.copyWith(
+              color: context.watch<AddProposalProvider>().isError
+                  ? kMainColor
+                  : kBlackTextColor,
+            ),
       ),
     );
   }
 
-  Padding _animationField() {
+  Padding _animationField(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(left: kWidth(125.0).w),
       child: Stack(
@@ -144,13 +163,18 @@ class _AddProposalSmsConfirmationPageState
               "assets/icons/main_icon.svg",
               height: kHeight(122.06).h,
               width: kWidth(131.12).w,
+              color: context.watch<AddProposalProvider>().isError
+                  ? kErrorAnimationColor
+                  : kMainColor,
             ),
           ),
           Positioned(
             child: BounceInDown(
               duration: const Duration(seconds: 5),
               child: SvgPicture.asset(
-                "assets/icons/sms.svg",
+                context.watch<AddProposalProvider>().isError
+                    ? "assets/icons/error-sms.svg"
+                    : "assets/icons/sms.svg",
                 height: kHeight(80.0).h,
                 width: kWidth(110.0).w,
               ),
@@ -175,13 +199,16 @@ class _AddProposalSmsConfirmationPageState
         preFilledWidget: Text(
           "*",
           style: TextStyle(
-            color: kBlackTextColor.withOpacity(0.5),
+            color: context.watch<AddProposalProvider>().isError
+                ? kMainColor
+                : kBlackTextColor.withOpacity(0.5),
             fontSize: 64.0,
           ),
         ),
         onChanged: (v) {
           setState(() {});
         },
+        showCursor: false,
         closeKeyboardWhenCompleted: false,
         defaultPinTheme: PinTheme(
           width: kWidth(50.0).w,
@@ -194,8 +221,12 @@ class _AddProposalSmsConfirmationPageState
               width: 1.0,
             ),
           ),
-          textStyle:
-              Theme.of(context).textTheme.titleMedium!.copyWith(fontSize: 48.0),
+          textStyle: Theme.of(context).textTheme.titleMedium!.copyWith(
+                fontSize: 48.0,
+                color: context.watch<AddProposalProvider>().isError
+                    ? kMainColor
+                    : kBlackTextColor,
+              ),
         ),
       ),
     );

@@ -35,26 +35,22 @@ class SignUpPage extends StatelessWidget {
                 child: Column(
                   children: [
                     InputField(
+                      context,
                       contexPro.nameController,
                       "Введите ваше имя",
+                      "Недопустимое имя",
                       TextInputType.name,
-                      (v) {
-                        if (v!.length < 2) return "";
-                        return null;
-                      },
                       30,
                       "* * * * * * * * * * * * * * *",
                       "##############################",
                       {"#": RegExp(r'[A-Za-z]')},
                     ),
                     InputField(
+                      context,
                       contexPro.phoneController,
                       "Введите ваш номер телефона",
+                      "Недопустимый номер телефона",
                       TextInputType.number,
-                      (v) {
-                        if (v!.length < 12) return "";
-                        return null;
-                      },
                       17,
                       "+ 998** *** ** ** ",
                       "+ 998## ### ## ##",
@@ -74,7 +70,8 @@ class SignUpPage extends StatelessWidget {
                         ? Get.to(const SmsCheckerPage())
                         : () {};
                   },
-                 contexPro.nameController.length>2 && contexPro.phoneController.length > 8,
+                  contexPro.nameController.length > 2 &&
+                      contexPro.phoneController.length > 8,
                 ),
               ),
             ],

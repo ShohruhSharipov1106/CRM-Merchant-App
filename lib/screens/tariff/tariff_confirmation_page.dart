@@ -13,8 +13,7 @@ class TariffConfirmationPage extends StatefulWidget {
 class _TariffConfirmationPageState extends State<TariffConfirmationPage> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final ItemScrollController _itemScrollController = ItemScrollController();
-  final ItemPositionsListener _itemPositionsListener =
-      ItemPositionsListener.create();
+
   int _currentCount = 0;
   @override
   Widget build(BuildContext context) {
@@ -25,7 +24,7 @@ class _TariffConfirmationPageState extends State<TariffConfirmationPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: kHeight(20.0).h),
-            StepsField(8),
+            StepsField(context, 8),
             SizedBox(height: kHeight(20.0).h),
             TitleOfPage("Подтверджение ", kWidth(123.0).w),
             SizedBox(height: kHeight(50.0).h),
@@ -128,7 +127,6 @@ class _TariffConfirmationPageState extends State<TariffConfirmationPage> {
             height: kHeight(175.0).h,
             child: ScrollablePositionedList.builder(
               itemScrollController: _itemScrollController,
-              itemPositionsListener: _itemPositionsListener,
               itemBuilder: (_, __) => _paymentSchedule(context, __ + 1),
               itemCount: widget.tarifCount,
               physics: _currentCount < widget.tarifCount - 5

@@ -22,7 +22,7 @@ class _TariffMainPageState extends State<TariffMainPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: kHeight(20.0).h),
-            StepsField(7),
+            StepsField(context, 7),
             SizedBox(height: kHeight(20.0).h),
             TitleOfPage("Выбрать тариф", kWidth(117.0).w),
             Stack(

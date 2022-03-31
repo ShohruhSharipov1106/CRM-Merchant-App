@@ -9,4 +9,15 @@ class AddProposalProvider extends ChangeNotifier {
   TextEditingController namingThings = TextEditingController();
   TextEditingController summThings = TextEditingController();
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  bool isError = false;
+
+  hasError() {
+    isError = true;
+    notifyListeners();
+  }
+
+  hasnotError() {
+    isError = false;
+    notifyListeners();
+  }
 }

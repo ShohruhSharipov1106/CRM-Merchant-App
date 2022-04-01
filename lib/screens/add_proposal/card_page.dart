@@ -23,8 +23,15 @@ class AddProposalCardPage extends StatelessWidget {
             SizedBox(height: kHeight(25.0).h),
             _headlineText(context),
             SizedBox(height: kHeight(15.0).h),
-            _cardNumber(context),
-            _cardExpirationDate(context),
+            Form(
+              key: context.watch<AddProposalProvider>().formKey,
+              child: Column(
+                children: [
+                  _cardNumber(context),
+                  _cardExpirationDate(context),
+                ],
+              ),
+            ),
             SizedBox(height: kHeight(22.0).h),
             _button(context, last4PhoneNumber),
             SizedBox(height: kHeight(53.0).h),
@@ -101,28 +108,34 @@ class AddProposalCardPage extends StatelessWidget {
   Padding _button(BuildContext context, String last4PhoneNumber) {
     return Padding(
       padding: const EdgeInsets.only(left: kButHorPad),
-      child: MainButton(
-        "Выслать код",
-        () {
-          if (context.read<AddProposalProvider>().cardNumber.text.length ==
-                  22 &&
-              context
-                      .read<AddProposalProvider>()
-                      .cardExpirationDate
-                      .text
-                      .length ==
-                  5) {
-            Get.to(AddProposalSmsConfirmationPage(last4PhoneNumber));
-            context.read<AddProposalProvider>().hasnotError();
-           
-          } else {
-            context.read<AddProposalProvider>().hasError();
-          }
-        },
-        context.read<AddProposalProvider>().cardNumber.text.length > 15 &&
-            context.read<AddProposalProvider>().cardExpirationDate.text.length >
-                4,
-      ),
+      child: ValueListenableBuilder<TextEditingValue>(
+          valueListenable: context.read<AddProposalProvider>().cardNumber,
+          builder: (context, v, child) {
+            return ListenableButton(
+              "Выслать код",
+              () {
+                if (context
+                            .read<AddProposalProvider>()
+                            .cardNumber
+                            .text
+                            .length ==
+                        22 &&
+                    context
+                            .read<AddProposalProvider>()
+                            .cardExpirationDate
+                            .text
+                            .length ==
+                        5) {
+                  Get.to(AddProposalSmsConfirmationPage(last4PhoneNumber));
+                  context.read<AddProposalProvider>().hasnotError();
+                } else {
+                  context.read<AddProposalProvider>().hasError();
+                }
+              },
+              context.watch<AddProposalProvider>().cardExpirationDate,
+              v.text.length == 22 ? 5 : 10,
+            );
+          }),
     );
   }
 

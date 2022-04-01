@@ -42,6 +42,15 @@ class _TariffConfirmationPageState extends State<TariffConfirmationPage> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(30.0),
                       color: kWhiteColor,
+                      border: Border.all(
+                        color: kBlackTextColor,
+                        width: 1.0,
+                      ),
+                      image: const DecorationImage(
+                        image: AssetImage(
+                          "assets/icons/camera.png",
+                        ),
+                      ),
                     ),
                   ),
                   Text.rich(
@@ -199,14 +208,14 @@ class _TariffConfirmationPageState extends State<TariffConfirmationPage> {
                 SizedBox(height: kHeight(20.0).h),
                 MainButton(
                   "Завершить",
-                  () {},
-                  true,
+                  () {
+                    Get.back();
+                  },
                 ),
               ],
             ),
           ),
         ),
-        true,
       ),
     );
   }

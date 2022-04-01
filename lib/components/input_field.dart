@@ -21,7 +21,8 @@ class InputField extends StatefulWidget {
     this.maxLen,
     this.hintTitle,
     this.maskText,
-    this.maskFilter, {
+    this.maskFilter,
+     {
     Key? key,
     this.capitalText = false,
   }) : super(key: key);
@@ -54,7 +55,6 @@ class _InputFieldState extends State<InputField> {
           MaskTextInputFormatter(
             mask: widget.maskText,
             filter: widget.maskFilter,
-            type: MaskAutoCompletionType.eager,
           )
         ],
         cursorColor: kBlackTextColor,

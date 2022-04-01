@@ -26,7 +26,6 @@ class IdentificationPage extends StatelessWidget {
                     ),
                     onTap: () {
                       Get.back();
-                    
                     },
                   ),
                   TitleOfPage("Идентификация", kWidth(90.0).w),
@@ -136,9 +135,7 @@ class IdentificationPage extends StatelessWidget {
         "Продолжить",
         () {
           Get.to(const MakeProposalPage());
-        
         },
-        true,
       ),
     );
   }

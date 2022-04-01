@@ -78,7 +78,7 @@ class MyApp extends StatelessWidget {
               backgroundColor: Colors.transparent,
             ),
           ),
-          home: const AddProposalPassportPage()
+          home:  const SignUpPage()
           // home: GetStorage().read("splashDone") == "splashDone"
           //     ? (GetStorage().read("signUpDone") == "signUpDone"
           //         ? const HomePage()

@@ -3,23 +3,18 @@ import 'package:crm_merchant/constants/exports.dart';
 class MainButton extends StatelessWidget {
   String buttonTitle;
   Function buttonFunc;
-  bool buttonValidation;
-  MainButton(this.buttonTitle, this.buttonFunc, this.buttonValidation,
-      {Key? key})
-      : super(key: key);
+  MainButton(this.buttonTitle, this.buttonFunc, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-   
       child: Text(
         buttonTitle,
         textAlign: TextAlign.center,
         style: Theme.of(context).textTheme.labelMedium,
       ),
       style: ElevatedButton.styleFrom(
-        primary:
-            buttonValidation ? kYellowButtonColor : kLightYellowButtonColor,
+        primary: kYellowButtonColor,
         fixedSize: Size(
           kWidth(269.0).w,
           kHeight(60.0).h,

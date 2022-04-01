@@ -35,7 +35,7 @@ class _MakeProposalPageState extends State<MakeProposalPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: kHeight(20.0).h),
-            StepsField(context,6),
+            StepsField(context, 6),
             SizedBox(height: kHeight(20.0).h),
             Expanded(
               child: SingleChildScrollView(
@@ -108,7 +108,6 @@ class _MakeProposalPageState extends State<MakeProposalPage> {
                       ),
                     ),
                     SizedBox(height: kHeight(90.0).h),
-                    // ADD IF VALIDATE THEN NEXT PAGE
                     _button(context),
                     SizedBox(height: kHeight(53.0).h),
                   ],
@@ -130,8 +129,11 @@ class _MakeProposalPageState extends State<MakeProposalPage> {
       TextInputType.number,
       29,
       "* * * * * * * * * * * * * * *",
-      "* * * * * * * * * * * * * * *",
-      {"*": RegExp(r'[0-9]')},
+      "# * * * * * * * * * * * * * *",
+      {
+        "#": RegExp(r'[1-9]'),
+        "*": RegExp(r'[0-9]'),
+      },
     );
   }
 
@@ -152,13 +154,34 @@ class _MakeProposalPageState extends State<MakeProposalPage> {
   Padding _button(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: kButHorPad),
-      child: MainButton(
-        "Продолжить",
-        () {
-          Get.to(const TariffMainPage());
-        },
-        true,
-      ),
+      child: ValueListenableBuilder<TextEditingValue>(
+          valueListenable: context.watch<AddProposalProvider>().namingThings,
+          builder: (context, v, child) {
+            return ListenableButton(
+              "Продолжить",
+              () {
+                if (context
+                            .read<AddProposalProvider>()
+                            .namingThings
+                            .text
+                            .length >=
+                        8 &&
+                    context
+                            .read<AddProposalProvider>()
+                            .summThings
+                            .text
+                            .length >=
+                        7) {
+                  Get.to(const TariffMainPage());
+                  context.read<AddProposalProvider>().hasnotError();
+                } else {
+                  context.read<AddProposalProvider>().hasError();
+                }
+              },
+              context.watch<AddProposalProvider>().summThings,
+              v.text.length >= 3 ? 4 : 20,
+            );
+          }),
     );
   }
 
@@ -166,8 +189,14 @@ class _MakeProposalPageState extends State<MakeProposalPage> {
     return Padding(
       padding: const EdgeInsets.only(left: kMainPadding),
       child: Text(
-        "Заполните заявку",
-        style: Theme.of(context).textTheme.labelMedium,
+        context.watch<AddProposalProvider>().isError
+            ? "Недопустимые символы для товара"
+            : "Заполните заявку",
+        style: Theme.of(context).textTheme.labelMedium!.copyWith(
+              color: context.watch<AddProposalProvider>().isError
+                  ? kMainColor
+                  : kBlackTextColor,
+            ),
       ),
     );
   }

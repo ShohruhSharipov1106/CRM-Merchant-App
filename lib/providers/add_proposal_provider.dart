@@ -11,6 +11,7 @@ class AddProposalProvider extends ChangeNotifier {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   bool isError = false;
 
+
   hasError() {
     isError = true;
     notifyListeners();
@@ -20,4 +21,5 @@ class AddProposalProvider extends ChangeNotifier {
     isError = false;
     notifyListeners();
   }
+
 }

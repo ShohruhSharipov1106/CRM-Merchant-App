@@ -6,6 +6,7 @@ class CameraFaceIDPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: kBlackTextColor,
       appBar: AppBar(
         leading: IconButton(
@@ -74,7 +75,7 @@ class CameraFaceIDPage extends StatelessWidget {
           MainButton(
             "Сделать фото",
             () {},
-            true,
+          
           ),
         ],
       ),

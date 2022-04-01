@@ -41,7 +41,7 @@ class _AddProposalPhoneNumberPageState
   Padding _button(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: kButHorPad),
-      child: MainButton(
+      child: ListenableButton(
         "Продолжить",
         () {
           if (context
@@ -64,12 +64,8 @@ class _AddProposalPhoneNumberPageState
             context.read<AddProposalProvider>().hasError();
           }
         },
-        context
-                .read<AddProposalProvider>()
-                .addProposalPhoneNumber
-                .text
-                .length ==
-            17,
+        context.watch<AddProposalProvider>().addProposalPhoneNumber,
+        17,
       ),
     );
   }

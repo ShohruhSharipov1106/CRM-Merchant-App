@@ -1,5 +1,4 @@
 import 'package:crm_merchant/constants/exports.dart';
-import 'package:crm_merchant/screens/home/components/full_information.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -10,6 +9,7 @@ class HomePage extends StatelessWidget {
     HomePageProvider ctxReadHomeProvider = context.read<HomePageProvider>();
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Column(
           children: [
@@ -64,7 +64,6 @@ class HomePage extends StatelessWidget {
             MainButton(
               "Создать заявку",
               () => ctxReadHomeProvider.addCheckout(kGreyLabelColor),
-              true,
             ),
           ],
         ),

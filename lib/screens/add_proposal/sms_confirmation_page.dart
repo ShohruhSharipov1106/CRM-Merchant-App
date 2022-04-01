@@ -41,7 +41,6 @@ class _AddProposalSmsConfirmationPageState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-    
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -120,7 +119,7 @@ class _AddProposalSmsConfirmationPageState
   Padding _buttonField(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: kButHorPad),
-      child: MainButton(
+      child: ListenableButton(
         "Продолжить",
         () {
           if (smsChecker.length == 4) {
@@ -130,7 +129,8 @@ class _AddProposalSmsConfirmationPageState
             context.read<AddProposalProvider>().hasError();
           }
         },
-        smsChecker.length == 4,
+        smsChecker,
+        4,
       ),
     );
   }
@@ -205,9 +205,6 @@ class _AddProposalSmsConfirmationPageState
             fontSize: 64.0,
           ),
         ),
-        onChanged: (v) {
-          setState(() {});
-        },
         showCursor: false,
         closeKeyboardWhenCompleted: false,
         defaultPinTheme: PinTheme(

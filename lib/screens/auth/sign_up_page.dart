@@ -30,48 +30,57 @@ class SignUpPage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: kHeight(10.5).h),
-              Form(
-                key: contexPro.formKey,
-                child: Column(
-                  children: [
-                    InputField(
-                      context,
-                      contexPro.nameController,
-                      "Введите ваше имя",
-                      "Недопустимое имя",
-                      TextInputType.name,
-                      30,
-                      "* * * * * * * * * * * * * * *",
-                      "##############################",
-                      {"#": RegExp(r'[A-Za-z]')},
-                    ),
-                    InputField(
-                      context,
-                      contexPro.phoneController,
-                      "Введите ваш номер телефона",
-                      "Недопустимый номер телефона",
-                      TextInputType.number,
-                      17,
-                      "+ 998** *** ** ** ",
-                      "+ 998## ### ## ##",
-                      {"#": RegExp(r'[0-9]')},
-                    ),
-                  ],
-                ),
+              InputField(
+                context,
+                contexPro.nameController,
+                "Введите ваше имя",
+                "Недопустимое имя",
+                TextInputType.name,
+                30,
+                "* * * * * * * * * * * * * * *",
+                "##############################",
+                {"#": RegExp(r'[A-Za-z]')},
+              ),
+              InputField(
+                context,
+                contexPro.phoneController,
+                "Введите ваш номер телефона",
+                "Недопустимый номер телефона",
+                TextInputType.number,
+                17,
+                "+ 998** *** ** ** ",
+                "+ 998## ### ## ##",
+                {"#": RegExp(r'[0-9]')},
               ),
               SizedBox(height: kHeight(100.0).h),
               Padding(
                 padding: const EdgeInsets.only(left: kButHorPad),
-                child: MainButton(
-                  "Продолжить",
-                  () {
-                    context.read<SignUpProvider>().isValidateFunc();
-                    contexPro.isValidate == true
-                        ? Get.to(const SmsCheckerPage())
-                        : () {};
+                child: ValueListenableBuilder<TextEditingValue>(
+                  valueListenable:
+                      context.watch<SignUpProvider>().nameController,
+                  builder: (context, v, child) {
+                    return ListenableButton(
+                      "Продолжить",
+                      () {
+                        context
+                                        .read<SignUpProvider>()
+                                        .nameController
+                                        .text
+                                        .length >
+                                    2 &&
+                                context
+                                        .read<SignUpProvider>()
+                                        .phoneController
+                                        .text
+                                        .length ==
+                                    17
+                            ? Get.to(const SmsCheckerPage())
+                            : () {};
+                      },
+                      context.watch<SignUpProvider>().phoneController,
+                      v.text.length > 2 ? 17 : 30,
+                    );
                   },
-                  contexPro.nameController.length > 2 &&
-                      contexPro.phoneController.length > 8,
                 ),
               ),
             ],

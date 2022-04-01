@@ -65,7 +65,7 @@ class CameraPassportIDPage extends StatelessWidget {
           MainButton(
             "Сделать фото",
             () => Get.to(const CameraPassportIDPage()),
-            true,
+         
           ),
         ],
       ),

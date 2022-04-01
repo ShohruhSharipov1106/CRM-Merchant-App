@@ -1,5 +1,5 @@
 import 'package:crm_merchant/constants/exports.dart';
-import 'package:crm_merchant/screens/face_id/auth_face_page.dart';
+import 'package:crm_merchant/screens/face_id/camera_face_id_page.dart';
 import 'package:flutter/material.dart';
 
 class AddProposalPassportPage extends StatelessWidget {
@@ -38,30 +38,31 @@ class AddProposalPassportPage extends StatelessWidget {
   Padding _buttonField(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: kButHorPad),
-      child: MainButton(
-        "Аутентификация по лицу",
-        () {
-          if (context.read<AddProposalProvider>().dateOfBirth.text.length ==
-                  10 &&
-              context
-                      .read<AddProposalProvider>()
-                      .serialNumberOfpassport
-                      .text
-                      .length ==
-                  10) {
-            Get.to(const AuthFacePage());
-            context.read<AddProposalProvider>().hasnotError();
-          } else {
-            context.read<AddProposalProvider>().hasError();
-          }
+      child: ValueListenableBuilder<TextEditingValue>(
+        valueListenable:
+            context.watch<AddProposalProvider>().serialNumberOfpassport,
+        builder: (context, v, child) {
+          return ListenableButton(
+            "Аутентификация по лицу",
+            () {
+              if (context.read<AddProposalProvider>().dateOfBirth.text.length ==
+                      10 &&
+                  context
+                          .read<AddProposalProvider>()
+                          .serialNumberOfpassport
+                          .text
+                          .length ==
+                      25) {
+                Get.to(const CameraFaceIDPage());
+                context.read<AddProposalProvider>().hasnotError();
+              } else {
+                context.read<AddProposalProvider>().hasError();
+              }
+            },
+            context.watch<AddProposalProvider>().dateOfBirth,
+            v.text.length == 25 ? 10 : 30,
+          );
         },
-        context.read<AddProposalProvider>().dateOfBirth.text.length == 10 &&
-            context
-                    .read<AddProposalProvider>()
-                    .serialNumberOfpassport
-                    .text
-                    .length ==
-                10,
       ),
     );
   }

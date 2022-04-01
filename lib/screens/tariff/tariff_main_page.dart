@@ -17,6 +17,7 @@ class _TariffMainPageState extends State<TariffMainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -157,7 +158,7 @@ class _TariffMainPageState extends State<TariffMainPage> {
                           TariffConfirmationPage(months[_whichTariff!]),
                         );
                       },
-                      _oneTapped,
+                   
                     ),
                     visible: _oneTapped,
                   ),

@@ -133,14 +133,15 @@ class _OfferConfirmationPageState extends State<OfferConfirmationPage>
   Padding _button() {
     return Padding(
       padding: const EdgeInsets.only(left: kButHorPad),
-      child: MainButton(
+      child: ListenableButton(
         "Продолжить",
         () => smsChecker.length == 4
             ? Get.to(
                 const HomePage(),
               )
             : () {},
-        smsChecker.length == 4,
+        smsChecker,
+        4,
       ),
     );
   }

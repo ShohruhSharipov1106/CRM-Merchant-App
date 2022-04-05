@@ -12,7 +12,7 @@ class CameraPassportIDPage extends StatelessWidget {
           onPressed: () => Get.back(),
           icon: const Icon(
             Icons.arrow_back_ios,
-            color: kBlackTextColor,
+            color: kWhiteColor,
             size: 24.0,
           ),
         ),

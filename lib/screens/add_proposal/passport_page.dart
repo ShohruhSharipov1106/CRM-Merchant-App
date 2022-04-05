@@ -53,7 +53,7 @@ class AddProposalPassportPage extends StatelessWidget {
                           .text
                           .length ==
                       25) {
-                Get.to(const CameraFaceIDPage());
+                // Get.to(const CameraFaceIDPage());
                 context.read<AddProposalProvider>().hasnotError();
               } else {
                 context.read<AddProposalProvider>().hasError();
@@ -79,9 +79,9 @@ class AddProposalPassportPage extends StatelessWidget {
       "**/%%/####",
       {
         // "@": RegExp(r'[0-3]'),
-        "*": RegExp(r'[1-9]|1[0-2]'),
-        "%": RegExp(r'[1-9]|1[0-2]'),
-        "#": RegExp(r'[1-9]|1[0-2]')
+        "*": RegExp(r'[0-9]'),
+        "%": RegExp(r'[0-9]'),
+        "#": RegExp(r'[0-9]'),
       },
     );
   }

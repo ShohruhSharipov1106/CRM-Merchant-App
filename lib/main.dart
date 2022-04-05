@@ -1,3 +1,4 @@
+import 'package:camera/camera.dart';
 import 'package:crm_merchant/constants/exports.dart';
 import 'package:crm_merchant/providers/add_proposal_provider.dart';
 import 'package:crm_merchant/providers/home_page_provider.dart';
@@ -19,7 +20,13 @@ import 'package:flutter/services.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 
-void main() {
+List<CameraDescription> cameras = [];
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  cameras = await availableCameras();
+
+  // final firstCamera = cameras.last;
   runApp(
     MultiProvider(
       providers: [
@@ -28,12 +35,13 @@ void main() {
         ChangeNotifierProvider(create: (_) => AddProposalProvider()),
         ChangeNotifierProvider(create: (_) => HomePageProvider()),
       ],
-      child: const MyApp(),
+      child: MyApp(),
     ),
   );
 }
 
 class MyApp extends StatelessWidget {
+  // final CameraDescription kamera;
   const MyApp({Key? key}) : super(key: key);
 
   @override
@@ -78,7 +86,7 @@ class MyApp extends StatelessWidget {
               backgroundColor: Colors.transparent,
             ),
           ),
-          home:  const SignUpPage()
+          home: CameraFaceIDPage()
           // home: GetStorage().read("splashDone") == "splashDone"
           //     ? (GetStorage().read("signUpDone") == "signUpDone"
           //         ? const HomePage()

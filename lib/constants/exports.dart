@@ -23,3 +23,5 @@ export 'package:flutter/foundation.dart';
 export 'package:wechat_assets_picker/wechat_assets_picker.dart';
 export 'package:image_picker/image_picker.dart';
 export 'package:crm_merchant/components/listenable_button.dart';
+export 'package:google_ml_kit/google_ml_kit.dart';
+export 'package:camera/camera.dart';

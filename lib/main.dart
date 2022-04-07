@@ -1,31 +1,12 @@
-import 'package:camera/camera.dart';
+
 import 'package:crm_merchant/constants/exports.dart';
-import 'package:crm_merchant/providers/add_proposal_provider.dart';
-import 'package:crm_merchant/providers/home_page_provider.dart';
-import 'package:crm_merchant/screens/add_proposal/card_page.dart';
-import 'package:crm_merchant/screens/add_proposal/identification_page.dart';
-import 'package:crm_merchant/screens/add_proposal/make_proposal_page.dart';
-import 'package:crm_merchant/screens/add_proposal/passport_page.dart';
-import 'package:crm_merchant/screens/add_proposal/phone_number_page.dart';
 import 'package:crm_merchant/screens/auth/sign_up_page.dart';
-import 'package:crm_merchant/screens/auth/sms_checker_page.dart';
-import 'package:crm_merchant/screens/face_id/camera_face_id_page.dart';
-import 'package:crm_merchant/screens/face_id/camera_passport_id_page.dart';
-import 'package:crm_merchant/screens/face_id/face_not_match_page.dart';
-import 'package:crm_merchant/screens/home/home_page.dart';
 import 'package:crm_merchant/screens/splash/splash_screen_page.dart';
-import 'package:crm_merchant/screens/tariff/tariff_confirmation_page.dart';
-import 'package:crm_merchant/screens/tariff/tariff_main_page.dart';
-import 'package:flutter/services.dart';
-import 'package:get_storage/get_storage.dart';
-import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 
 List<CameraDescription> cameras = [];
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   cameras = await availableCameras();
-
   // final firstCamera = cameras.last;
   runApp(
     MultiProvider(
@@ -35,13 +16,13 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (_) => AddProposalProvider()),
         ChangeNotifierProvider(create: (_) => HomePageProvider()),
       ],
-      child: MyApp(),
+      child: const MyApp(),
     ),
   );
 }
 
 class MyApp extends StatelessWidget {
-  // final CameraDescription kamera;
+  
   const MyApp({Key? key}) : super(key: key);
 
   @override
@@ -86,7 +67,7 @@ class MyApp extends StatelessWidget {
               backgroundColor: Colors.transparent,
             ),
           ),
-          home: CameraFaceIDPage()
+          home:  const SignUpPage()
           // home: GetStorage().read("splashDone") == "splashDone"
           //     ? (GetStorage().read("signUpDone") == "signUpDone"
           //         ? const HomePage()

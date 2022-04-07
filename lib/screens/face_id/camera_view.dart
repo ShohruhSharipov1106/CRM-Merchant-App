@@ -27,12 +27,13 @@ class _CameraViewState extends State<CameraView> {
   final ScreenMode _mode = ScreenMode.liveFeed;
   CameraController? _controller;
   File? _image;
+  
   int _cameraIndex = 0;
 
   @override
   void initState() {
     super.initState();
-
+  
     if (cameras.any(
       (element) =>
           element.lensDirection == widget.initialDirection &&
@@ -96,7 +97,7 @@ class _CameraViewState extends State<CameraView> {
       fit: StackFit.expand,
       children: <Widget>[
         Transform.scale(
-          scale: scale,
+          scale: scale*1.1,
           child: Center(
             child: CameraPreview(_controller!),
           ),

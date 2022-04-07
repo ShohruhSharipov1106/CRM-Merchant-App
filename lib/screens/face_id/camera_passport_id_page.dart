@@ -1,7 +1,15 @@
 import 'package:crm_merchant/constants/exports.dart';
 
-class CameraPassportIDPage extends StatelessWidget {
+class CameraPassportIDPage extends StatefulWidget {
   const CameraPassportIDPage({Key? key}) : super(key: key);
+
+  @override
+  State<CameraPassportIDPage> createState() => _CameraPassportIDPageState();
+}
+
+class _CameraPassportIDPageState extends State<CameraPassportIDPage> {
+  
+
 
   @override
   Widget build(BuildContext context) {
@@ -50,6 +58,7 @@ class CameraPassportIDPage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(30.0),
                   color: kWhiteColor,
                 ),
+               
               ),
             ),
           ),
@@ -65,7 +74,6 @@ class CameraPassportIDPage extends StatelessWidget {
           MainButton(
             "Сделать фото",
             () => Get.to(const CameraPassportIDPage()),
-         
           ),
         ],
       ),

@@ -1,5 +1,10 @@
+import 'dart:io';
+
 import 'package:crm_merchant/constants/exports.dart';
+import 'package:crm_merchant/models/api_account/token_model.dart';
 import 'package:crm_merchant/screens/auth/sms_checker_page.dart';
+
+import 'package:http/http.dart' as http;
 
 class SignUpPage extends StatelessWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -83,10 +88,38 @@ class SignUpPage extends StatelessWidget {
                   },
                 ),
               ),
+              ElevatedButton(
+                onPressed: () => _postTokenfromApi(
+                  contexPro.nameController.text,
+                  contexPro.phoneController.text,
+                ),
+                child: Text("Bos"),
+              ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  Future<List<Token>> _postTokenfromApi(
+      String userName, String password) async {
+    Uri url = Uri.parse('https://crm.creditexpress.uz:6262/api/account/token');
+    var res = await http.post(
+      url,
+      body: {"userName": userName, "password": password},
+      
+    );
+    print("object 1");
+    if (res.statusCode == 200) {
+      print("object 2");
+      print(res.body);
+      return (json.decode(res.body) as List)
+          .map((e) => Token.fromJson(e))
+          .toList();
+    } else {
+      print("${res.statusCode}");
+      throw  Exception('Xato bor: ${res.statusCode}');
+    }
   }
 }

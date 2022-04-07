@@ -16,6 +16,9 @@ class _CameraFaceIDPageState extends State<CameraFaceIDPage> {
   int faceLength = 0;
   String? facePath;
   bool hasFace = false;
+  File? _image;
+  ImagePicker? _imagePicker;
+  late final Function(InputImage inputImage) onImage;
   FaceDetector faceDetector = GoogleMlKit.vision.faceDetector(
     const FaceDetectorOptions(
       enableContours: true,
@@ -24,6 +27,7 @@ class _CameraFaceIDPageState extends State<CameraFaceIDPage> {
   );
   bool isBusy = false;
   CustomPaint? customPaint;
+  late CameraController _controller;
 
   @override
   void dispose() {
@@ -75,7 +79,7 @@ class _CameraFaceIDPageState extends State<CameraFaceIDPage> {
             decoration: BoxDecoration(
               image: DecorationImage(
                 image: AssetImage(
-                  faceLength == 1
+                  hasFace
                       ? "assets/icons/oval-frame.png"
                       : "assets/icons/unselected-oval-frame.png",
                 ),
@@ -90,27 +94,31 @@ class _CameraFaceIDPageState extends State<CameraFaceIDPage> {
                   kHeight(515.0).h,
                 ),
               ),
-              child: faceLength == 1
-                  ? Image.file(File(facePath!))
-                  : CameraView(
-                      title: 'Face Detector',
-                      customPaint: customPaint,
-                      onImage: (inputImage) {
-                        processImage(inputImage);
-                      },
-                      initialDirection: CameraLensDirection.front,
-                    ),
+              child: CameraView(
+                title: 'Face Detector',
+                customPaint: customPaint,
+                onImage: (inputImage) {
+                  processImage(inputImage);
+                },
+                initialDirection: CameraLensDirection.front,
+              ),
             ),
           ),
           _subtitleText(context),
           SizedBox(height: kHeight(50.0).h),
           MainButton(
             "Сделать фото",
-            (InputImage inputImage) {
-              setState(() {
-                processImage(inputImage);
-                hasFace ? faceLength = 1 : faceLength;
-              });
+            (InputImage inputImage) async {
+              await processImage(inputImage);
+              setState(
+                () {
+                  hasFace ? faceLength = 1 : faceLength;
+                },
+              );
+              await _getImage(ImageSource.camera);
+              await Get.to(
+                DisplayPictureScreen(imagePath: _image!.path),
+              );
             },
           ),
         ],
@@ -150,10 +158,34 @@ class _CameraFaceIDPageState extends State<CameraFaceIDPage> {
         () {
           if (faces.length == 1) {
             hasFace = true;
+          } else {
+            hasFace = false;
           }
         },
       );
     }
+  }
+
+  Future _getImage(ImageSource source) async {
+    final pickedFile = await _imagePicker?.pickImage(source: source);
+    if (pickedFile != null) {
+      _processPickedFile(pickedFile);
+    } else {
+      debugPrint('No image selected.');
+    }
+    setState(() {});
+  }
+
+  Future _processPickedFile(XFile? pickedFile) async {
+    final path = pickedFile?.path;
+    if (path == null) {
+      return;
+    }
+    setState(() {
+      _image = File(path);
+    });
+    final inputImage = InputImage.fromFilePath(path);
+    onImage(inputImage);
   }
 }
 

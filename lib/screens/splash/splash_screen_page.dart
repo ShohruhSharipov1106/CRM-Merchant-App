@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:crm_merchant/constants/exports.dart';
 import 'package:crm_merchant/screens/auth/sign_up_page.dart';
-import 'package:get_storage/get_storage.dart';
+import 'package:crm_merchant/screens/home/home_page.dart';
 
 class SplashScreenPage extends StatefulWidget {
   const SplashScreenPage({Key? key}) : super(key: key);
@@ -34,7 +34,7 @@ class _SplashScreenPageState extends State<SplashScreenPage>
             end: kHeight(241.13).h,
           ),
           from: Duration.zero,
-          to: const Duration(seconds: 3),
+          to: const Duration(seconds: 1),
           tag: 'heightSzb',
         )
         .addAnimatable(
@@ -43,7 +43,7 @@ class _SplashScreenPageState extends State<SplashScreenPage>
             end: kWidth(275.57).w,
           ),
           from: Duration.zero,
-          to: const Duration(seconds: 3),
+          to: const Duration(seconds: 1),
           tag: 'widthSzb',
         )
         .addAnimatable(
@@ -51,8 +51,8 @@ class _SplashScreenPageState extends State<SplashScreenPage>
             begin: kHeight(241.13).h,
             end: kHeight(87.0).h,
           ),
-          from: const Duration(seconds: 5),
-          to: const Duration(seconds: 8),
+          from: const Duration(seconds: 2),
+          to: const Duration(seconds: 5),
           tag: 'heightSzb',
         )
         .addAnimatable(
@@ -60,8 +60,8 @@ class _SplashScreenPageState extends State<SplashScreenPage>
             begin: kWidth(275.57).w,
             end: kWidth(95.71).w,
           ),
-          from: const Duration(seconds: 5),
-          to: const Duration(seconds: 8),
+          from: const Duration(seconds: 2),
+          to: const Duration(seconds: 5),
           tag: 'widthSzb',
         )
         .addAnimatable(
@@ -69,8 +69,8 @@ class _SplashScreenPageState extends State<SplashScreenPage>
             begin: kHeight(382.47).h,
             end: kHeight(435.0).h,
           ),
-          from: const Duration(seconds: 5),
-          to: const Duration(seconds: 8),
+          from: const Duration(seconds: 2),
+          to: const Duration(seconds: 5),
           tag: 'positionSzbHeight',
         )
         .addAnimatable(
@@ -78,8 +78,8 @@ class _SplashScreenPageState extends State<SplashScreenPage>
             begin: kWidth(76.43).w,
             end: kWidth(90.0).w,
           ),
-          from: const Duration(seconds: 5),
-          to: const Duration(seconds: 8),
+          from: const Duration(seconds: 2),
+          to: const Duration(seconds: 5),
           tag: 'positionSzbWidth',
         )
         .addAnimatable(
@@ -87,8 +87,8 @@ class _SplashScreenPageState extends State<SplashScreenPage>
             begin: kHeight(427.0).h,
             end: kHeight(427.0).h,
           ),
-          from: const Duration(seconds: 5),
-          to: const Duration(seconds: 8),
+          from: const Duration(seconds: 2),
+          to: const Duration(seconds: 5),
           tag: 'positionTextHeight',
         )
         .addAnimatable(
@@ -96,20 +96,21 @@ class _SplashScreenPageState extends State<SplashScreenPage>
             begin: -kWidth(150.0).w,
             end: kWidth(102.0).w,
           ),
-          from: const Duration(seconds: 5),
-          to: const Duration(seconds: 8),
+          from: const Duration(seconds: 2),
+          to: const Duration(seconds: 5),
           tag: 'positionTextWidth',
         )
         .animate(_animationController!);
 
     _animationController!.forward();
 
-    Timer(const Duration(seconds: 10), () {
-      GetStorage().write("splashDone", "splashDone");
+    Timer(const Duration(seconds: 6), () {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (_) => const SignUpPage(),
+          builder: (_) => GetStorage().read("signUpDone") == "signUpDone"
+              ? const HomePage()
+              : const SignUpPage(),
         ),
       );
     });
@@ -117,9 +118,9 @@ class _SplashScreenPageState extends State<SplashScreenPage>
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: Stack(
+    return Scaffold(
+      body: SafeArea(
+        child: Stack(
           children: [
             Center(
               child: SizedBox(

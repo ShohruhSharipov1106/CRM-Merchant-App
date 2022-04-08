@@ -136,9 +136,7 @@ class _OfferConfirmationPageState extends State<OfferConfirmationPage>
       child: ListenableButton(
         "Продолжить",
         () => smsChecker.length == 4
-            ? Get.to(
-                const HomePage(),
-              )
+            ? Get.back()
             : () {},
         smsChecker,
         4,

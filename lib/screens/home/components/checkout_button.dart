@@ -1,4 +1,5 @@
 import 'package:crm_merchant/constants/exports.dart';
+import 'package:crm_merchant/screens/home/offer_confirmation_page.dart';
 
 class CheckOutButton extends StatelessWidget {
   const CheckOutButton({Key? key}) : super(key: key);
@@ -29,7 +30,9 @@ class CheckOutButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(30.0),
           ),
         ),
-        onPressed: () {},
+        onPressed: () {
+          Get.to(const OfferConfirmationPage());
+        },
       ),
     );
   }

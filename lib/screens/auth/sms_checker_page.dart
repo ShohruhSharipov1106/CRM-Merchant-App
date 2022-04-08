@@ -1,7 +1,6 @@
 import 'package:crm_merchant/constants/exports.dart';
 import 'package:crm_merchant/screens/home/home_page.dart';
-import 'package:get_storage/get_storage.dart';
-import 'package:pinput/pinput.dart';
+
 
 class SmsCheckerPage extends StatefulWidget {
   const SmsCheckerPage({Key? key}) : super(key: key);
@@ -38,9 +37,9 @@ class _SmsCheckerPageState extends State<SmsCheckerPage>
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: Column(
+    return Scaffold(
+      body: SafeArea(
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: kHeight(72.0).h),
@@ -60,41 +59,45 @@ class _SmsCheckerPageState extends State<SmsCheckerPage>
               ),
             ),
             _smsCode(context),
-            Padding(
-              padding: EdgeInsets.only(
-                left: kWidth(140.0).w,
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Countdown(
-                    animation: StepTween(
-                      begin: levelClock,
-                      end: 0,
-                    ).animate(_controller!),
-                  ),
-                  InkWell(
-                    child: Text(
-                      "Не пришло SMS ?",
-                      style: TextStyle(
-                        color: kBlackTextColor.withOpacity(0.5),
-                        fontSize: 12.0,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-
-                    // unreceived sms function
-                    onTap: () {},
-                  ),
-                ],
-              ),
-            ),
+            _subtitleText(),
             SizedBox(height: kHeight(140.0).h),
             _button(),
           ],
         ),
       ),
     );
+  }
+
+  Padding _subtitleText() {
+    return Padding(
+            padding: EdgeInsets.only(
+              left: kWidth(140.0).w,
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Countdown(
+                  animation: StepTween(
+                    begin: levelClock,
+                    end: 0,
+                  ).animate(_controller!),
+                ),
+                InkWell(
+                  child: Text(
+                    "Не пришло SMS ?",
+                    style: TextStyle(
+                      color: kBlackTextColor.withOpacity(0.5),
+                      fontSize: 12.0,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+
+                  // unreceived sms function
+                  onTap: () {},
+                ),
+              ],
+            ),
+          );
   }
 
   Padding _smsCode(BuildContext context) {

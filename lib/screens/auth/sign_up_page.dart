@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:crm_merchant/constants/exports.dart';
 import 'package:crm_merchant/models/api_account/token_model.dart';
 import 'package:crm_merchant/screens/auth/sms_checker_page.dart';
@@ -12,10 +10,11 @@ class SignUpPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SignUpProvider contexPro = context.watch<SignUpProvider>();
-    return SlideInUp(
-      child: SafeArea(
-        child: Scaffold(
-          body: Column(
+    return Scaffold(
+      body: ZoomIn(
+        duration: const Duration(seconds: 2),
+        child: SafeArea(
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: kHeight(72.0).h),
@@ -51,11 +50,11 @@ class SignUpPage extends StatelessWidget {
                 contexPro.phoneController,
                 "Введите ваш номер телефона",
                 "Недопустимый номер телефона",
-                TextInputType.number,
-                17,
+                TextInputType.visiblePassword,
+                8,
                 "+ 998** *** ** ** ",
-                "+ 998## ### ## ##",
-                {"#": RegExp(r'[0-9]')},
+                "########",
+                {"#": RegExp(r'[4f?$@VK3]')},
               ),
               SizedBox(height: kHeight(100.0).h),
               Padding(
@@ -66,7 +65,11 @@ class SignUpPage extends StatelessWidget {
                   builder: (context, v, child) {
                     return ListenableButton(
                       "Продолжить",
-                      () {
+                      () async {
+                        await _postTokenfromApi(
+                          contexPro.nameController.text,
+                          contexPro.phoneController.text,
+                        );
                         context
                                         .read<SignUpProvider>()
                                         .nameController
@@ -78,22 +81,15 @@ class SignUpPage extends StatelessWidget {
                                         .phoneController
                                         .text
                                         .length ==
-                                    17
+                                    8
                             ? Get.to(const SmsCheckerPage())
                             : () {};
                       },
                       context.watch<SignUpProvider>().phoneController,
-                      v.text.length > 2 ? 17 : 30,
+                      v.text.length > 2 ? 8 : 30,
                     );
                   },
                 ),
-              ),
-              ElevatedButton(
-                onPressed: () => _postTokenfromApi(
-                  contexPro.nameController.text,
-                  contexPro.phoneController.text,
-                ),
-                child: Text("Bos"),
               ),
             ],
           ),
@@ -102,24 +98,25 @@ class SignUpPage extends StatelessWidget {
     );
   }
 
-  Future<List<Token>> _postTokenfromApi(
+  Future<dynamic> _postTokenfromApi(
       String userName, String password) async {
     Uri url = Uri.parse('https://crm.creditexpress.uz:6262/api/account/token');
     var res = await http.post(
       url,
-      body: {"userName": userName, "password": password},
-      
+      headers: {
+        "Content-type": "application/json",
+        "Accept": "application/json",
+        "charset": "utf-8"
+      },
+      body: json.encode({"userName": userName, "password": password}),
     );
-    print("object 1");
+
     if (res.statusCode == 200) {
       print("object 2");
       print(res.body);
-      return (json.decode(res.body) as List)
-          .map((e) => Token.fromJson(e))
-          .toList();
+      return res.body;
     } else {
-      print("${res.statusCode}");
-      throw  Exception('Xato bor: ${res.statusCode}');
+      throw Exception('Xato bor: ${res.statusCode}');
     }
   }
 }

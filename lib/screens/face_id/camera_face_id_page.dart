@@ -5,6 +5,8 @@ import 'package:crm_merchant/constants/exports.dart';
 import 'package:crm_merchant/screens/face_id/camera_view.dart';
 import 'package:crm_merchant/screens/face_id/painters/face_detector_painter.dart';
 
+import '../../main.dart';
+
 class CameraFaceIDPage extends StatefulWidget {
   const CameraFaceIDPage({Key? key}) : super(key: key);
 
@@ -28,12 +30,28 @@ class _CameraFaceIDPageState extends State<CameraFaceIDPage> {
   bool isBusy = false;
   CustomPaint? customPaint;
   late CameraController _controller;
+  late Future<void> _initializeControllerFuture;
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _controller = CameraController(cameras[1], ResolutionPreset.max);
+  //   _controller.initialize().then((_) {
+  //     if (!mounted) {
+  //       return;
+  //     }
+  //     setState(() {});
+  //   });
+  //   _initializeControllerFuture = _controller.initialize();
+  // }
 
   @override
   void dispose() {
+    _controller.dispose();
     faceDetector.close();
     super.dispose();
   }
+
+  XFile? file;
 
   @override
   Widget build(BuildContext context) {
@@ -94,11 +112,13 @@ class _CameraFaceIDPageState extends State<CameraFaceIDPage> {
                   kHeight(515.0).h,
                 ),
               ),
-              child: CameraView(
+              // child: CameraPreview(_controller),
+           child:   CameraView(
                 title: 'Face Detector',
                 customPaint: customPaint,
                 onImage: (inputImage) {
                   processImage(inputImage);
+                  _controller.takePicture();
                 },
                 initialDirection: CameraLensDirection.front,
               ),
@@ -108,17 +128,31 @@ class _CameraFaceIDPageState extends State<CameraFaceIDPage> {
           SizedBox(height: kHeight(50.0).h),
           MainButton(
             "Сделать фото",
-            (InputImage inputImage) async {
-              await processImage(inputImage);
-              setState(
-                () {
-                  hasFace ? faceLength = 1 : faceLength;
-                },
-              );
-              await _getImage(ImageSource.camera);
-              await Get.to(
-                DisplayPictureScreen(imagePath: _image!.path),
-              );
+            () async {
+              // Take the Picture in a try / catch block. If anything goes wrong,
+              // catch the error.
+              try {
+                // Ensure that the camera is initialized.
+                await _initializeControllerFuture;
+
+                // Attempt to take a picture and get the file `image`
+                // where it was saved.
+                final image = await _controller.takePicture();
+
+                // If the picture was taken, display it on a new screen.
+                await Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => DisplayPictureScreen(
+                      // Pass the automatically generated path to
+                      // the DisplayPictureScreen widget.
+                      imagePath: image.path,
+                    ),
+                  ),
+                );
+              } catch (e) {
+                // If an error occurs, log the error to the console.
+                print(e);
+              }
             },
           ),
         ],
@@ -186,6 +220,24 @@ class _CameraFaceIDPageState extends State<CameraFaceIDPage> {
     });
     final inputImage = InputImage.fromFilePath(path);
     onImage(inputImage);
+  }
+
+  Future<XFile?> takePicture() async {
+    final CameraController? cameraController = _controller;
+    if (cameraController == null || !cameraController.value.isInitialized) {
+      return null;
+    }
+
+    if (cameraController.value.isTakingPicture) {
+      return null;
+    }
+
+    try {
+      final XFile file = await cameraController.takePicture();
+      return file;
+    } on CameraException {
+      return null;
+    }
   }
 }
 

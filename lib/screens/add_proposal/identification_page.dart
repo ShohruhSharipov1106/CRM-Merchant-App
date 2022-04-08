@@ -38,53 +38,7 @@ class IdentificationPage extends StatelessWidget {
             SizedBox(height: kHeight(11.0).h),
             _titleField(context),
             SizedBox(height: kHeight(20.0).h),
-            Container(
-              height: kHeight(235.0).h,
-              width: kWidth(316.0).w,
-              margin: EdgeInsets.symmetric(horizontal: kWidth(56.0).w),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30.0),
-                color: kWhiteColor,
-              ),
-              padding: EdgeInsets.symmetric(horizontal: kWidth(kMainPadding).w),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  _pieceOfInformations(
-                    context,
-                    "Ф.И.О",
-                    "VIKTOR KAMAROV VIKTOROVICH",
-                  ),
-                  _pieceOfInformations(
-                    context,
-                    "Адрес прописки",
-                    " г.Ташкент,Садыка Азимова,1/28",
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _pieceOfInformations(
-                        context,
-                        "Номер паспорта",
-                        "АА1564457",
-                      ),
-                      _pieceOfInformations(
-                        context,
-                        "Дата рождения",
-                        "11.04.2020",
-                      ),
-                    ],
-                  ),
-                  _pieceOfInformations(
-                    context,
-                    "Номер телефона",
-                    "+998 90 900 90 90",
-                  ),
-                ],
-              ),
-            ),
+            _mainBody(context),
             SizedBox(height: kHeight(310.0).h),
             _button(context),
             SizedBox(height: kHeight(20.0).h),
@@ -92,6 +46,56 @@ class IdentificationPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Container _mainBody(BuildContext context) {
+    return Container(
+            height: kHeight(235.0).h,
+            width: kWidth(316.0).w,
+            margin: EdgeInsets.symmetric(horizontal: kWidth(56.0).w),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(30.0),
+              color: kWhiteColor,
+            ),
+            padding: EdgeInsets.symmetric(horizontal: kWidth(kMainPadding).w),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                _pieceOfInformations(
+                  context,
+                  "Ф.И.О",
+                  "VIKTOR KAMAROV VIKTOROVICH",
+                ),
+                _pieceOfInformations(
+                  context,
+                  "Адрес прописки",
+                  " г.Ташкент,Садыка Азимова,1/28",
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _pieceOfInformations(
+                      context,
+                      "Номер паспорта",
+                      "АА1564457",
+                    ),
+                    _pieceOfInformations(
+                      context,
+                      "Дата рождения",
+                      "11.04.2020",
+                    ),
+                  ],
+                ),
+                _pieceOfInformations(
+                  context,
+                  "Номер телефона",
+                  "+998 90 900 90 90",
+                ),
+              ],
+            ),
+          );
   }
 
   Column _pieceOfInformations(

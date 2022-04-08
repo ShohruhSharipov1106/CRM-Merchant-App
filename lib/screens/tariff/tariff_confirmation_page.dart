@@ -1,4 +1,5 @@
 import 'package:crm_merchant/constants/exports.dart';
+import 'package:crm_merchant/screens/home/home_page.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class TariffConfirmationPage extends StatefulWidget {
@@ -208,7 +209,7 @@ class _TariffConfirmationPageState extends State<TariffConfirmationPage> {
                 MainButton(
                   "Завершить",
                   () {
-                    Get.back();
+                    Get.offAll(const HomePage());
                   },
                 ),
               ],

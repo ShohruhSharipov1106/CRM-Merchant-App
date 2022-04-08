@@ -8,10 +8,14 @@ class HomePageProvider extends ChangeNotifier {
   double mainContainerWidth = kWidth(396.0).w;
   String hideText = "Подробней...";
   bool isVisible = false;
-  List<Widget> listOfAllInformation = [];
-  List<Widget> listOfDoneInformation = [];
-  List<Widget> listOfErrorInformation = [];
-  List<Widget> listOfWaitingInformation = [];
+  List<Widget> listOfAllInformation = [
+    FullInformation(kGreenLabelColor),
+    FullInformation(kGreyLabelColor),
+    FullInformation(kMainColor),
+  ];
+  List<Widget> listOfDoneInformation = [FullInformation(kGreenLabelColor)];
+  List<Widget> listOfErrorInformation = [FullInformation(kMainColor)];
+  List<Widget> listOfWaitingInformation = [FullInformation(kGreyLabelColor)];
 
   increaseSize() {
     mainSzbHeight = kHeight(317.0).h;

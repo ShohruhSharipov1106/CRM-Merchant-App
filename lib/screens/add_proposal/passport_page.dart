@@ -53,7 +53,7 @@ class AddProposalPassportPage extends StatelessWidget {
                           .text
                           .length ==
                       25) {
-                // Get.to(const CameraFaceIDPage());
+                Get.to(const CameraFaceIDPage());
                 context.read<AddProposalProvider>().hasnotError();
               } else {
                 context.read<AddProposalProvider>().hasError();

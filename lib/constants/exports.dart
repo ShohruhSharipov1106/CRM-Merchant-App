@@ -26,3 +26,4 @@ export 'package:crm_merchant/components/listenable_button.dart';
 export 'package:google_ml_kit/google_ml_kit.dart';
 export 'package:camera/camera.dart';
 export 'dart:convert';
+export 'package:get_storage/get_storage.dart';

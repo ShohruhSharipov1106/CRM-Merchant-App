@@ -1,6 +1,6 @@
-
 import 'package:crm_merchant/constants/exports.dart';
 import 'package:crm_merchant/screens/auth/sign_up_page.dart';
+import 'package:crm_merchant/screens/face_id/camera_face_id_page.dart';
 import 'package:crm_merchant/screens/splash/splash_screen_page.dart';
 
 List<CameraDescription> cameras = [];
@@ -22,7 +22,6 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
-  
   const MyApp({Key? key}) : super(key: key);
 
   @override
@@ -68,12 +67,7 @@ class MyApp extends StatelessWidget {
             ),
           ),
           home:  const SignUpPage()
-          // home: GetStorage().read("splashDone") == "splashDone"
-          //     ? (GetStorage().read("signUpDone") == "signUpDone"
-          //         ? const HomePage()
-          //         : const SignUpPage())
-          //     : const SplashScreenPage(),
-          ,
+          // home:const CameraFaceIDPage()
         );
       },
     );

@@ -15,7 +15,9 @@ class _SplashScreenPageState extends State<SplashScreenPage>
     with TickerProviderStateMixin {
   AnimationController? _animationController;
   SequenceAnimation? _sequenceAnimation;
-
+  int firstAnimate = 1;
+  int secondAnimateBegin = 1200;
+  int secondAnimateEnd = 2000;
   @override
   void initState() {
     super.initState();
@@ -34,7 +36,7 @@ class _SplashScreenPageState extends State<SplashScreenPage>
             end: kHeight(241.13).h,
           ),
           from: Duration.zero,
-          to: const Duration(seconds: 1),
+          to: Duration(seconds: firstAnimate),
           tag: 'heightSzb',
         )
         .addAnimatable(
@@ -43,7 +45,7 @@ class _SplashScreenPageState extends State<SplashScreenPage>
             end: kWidth(275.57).w,
           ),
           from: Duration.zero,
-          to: const Duration(seconds: 1),
+          to: Duration(seconds: firstAnimate),
           tag: 'widthSzb',
         )
         .addAnimatable(
@@ -51,8 +53,8 @@ class _SplashScreenPageState extends State<SplashScreenPage>
             begin: kHeight(241.13).h,
             end: kHeight(87.0).h,
           ),
-          from: const Duration(seconds: 2),
-          to: const Duration(seconds: 5),
+          from: Duration(milliseconds: secondAnimateBegin),
+          to: Duration(milliseconds: secondAnimateEnd),
           tag: 'heightSzb',
         )
         .addAnimatable(
@@ -60,8 +62,8 @@ class _SplashScreenPageState extends State<SplashScreenPage>
             begin: kWidth(275.57).w,
             end: kWidth(95.71).w,
           ),
-          from: const Duration(seconds: 2),
-          to: const Duration(seconds: 5),
+          from: Duration(milliseconds: secondAnimateBegin),
+          to: Duration(milliseconds: secondAnimateEnd),
           tag: 'widthSzb',
         )
         .addAnimatable(
@@ -69,8 +71,8 @@ class _SplashScreenPageState extends State<SplashScreenPage>
             begin: kHeight(382.47).h,
             end: kHeight(435.0).h,
           ),
-          from: const Duration(seconds: 2),
-          to: const Duration(seconds: 5),
+          from: Duration(milliseconds: secondAnimateBegin),
+          to: Duration(milliseconds: secondAnimateEnd),
           tag: 'positionSzbHeight',
         )
         .addAnimatable(
@@ -78,8 +80,8 @@ class _SplashScreenPageState extends State<SplashScreenPage>
             begin: kWidth(76.43).w,
             end: kWidth(90.0).w,
           ),
-          from: const Duration(seconds: 2),
-          to: const Duration(seconds: 5),
+          from: Duration(milliseconds: secondAnimateBegin),
+          to: Duration(milliseconds: secondAnimateEnd),
           tag: 'positionSzbWidth',
         )
         .addAnimatable(
@@ -87,8 +89,8 @@ class _SplashScreenPageState extends State<SplashScreenPage>
             begin: kHeight(427.0).h,
             end: kHeight(427.0).h,
           ),
-          from: const Duration(seconds: 2),
-          to: const Duration(seconds: 5),
+          from: Duration(milliseconds: secondAnimateBegin),
+          to: Duration(milliseconds: secondAnimateEnd),
           tag: 'positionTextHeight',
         )
         .addAnimatable(
@@ -96,15 +98,15 @@ class _SplashScreenPageState extends State<SplashScreenPage>
             begin: -kWidth(150.0).w,
             end: kWidth(102.0).w,
           ),
-          from: const Duration(seconds: 2),
-          to: const Duration(seconds: 5),
+          from: Duration(milliseconds: secondAnimateBegin),
+          to: Duration(milliseconds: secondAnimateEnd),
           tag: 'positionTextWidth',
         )
         .animate(_animationController!);
 
     _animationController!.forward();
 
-    Timer(const Duration(seconds: 6), () {
+    Timer(const Duration(milliseconds: 2500), () {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(

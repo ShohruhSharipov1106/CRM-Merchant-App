@@ -1,6 +1,7 @@
 import 'dart:io';
+import 'package:crm_merchant/models/marketplace/get_my_tariffs_model.dart';
 import 'package:http/http.dart' as http;
-import 'package:crm_merchant/models/api_partner/get_tariffs_model.dart';
+
 import 'package:crm_merchant/constants/exports.dart';
 import 'package:crm_merchant/screens/tariff/tariff_confirmation_page.dart';
 
@@ -30,136 +31,137 @@ class _TariffMainPageState extends State<TariffMainPage> {
             SizedBox(height: kHeight(20.0).h),
             TitleOfPage("Выбрать тариф", kWidth(117.0).w),
             SizedBox(
-                height: kHeight(768).h,
-                child: Stack(
-                  children: [
-                    SizedBox(
-                      height: kHeight(768).h,
-                      child: ListView.builder(
-                        physics: const BouncingScrollPhysics(),
-                        itemBuilder: (_, __) => InkWell(
-                          child: Stack(
-                            children: [
-                              Container(
-                                margin: EdgeInsets.symmetric(
-                                  horizontal: kWidth(kInpHorPad).w,
-                                  vertical: kHeight(7.5).h,
-                                ),
-                                padding: EdgeInsets.only(
-                                  left: kWidth(25.0).w,
-                                  top: kHeight(10.0).h,
-                                ),
-                                height: kHeight(228.0).h,
-                                width: kWidth(368.0).w,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(30.0),
-                                  color: kWhiteColor,
-                                ),
-                                child: Text.rich(
-                                  TextSpan(
-                                    children: [
-                                      TextSpan(
-                                        text: "Тариф (Выгодный)\n\n",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headlineLarge,
-                                      ),
-                                      TextSpan(
-                                        text:
-                                            "${summs[__].toString().replaceRange(3, 4, " 0")}\t",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headlineLarge,
-                                      ),
-                                      TextSpan(
-                                        text: "UZS в месяц\n\n",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .labelMedium!
-                                            .copyWith(fontSize: 13.0),
-                                      ),
-                                      TextSpan(
-                                        text:
-                                            "Предоплата ${prepayments[__]}%\t\t",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .labelMedium,
-                                      ),
-                                      TextSpan(
-                                        text: "Без переплат",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .labelMedium,
-                                      ),
-                                    ],
-                                  ),
-                                  textAlign: TextAlign.left,
-                                ),
+              height: kHeight(768).h,
+              child: Stack(
+                children: [
+                  SizedBox(
+                    height: kHeight(768).h,
+                    child: ListView.builder(
+                      physics: const BouncingScrollPhysics(),
+                      itemBuilder: (_, __) => InkWell(
+                        child: Stack(
+                          children: [
+                            Container(
+                              margin: EdgeInsets.symmetric(
+                                horizontal: kWidth(kInpHorPad).w,
+                                vertical: kHeight(7.5).h,
                               ),
-                              _ribbon(__),
-                              Positioned(
-                                child: _whichTariff == __ || !_oneTapped
-                                    ? Text.rich(
-                                        TextSpan(
-                                          text: "${months[__]}",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headlineLarge!
-                                              .copyWith(
-                                                color: kWhiteColor,
-                                              ),
-                                          children: [
-                                            TextSpan(
-                                              text: months[__] < 4
-                                                  ? "\nмесяца"
-                                                  : "\nмесяцев",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .labelMedium!
-                                                  .copyWith(
-                                                    color: kWhiteColor,
-                                                    fontSize: 10.0,
-                                                  ),
+                              padding: EdgeInsets.only(
+                                left: kWidth(25.0).w,
+                                top: kHeight(10.0).h,
+                              ),
+                              height: kHeight(228.0).h,
+                              width: kWidth(368.0).w,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(30.0),
+                                color: kWhiteColor,
+                              ),
+                              child: Text.rich(
+                                TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text: "Тариф (Выгодный)\n\n",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headlineLarge,
+                                    ),
+                                    TextSpan(
+                                      text:
+                                          "${summs[__].toString().replaceRange(3, 4, " 0")}\t",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headlineLarge,
+                                    ),
+                                    TextSpan(
+                                      text: "UZS в месяц\n\n",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelMedium!
+                                          .copyWith(fontSize: 13.0),
+                                    ),
+                                    TextSpan(
+                                      text:
+                                          "Предоплата ${prepayments[__]}%\t\t",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelMedium,
+                                    ),
+                                    TextSpan(
+                                      text: "Без переплат",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelMedium,
+                                    ),
+                                  ],
+                                ),
+                                textAlign: TextAlign.left,
+                              ),
+                            ),
+                            _ribbon(__),
+                            Positioned(
+                              child: _whichTariff == __ || !_oneTapped
+                                  ? Text.rich(
+                                      TextSpan(
+                                        text: "${months[__]}",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headlineLarge!
+                                            .copyWith(
+                                              color: kWhiteColor,
                                             ),
-                                          ],
-                                        ),
-                                        textAlign: TextAlign.center,
-                                      )
-                                    : const Text(""),
-                                top: kHeight(25.0).h,
-                                right: kWidth(40.0).w,
-                              ),
-                            ],
-                          ),
-                          onTap: () {
-                            setState(() {
-                              _whichTariff = __;
-                              _oneTapped = true;
-                            });
-                          },
+                                        children: [
+                                          TextSpan(
+                                            text: months[__] < 4
+                                                ? "\nмесяца"
+                                                : "\nмесяцев",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .labelMedium!
+                                                .copyWith(
+                                                  color: kWhiteColor,
+                                                  fontSize: 10.0,
+                                                ),
+                                          ),
+                                        ],
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    )
+                                  : const Text(""),
+                              top: kHeight(25.0).h,
+                              right: kWidth(40.0).w,
+                            ),
+                          ],
                         ),
-                        itemCount: months.length,
+                        onTap: () {
+                          setState(() {
+                            _whichTariff = __;
+                            _oneTapped = true;
+                          });
+                        },
                       ),
+                      itemCount: months.length,
                     ),
-                    Positioned(
-                      child: Visibility(
-                        child: MainButton(
-                          "Перейти к оформлению",
-                          () {
-                            Get.to(
-                              TariffConfirmationPage(
-                                months[_whichTariff!],
-                              ),
-                            );
-                          },
-                        ),
-                        visible: _oneTapped,
+                  ),
+                  Positioned(
+                    child: Visibility(
+                      child: MainButton(
+                        "Перейти к оформлению",
+                        () {
+                          Get.to(
+                            TariffConfirmationPage(
+                              months[_whichTariff!],
+                            ),
+                          );
+                        },
                       ),
-                      bottom: kHeight(30.0).h,
-                      left: kWidth(80.0).w,
+                      visible: _oneTapped,
                     ),
-                  ],
-                )),
+                    bottom: kHeight(30.0).h,
+                    left: kWidth(80.0).w,
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
@@ -186,7 +188,7 @@ class _TariffMainPageState extends State<TariffMainPage> {
     );
   }
 
-  Future<List<GetTariffs>> _getTarifffromApi() async {
+  Future<List<GetMyTariffs>> _getTarifffromApi() async {
     Uri url =
         Uri.parse("https://crm.creditexpress.uz:6262/api/partner/GetTariffs");
     var res = await http.get(
@@ -201,7 +203,7 @@ class _TariffMainPageState extends State<TariffMainPage> {
     if (res.statusCode == 200) {
       print("object 2");
       return (json.decode(res.body) as List)
-          .map((e) => GetTariffs.fromJson(e))
+          .map((e) => GetMyTariffs.fromJson(e))
           .toList();
     } else {
       print("${res.statusCode}");

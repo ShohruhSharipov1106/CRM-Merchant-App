@@ -1,5 +1,4 @@
 import 'package:crm_merchant/constants/exports.dart';
-import 'package:crm_merchant/models/api_account/token_model.dart';
 import 'package:crm_merchant/screens/auth/sms_checker_page.dart';
 
 import 'package:http/http.dart' as http;
@@ -12,7 +11,7 @@ class SignUpPage extends StatelessWidget {
     SignUpProvider contexPro = context.watch<SignUpProvider>();
     return Scaffold(
       body: ZoomIn(
-        duration: const Duration(seconds: 2),
+        duration: const Duration(seconds: 1),
         child: SafeArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -51,10 +50,10 @@ class SignUpPage extends StatelessWidget {
                 "Введите ваш номер телефона",
                 "Недопустимый номер телефона",
                 TextInputType.visiblePassword,
-                8,
+                17,
                 "+ 998** *** ** ** ",
-                "########",
-                {"#": RegExp(r'[4f?$@VK3]')},
+                "+ 998** *** ** ** ",
+                {"*": RegExp(r'[0-9]')},
               ),
               SizedBox(height: kHeight(100.0).h),
               Padding(
@@ -65,11 +64,8 @@ class SignUpPage extends StatelessWidget {
                   builder: (context, v, child) {
                     return ListenableButton(
                       "Продолжить",
-                      () async {
-                        await _postTokenfromApi(
-                          contexPro.nameController.text,
-                          contexPro.phoneController.text,
-                        );
+                      ()  {
+                        
                         context
                                         .read<SignUpProvider>()
                                         .nameController
@@ -81,12 +77,12 @@ class SignUpPage extends StatelessWidget {
                                         .phoneController
                                         .text
                                         .length ==
-                                    8
+                                    17
                             ? Get.to(const SmsCheckerPage())
                             : () {};
                       },
                       context.watch<SignUpProvider>().phoneController,
-                      v.text.length > 2 ? 8 : 30,
+                      v.text.length > 2 ? 17 : 30,
                     );
                   },
                 ),

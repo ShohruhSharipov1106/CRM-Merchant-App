@@ -66,7 +66,7 @@ class MyApp extends StatelessWidget {
               backgroundColor: Colors.transparent,
             ),
           ),
-          home:  const SignUpPage()
+          home:  const SplashScreenPage()
           // home:const CameraFaceIDPage()
         );
       },

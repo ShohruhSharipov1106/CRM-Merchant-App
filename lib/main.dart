@@ -1,6 +1,8 @@
 import 'package:crm_merchant/constants/exports.dart';
+import 'package:crm_merchant/screens/add_proposal/phone_number_page.dart';
 import 'package:crm_merchant/screens/auth/sign_up_page.dart';
 import 'package:crm_merchant/screens/face_id/camera_face_id_page.dart';
+import 'package:crm_merchant/screens/face_id/camera_passport_id_page.dart';
 import 'package:crm_merchant/screens/splash/splash_screen_page.dart';
 
 List<CameraDescription> cameras = [];
@@ -66,7 +68,7 @@ class MyApp extends StatelessWidget {
               backgroundColor: Colors.transparent,
             ),
           ),
-          home:  const SplashScreenPage()
+          home:  const AddProposalPhoneNumberPage()
           // home:const CameraFaceIDPage()
         );
       },

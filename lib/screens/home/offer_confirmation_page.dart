@@ -1,5 +1,5 @@
 import 'package:crm_merchant/constants/exports.dart';
-import 'package:crm_merchant/screens/home/home_page.dart';
+import 'package:crm_merchant/screens/add_proposal/card_page.dart';
 
 class OfferConfirmationPage extends StatefulWidget {
   const OfferConfirmationPage({Key? key}) : super(key: key);
@@ -136,7 +136,15 @@ class _OfferConfirmationPageState extends State<OfferConfirmationPage>
       child: ListenableButton(
         "Продолжить",
         () => smsChecker.length == 4
-            ? Get.back()
+            ? Get.off(
+                AddProposalCardPage(
+                  context
+                      .read<AddProposalProvider>()
+                      .addProposalPhoneNumber
+                      .text
+                      .substring(12),
+                ),
+              )
             : () {},
         smsChecker,
         4,

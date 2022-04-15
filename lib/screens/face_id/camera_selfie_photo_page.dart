@@ -1,14 +1,14 @@
 import 'package:crm_merchant/constants/exports.dart';
-import 'package:crm_merchant/screens/face_id/camera_registration_page.dart';
+import 'package:crm_merchant/screens/add_proposal/identification_page.dart';
 
-class CameraPassportIDPage extends StatefulWidget {
-  const CameraPassportIDPage({Key? key}) : super(key: key);
+class CameraSelfiePhotoPage extends StatefulWidget {
+  const CameraSelfiePhotoPage({Key? key}) : super(key: key);
 
   @override
-  State<CameraPassportIDPage> createState() => _CameraPassportIDPageState();
+  State<CameraSelfiePhotoPage> createState() => _CameraSelfiePhotoPageState();
 }
 
-class _CameraPassportIDPageState extends State<CameraPassportIDPage> {
+class _CameraSelfiePhotoPageState extends State<CameraSelfiePhotoPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,7 +29,7 @@ class _CameraPassportIDPageState extends State<CameraPassportIDPage> {
         children: [
           const Center(
             child: Text(
-              "Идетификация по паспорту\nФотография паспорта",
+              "Идетификация по паспорту\nФотография паспорта\nна фоне лица",
               style: TextStyle(
                 fontSize: 24.0,
                 color: kWhiteColor,
@@ -70,10 +70,10 @@ class _CameraPassportIDPageState extends State<CameraPassportIDPage> {
               ),
             ),
           ),
-          SizedBox(height: kHeight(20.0).h),
+          SizedBox(height: kHeight(10.0).h),
           MainButton(
             "Сделать фото",
-            () => Get.off(const CameraRegistrationPage()),
+            () => Get.off(const IdentificationPage()),
           ),
         ],
       ),

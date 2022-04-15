@@ -1,5 +1,6 @@
 import 'package:crm_merchant/constants/exports.dart';
-import 'package:crm_merchant/screens/add_proposal/card_page.dart';
+import 'package:crm_merchant/screens/home/offer_confirmation_page.dart';
+import 'package:crm_merchant/services/create_request_service.dart';
 
 class AddProposalPhoneNumberPage extends StatefulWidget {
   const AddProposalPhoneNumberPage({Key? key}) : super(key: key);
@@ -50,15 +51,11 @@ class _AddProposalPhoneNumberPageState
                   .text
                   .length ==
               17) {
-            Get.to(
-              AddProposalCardPage(
-                context
-                    .read<AddProposalProvider>()
-                    .addProposalPhoneNumber
-                    .text
-                    .substring(12),
-              ),
-            );
+            CreateRequestService.postPhoneNumber(context
+                .read<AddProposalProvider>()
+                .addProposalPhoneNumber
+                .text);
+            Get.to(const OfferConfirmationPage());
             context.read<AddProposalProvider>().hasnotError();
           } else {
             context.read<AddProposalProvider>().hasError();

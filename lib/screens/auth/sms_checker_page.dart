@@ -143,7 +143,7 @@ class _SmsCheckerPageState extends State<SmsCheckerPage>
         () {
           if (smsChecker.length == 4) {
             GetStorage().write("signUpDone", "signUpDone");
-            Get.to(const HomePage());
+            Get.off(const HomePage());
           }
         },
         smsChecker,

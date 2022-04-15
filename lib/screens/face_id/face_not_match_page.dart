@@ -60,7 +60,6 @@ class FaceNotMatch extends StatelessWidget {
           MainButton(
             "Сделать фото",
             () => Get.back(),
-          
           ),
           SizedBox(height: kHeight(15.0).h),
           Text(
@@ -72,7 +71,11 @@ class FaceNotMatch extends StatelessWidget {
           MainButton(
             "Сделать фото паспотра",
             () => Get.to(const CameraPassportIDPage()),
-         
+          ),
+          SizedBox(height: kHeight(15.0).h),
+          MainButton(
+            "Загрузить фото паспорта",
+            () => Get.to(const CameraPassportIDPage()),
           ),
         ],
       ),

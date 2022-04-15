@@ -30,9 +30,7 @@ class CheckOutButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(30.0),
           ),
         ),
-        onPressed: () {
-          Get.to(const OfferConfirmationPage());
-        },
+        onPressed: () {},
       ),
     );
   }

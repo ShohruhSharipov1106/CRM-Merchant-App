@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:crm_merchant/constants/exports.dart';
+import 'package:crm_merchant/screens/add_proposal/list_of_item_page.dart';
 import 'package:crm_merchant/screens/tariff/tariff_main_page.dart';
-import 'package:flutter/services.dart';
 
 class MakeProposalPage extends StatefulWidget {
   const MakeProposalPage({Key? key}) : super(key: key);
@@ -12,21 +12,6 @@ class MakeProposalPage extends StatefulWidget {
 }
 
 class _MakeProposalPageState extends State<MakeProposalPage> {
-  File? image;
-
-  Future pickImage(ImageSource source) async {
-    try {
-      final image = await ImagePicker().pickImage(source: source);
-      if (image == null) return;
-      final imageTemporary = File(image.path);
-      setState(() {
-        this.image = imageTemporary;
-      });
-    } on PlatformException catch (e) {
-      debugPrint("Failed to pick image: $e");
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,70 +28,76 @@ class _MakeProposalPageState extends State<MakeProposalPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    TitleOfPage("Создание заявки", kWidth(88.0).w),
+                    Row(
+                      children: [
+                        TitleOfPage("Создание заявки", kWidth(88.0).w),
+                        SizedBox(width: kWidth(44.0).w),
+                        InkWell(
+                          child: Stack(
+                            children: [
+                              SizedBox(
+                                height: kHeight(42.0).h,
+                                width: kWidth(42.0).w,
+                                child: Padding(
+                                  padding: EdgeInsets.only(
+                                    bottom: kHeight(10.0).h,
+                                    right: kWidth(14.0).w,
+                                    top: kHeight(2.0).h,
+                                  ),
+                                  child: SvgPicture.asset(
+                                    "assets/icons/job-description-icon.svg",
+                                  ),
+                                ),
+                              ),
+                              Positioned(
+                                child: CircleAvatar(
+                                  radius: kHeight(11.5).h,
+                                  backgroundColor: kMainColor,
+                                  child: Text(
+                                    "1",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleMedium!
+                                        .copyWith(color: kWhiteColor),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                                right: kWidth(8.0).w,
+                                bottom: 0,
+                              ),
+                            ],
+                          ),
+                          onTap: () => Get.to(
+                            const ListOfItem(),
+                          ),
+                        ),
+                      ],
+                    ),
                     SizedBox(height: kHeight(20.0).h),
                     _headlineText(context),
                     SizedBox(height: kHeight(20.0).h),
-                    _naming(context),
-                    _summ(context),
+                    _listOfInputField(context),
                     SizedBox(height: kHeight(22.0).h),
                     Padding(
-                      padding: const EdgeInsets.only(left: kMainPadding),
-                      child: Text(
-                        "Загрузите фото ",
-                        style: Theme.of(context).textTheme.labelMedium,
+                      padding: EdgeInsets.only(left: kWidth(182.0).w),
+                      child: InkWell(
+                        child: Material(
+                          elevation: 4.0,
+                          color: kYellowButtonColor,
+                          shape: const CircleBorder(),
+                          child: Padding(
+                            padding: EdgeInsets.all(kHeight(5.0).h),
+                            child: Icon(
+                              Icons.add,
+                              size: kHeight(47.0).h,
+                              color: kWhiteColor,
+                            ),
+                          ),
+                        ),
+                        onTap: () {},
                       ),
                     ),
                     SizedBox(height: kHeight(15.0).h),
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: kWidth(34.0).w),
-                      height: kHeight(60.0).h,
-                      child: GridView.builder(
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 1,
-                          mainAxisSpacing: 15.0,
-                        ),
-                        scrollDirection: Axis.horizontal,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemBuilder: (_, __) => InkWell(
-                          child: Container(
-                            foregroundDecoration: BoxDecoration(
-                              border: Border.all(
-                                color: kBlackTextColor,
-                                width: 1.0,
-                              ),
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            child: Center(
-                              child: __ == 0
-                                  ? image != null
-                                      ? Image.file(
-                                          image!,
-                                          fit: BoxFit.cover,
-                                        )
-                                      : const Icon(
-                                          Icons.add,
-                                          size: 40.0,
-                                        )
-                                  : image != null
-                                      ? Image.file(
-                                          image!,
-                                          fit: BoxFit.cover,
-                                        )
-                                      : SvgPicture.asset(
-                                          "assets/icons/camera.svg",
-                                          height: kHeight(20.0).h,
-                                          width: kWidth(26.0).w,
-                                          fit: BoxFit.cover,
-                                        ),
-                            ),
-                          ),
-                          onTap: () => pickImage(ImageSource.gallery),
-                        ),
-                        itemCount: 5,
-                      ),
-                    ),
                     SizedBox(height: kHeight(90.0).h),
                     _button(context),
                     SizedBox(height: kHeight(53.0).h),
@@ -117,6 +108,15 @@ class _MakeProposalPageState extends State<MakeProposalPage> {
           ],
         ),
       ),
+    );
+  }
+
+  Column _listOfInputField(BuildContext context) {
+    return Column(
+      children: [
+        _naming(context),
+        _summ(context),
+      ],
     );
   }
 

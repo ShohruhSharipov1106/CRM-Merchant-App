@@ -1,3 +1,4 @@
+import 'package:crm_merchant/components/variable_elements.dart';
 import 'package:crm_merchant/constants/exports.dart';
 import 'package:crm_merchant/screens/home/offer_confirmation_page.dart';
 import 'package:crm_merchant/services/create_request_service.dart';
@@ -55,6 +56,8 @@ class _AddProposalPhoneNumberPageState
                 .read<AddProposalProvider>()
                 .addProposalPhoneNumber
                 .text);
+            phoneNumVarElement =
+                context.read<AddProposalProvider>().addProposalPhoneNumber.text;
             Get.to(const OfferConfirmationPage());
             context.read<AddProposalProvider>().hasnotError();
           } else {

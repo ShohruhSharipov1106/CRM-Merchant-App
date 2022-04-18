@@ -137,13 +137,7 @@ class _OfferConfirmationPageState extends State<OfferConfirmationPage>
         "Продолжить",
         () => smsChecker.length == 4
             ? Get.off(
-                AddProposalCardPage(
-                  context
-                      .read<AddProposalProvider>()
-                      .addProposalPhoneNumber
-                      .text
-                      .substring(12),
-                ),
+                const AddProposalCardPage(),
               )
             : () {},
         smsChecker,

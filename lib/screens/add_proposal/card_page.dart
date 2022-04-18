@@ -2,8 +2,7 @@ import 'package:crm_merchant/constants/exports.dart';
 import 'package:crm_merchant/screens/add_proposal/sms_confirmation_page.dart';
 
 class AddProposalCardPage extends StatelessWidget {
-  String last4PhoneNumber;
-  AddProposalCardPage(this.last4PhoneNumber, {Key? key}) : super(key: key);
+  const AddProposalCardPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +32,7 @@ class AddProposalCardPage extends StatelessWidget {
               ),
             ),
             SizedBox(height: kHeight(22.0).h),
-            _button(context, last4PhoneNumber),
+            _button(context),
             SizedBox(height: kHeight(53.0).h),
           ],
         ),
@@ -105,7 +104,9 @@ class AddProposalCardPage extends StatelessWidget {
     );
   }
 
-  Padding _button(BuildContext context, String last4PhoneNumber) {
+  Padding _button(
+    BuildContext context,
+  ) {
     return Padding(
       padding: const EdgeInsets.only(left: kButHorPad),
       child: ValueListenableBuilder<TextEditingValue>(
@@ -126,7 +127,12 @@ class AddProposalCardPage extends StatelessWidget {
                             .text
                             .length ==
                         5) {
-                  Get.to(AddProposalSmsConfirmationPage(last4PhoneNumber));
+                  Get.to(const AddProposalSmsConfirmationPage());
+                  context.read<AddProposalProvider>().cardNumber.clear();
+                  context
+                      .read<AddProposalProvider>()
+                      .cardExpirationDate
+                      .clear();
                   context.read<AddProposalProvider>().hasnotError();
                 } else {
                   context.read<AddProposalProvider>().hasError();

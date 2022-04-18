@@ -1,10 +1,9 @@
+import 'package:crm_merchant/components/variable_elements.dart';
 import 'package:crm_merchant/constants/exports.dart';
-import 'package:crm_merchant/screens/add_proposal/passport_page.dart';
+import 'package:crm_merchant/screens/add_proposal/card_added_successfully_page.dart';
 
 class AddProposalSmsConfirmationPage extends StatefulWidget {
-  String last4PhoneNumber;
-  AddProposalSmsConfirmationPage(this.last4PhoneNumber, {Key? key})
-      : super(key: key);
+  const AddProposalSmsConfirmationPage({Key? key}) : super(key: key);
 
   @override
   State<AddProposalSmsConfirmationPage> createState() =>
@@ -17,7 +16,7 @@ class _AddProposalSmsConfirmationPageState
   TextEditingController smsChecker = TextEditingController();
   AnimationController? _controller;
   int levelClock = 30;
-
+  
   @override
   void dispose() {
     _controller!.dispose();
@@ -55,7 +54,7 @@ class _AddProposalSmsConfirmationPageState
             Padding(
               padding: const EdgeInsets.only(left: kInpHorPad),
               child: Text(
-                "Введите код, отправленный на номер телефона (*${widget.last4PhoneNumber}), привязанный к \nкарте",
+                "Введите код, отправленный на номер телефона (*${phoneNumVarElement.substring(12)}), привязанный к \nкарте",
                 style: const TextStyle(
                   fontSize: 10.0,
                   fontWeight: FontWeight.w400,
@@ -123,7 +122,7 @@ class _AddProposalSmsConfirmationPageState
         "Продолжить",
         () {
           if (smsChecker.length == 4) {
-            Get.to(const AddProposalPassportPage());
+            Get.to(const CardAddedSuccessfullyPage());
             context.read<AddProposalProvider>().hasnotError();
           } else {
             context.read<AddProposalProvider>().hasError();

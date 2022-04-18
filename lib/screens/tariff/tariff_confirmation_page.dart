@@ -70,6 +70,24 @@ class _TariffConfirmationPageState extends State<TariffConfirmationPage> {
                       ],
                     ),
                   ),
+                  Column(
+                    children: [
+                      SizedBox(height: kHeight(140.0).h),
+                      InkWell(
+                        child: Material(
+                          elevation: 5.0,
+                          shape: const CircleBorder(),
+                          color: kYellowButtonColor,
+                          child: Padding(
+                            padding: const EdgeInsets.all(5.0),
+                            child:
+                                SvgPicture.asset("assets/icons/pen-icon.svg"),
+                          ),
+                        ),
+                        onTap: () {},
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),

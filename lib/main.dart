@@ -1,9 +1,14 @@
 import 'package:crm_merchant/constants/exports.dart';
+import 'package:crm_merchant/screens/add_proposal/card_added_successfully_page.dart';
+import 'package:crm_merchant/screens/add_proposal/list_of_item_page.dart';
+import 'package:crm_merchant/screens/add_proposal/make_proposal_page.dart';
+import 'package:crm_merchant/screens/add_proposal/passport_identification_page.dart';
 import 'package:crm_merchant/screens/add_proposal/phone_number_page.dart';
 import 'package:crm_merchant/screens/auth/sign_up_page.dart';
 import 'package:crm_merchant/screens/face_id/camera_face_id_page.dart';
 import 'package:crm_merchant/screens/face_id/camera_passport_id_page.dart';
 import 'package:crm_merchant/screens/splash/splash_screen_page.dart';
+import 'package:crm_merchant/screens/tariff/tariff_confirmation_page.dart';
 
 List<CameraDescription> cameras = [];
 Future<void> main() async {
@@ -68,7 +73,7 @@ class MyApp extends StatelessWidget {
               backgroundColor: Colors.transparent,
             ),
           ),
-          home:  const AddProposalPhoneNumberPage()
+          home:  const ListOfItem()
           // home:const CameraFaceIDPage()
         );
       },

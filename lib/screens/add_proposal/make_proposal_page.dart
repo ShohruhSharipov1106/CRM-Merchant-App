@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:crm_merchant/constants/exports.dart';
 import 'package:crm_merchant/screens/add_proposal/list_of_item_page.dart';
 import 'package:crm_merchant/screens/tariff/tariff_main_page.dart';
+import 'package:crm_merchant/services/create_request_service.dart';
 
 class MakeProposalPage extends StatefulWidget {
   const MakeProposalPage({Key? key}) : super(key: key);
@@ -120,6 +121,18 @@ class _MakeProposalPageState extends State<MakeProposalPage> {
                             ],
                           );
                           summValue = summ.sum;
+                          print("post boshlandi");
+                          CreateRequestService.postProductsToApi(
+                              context
+                                  .read<AddProposalProvider>()
+                                  .namingThings
+                                  .text,
+                              int.parse(context
+                                  .read<AddProposalProvider>()
+                                  .summThings
+                                  .text
+                                  .removeAllWhitespace));
+                          print("postdan otib ketti");
                           context
                               .read<AddProposalProvider>()
                               .namingThings

@@ -52,7 +52,7 @@ class _AddProposalPhoneNumberPageState
                   .text
                   .length ==
               17) {
-            CreateRequestService.postPhoneNumber(context
+            CreateRequestService.postPhoneNumberToApi(context
                 .read<AddProposalProvider>()
                 .addProposalPhoneNumber
                 .text);

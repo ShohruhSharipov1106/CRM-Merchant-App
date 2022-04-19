@@ -74,7 +74,7 @@ class MyApp extends StatelessWidget {
                 backgroundColor: Colors.transparent,
               ),
             ),
-            home: const CameraFaceIDPage()
+            home: const AddProposalPhoneNumberPage()
             // home:const CameraFaceIDPage()
             );
       },

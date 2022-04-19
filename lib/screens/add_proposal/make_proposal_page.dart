@@ -1,5 +1,4 @@
-import 'dart:io';
-
+import 'package:collection/collection.dart';
 import 'package:crm_merchant/constants/exports.dart';
 import 'package:crm_merchant/screens/add_proposal/list_of_item_page.dart';
 import 'package:crm_merchant/screens/tariff/tariff_main_page.dart';
@@ -49,27 +48,30 @@ class _MakeProposalPageState extends State<MakeProposalPage> {
                                   ),
                                 ),
                               ),
-                              Positioned(
-                                child: CircleAvatar(
-                                  radius: kHeight(11.5).h,
-                                  backgroundColor: kMainColor,
-                                  child: Text(
-                                    "1",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleMedium!
-                                        .copyWith(color: kWhiteColor),
-                                    textAlign: TextAlign.center,
+                              Visibility(
+                                visible: itemList.isEmpty ? false : true,
+                                child: Positioned(
+                                  child: CircleAvatar(
+                                    radius: kHeight(11.5).h,
+                                    backgroundColor: kMainColor,
+                                    child: Text(
+                                      "${itemList.length}",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium!
+                                          .copyWith(color: kWhiteColor),
+                                      textAlign: TextAlign.center,
+                                    ),
                                   ),
+                                  right: kWidth(8.0).w,
+                                  bottom: 0,
                                 ),
-                                right: kWidth(8.0).w,
-                                bottom: 0,
                               ),
                             ],
                           ),
-                          onTap: () => Get.to(
-                            const ListOfItem(),
-                          ),
+                          onTap: () {
+                            Get.to(const ListOfItem());
+                          },
                         ),
                       ],
                     ),
@@ -94,7 +96,39 @@ class _MakeProposalPageState extends State<MakeProposalPage> {
                             ),
                           ),
                         ),
-                        onTap: () {},
+                        onTap: () {
+                          setState(() {});
+                          summ.add(
+                            int.parse(
+                              context
+                                  .read<AddProposalProvider>()
+                                  .summThings
+                                  .text
+                                  .removeAllWhitespace,
+                            ),
+                          );
+                          itemList.add(
+                            [
+                              context
+                                  .read<AddProposalProvider>()
+                                  .namingThings
+                                  .text,
+                              context
+                                  .read<AddProposalProvider>()
+                                  .summThings
+                                  .text
+                            ],
+                          );
+                          summValue = summ.sum;
+                          context
+                              .read<AddProposalProvider>()
+                              .namingThings
+                              .clear();
+                          context
+                              .read<AddProposalProvider>()
+                              .summThings
+                              .clear();
+                        },
                       ),
                     ),
                     SizedBox(height: kHeight(15.0).h),
@@ -161,17 +195,18 @@ class _MakeProposalPageState extends State<MakeProposalPage> {
               "Продолжить",
               () {
                 if (context
-                            .read<AddProposalProvider>()
-                            .namingThings
-                            .text
-                            .length >=
-                        8 &&
-                    context
-                            .read<AddProposalProvider>()
-                            .summThings
-                            .text
-                            .length >=
-                        7) {
+                                .read<AddProposalProvider>()
+                                .namingThings
+                                .text
+                                .length >=
+                            8 &&
+                        context
+                                .read<AddProposalProvider>()
+                                .summThings
+                                .text
+                                .length >=
+                            7 ||
+                    itemList.isNotEmpty) {
                   Get.to(const TariffMainPage());
                   context.read<AddProposalProvider>().hasnotError();
                 } else {

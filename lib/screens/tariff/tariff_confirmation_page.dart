@@ -1,5 +1,6 @@
 import 'package:crm_merchant/constants/exports.dart';
 import 'package:crm_merchant/screens/home/home_page.dart';
+import 'package:intl/intl.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class TariffConfirmationPage extends StatefulWidget {
@@ -66,7 +67,13 @@ class _TariffConfirmationPageState extends State<TariffConfirmationPage> {
                         const TextSpan(text: "11.04.2020\n\n"),
                         _informationTitle(context,
                             "Первоначальный взнос\n(будет списан с карты)"),
-                        const TextSpan(text: "16 000 сум\n\n"),
+                        TextSpan(
+                          text: NumberFormat('###,###,###,###,###,###')
+                              .format(summValue == 0
+                                  ? 0
+                                  : (summValue / widget.tarifCount) * 0.1)
+                              .replaceAll(",", " "),
+                        ),
                       ],
                     ),
                   ),
@@ -261,7 +268,9 @@ class _TariffConfirmationPageState extends State<TariffConfirmationPage> {
           ),
           SizedBox(width: kWidth(72.0).w),
           Text(
-            "175 000 UZS",
+            NumberFormat('###,###,###,###,###,###')
+                .format(summValue == 0 ? 0 : (summValue / widget.tarifCount))
+                .replaceAll(",", " "),
             style: Theme.of(context).textTheme.labelMedium,
           ),
         ],

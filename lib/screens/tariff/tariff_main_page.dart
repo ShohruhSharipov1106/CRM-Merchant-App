@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 
 import 'package:crm_merchant/constants/exports.dart';
 import 'package:crm_merchant/screens/tariff/tariff_confirmation_page.dart';
+import 'package:intl/intl.dart';
 
 class TariffMainPage extends StatefulWidget {
   const TariffMainPage({Key? key}) : super(key: key);
@@ -16,7 +17,6 @@ class _TariffMainPageState extends State<TariffMainPage> {
   int? _whichTariff;
   bool _oneTapped = false;
   List<int> months = [3, 6, 9, 12];
-  List<int> summs = [200000, 175000, 150000, 125000];
   List<num> prepayments = [10, 10, 10, 10];
   @override
   Widget build(BuildContext context) {
@@ -66,14 +66,18 @@ class _TariffMainPageState extends State<TariffMainPage> {
                                           .headlineLarge,
                                     ),
                                     TextSpan(
-                                      text:
-                                          "${summs[__].toString().replaceRange(3, 4, " 0")}\t",
+                                      text: NumberFormat(
+                                              '###,###,###,###,###,###')
+                                          .format(summValue == 0
+                                              ? 0
+                                              : summValue / months[__])
+                                          .replaceAll(",", " "),
                                       style: Theme.of(context)
                                           .textTheme
                                           .headlineLarge,
                                     ),
                                     TextSpan(
-                                      text: "UZS в месяц\n\n",
+                                      text: "  UZS в месяц\n\n",
                                       style: Theme.of(context)
                                           .textTheme
                                           .labelMedium!

@@ -27,3 +27,4 @@ export 'package:google_ml_kit/google_ml_kit.dart';
 export 'package:camera/camera.dart';
 export 'dart:convert';
 export 'package:get_storage/get_storage.dart';
+export '../../components/variable_elements.dart';

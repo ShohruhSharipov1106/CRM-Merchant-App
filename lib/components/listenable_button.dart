@@ -26,7 +26,7 @@ class ListenableButton extends StatelessWidget {
             style: Theme.of(context).textTheme.labelMedium,
           ),
           style: ElevatedButton.styleFrom(
-            primary: value.text.length >= inputLength
+            primary: value.text.length >= inputLength || itemList.isNotEmpty
                 ? kYellowButtonColor
                 : kLightYellowButtonColor,
             fixedSize: Size(
@@ -43,8 +43,9 @@ class ListenableButton extends StatelessWidget {
               borderRadius: BorderRadius.circular(30.0),
             ),
           ),
-          onPressed:
-              value.text.length >= inputLength ? () => buttonFunc() : () => {},
+          onPressed: value.text.length >= inputLength || itemList.isNotEmpty
+              ? () => buttonFunc()
+              : () => {},
         );
       },
     );

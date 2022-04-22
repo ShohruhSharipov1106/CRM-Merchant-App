@@ -1,5 +1,8 @@
 import 'package:crm_merchant/constants/exports.dart';
 import 'package:crm_merchant/screens/add_proposal/card_page.dart';
+import 'package:crm_merchant/screens/add_proposal/identification_page.dart';
+import 'package:crm_merchant/screens/add_proposal/passport_identification_page.dart';
+import 'package:crm_merchant/screens/add_proposal/passport_page.dart';
 
 class CardAddedSuccessfullyPage extends StatelessWidget {
   const CardAddedSuccessfullyPage({Key? key}) : super(key: key);
@@ -72,8 +75,22 @@ class CardAddedSuccessfullyPage extends StatelessWidget {
                 ],
               ),
             ),
+            SizedBox(height: kHeight(50.0).h),
+            _button(context),
           ],
         ),
+      ),
+    );
+  }
+
+  Padding _button(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: kButHorPad),
+      child: MainButton(
+        "Продолжить",
+        () {
+          Get.to(const AddProposalPassportPage());
+        },
       ),
     );
   }

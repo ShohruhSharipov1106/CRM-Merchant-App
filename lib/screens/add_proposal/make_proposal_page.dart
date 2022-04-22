@@ -122,16 +122,16 @@ class _MakeProposalPageState extends State<MakeProposalPage> {
                           );
                           summValue = summ.sum;
                           print("post boshlandi");
-                          CreateRequestService.postProductsToApi(
-                              context
-                                  .read<AddProposalProvider>()
-                                  .namingThings
-                                  .text,
-                              int.parse(context
-                                  .read<AddProposalProvider>()
-                                  .summThings
-                                  .text
-                                  .removeAllWhitespace));
+                          // CreateRequestService.postProductsToApi(
+                          //     context
+                          //         .read<AddProposalProvider>()
+                          //         .namingThings
+                          //         .text,
+                          //     int.parse(context
+                          //         .read<AddProposalProvider>()
+                          //         .summThings
+                          //         .text
+                          //         .removeAllWhitespace));
                           print("postdan otib ketti");
                           context
                               .read<AddProposalProvider>()

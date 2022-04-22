@@ -7,6 +7,7 @@ import 'package:crm_merchant/screens/add_proposal/phone_number_page.dart';
 import 'package:crm_merchant/screens/auth/sign_up_page.dart';
 import 'package:crm_merchant/screens/face_id/camera_face_id_page.dart';
 import 'package:crm_merchant/screens/face_id/camera_passport_id_page.dart';
+import 'package:crm_merchant/screens/internet_check/no_internet_page.dart';
 import 'package:crm_merchant/screens/splash/splash_screen_page.dart';
 import 'package:crm_merchant/screens/tariff/tariff_confirmation_page.dart';
 import 'package:crm_merchant/screens/tariff/tariff_main_page.dart';
@@ -74,7 +75,7 @@ class MyApp extends StatelessWidget {
                 backgroundColor: Colors.transparent,
               ),
             ),
-            home: const AddProposalPhoneNumberPage()
+            home: const NoInternetPage()
             // home:const CameraFaceIDPage()
             );
       },

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:crm_merchant/constants/exports.dart';
 import 'package:crm_merchant/main.dart';
+import 'package:crm_merchant/screens/add_proposal/identification_page.dart';
 
 import 'package:crm_merchant/screens/face_id/camera_view.dart';
 import 'package:crm_merchant/screens/face_id/painters/face_detector_painter.dart';
@@ -31,25 +32,25 @@ class _CameraFaceIDPageState extends State<CameraFaceIDPage> {
   late CameraController _controller;
   late Future<void> _initializeControllerFuture;
   @override
-  void initState() {
-    super.initState();
-    _controller = CameraController(cameras[1], ResolutionPreset.max);
-    _controller.initialize().then((_) {
-      if (!mounted) {
-        return;
-      }
-      // _controller.startImageStream((image) => null);
-      setState(() {});
-    });
-    _initializeControllerFuture = _controller.initialize();
-  }
-
-  // @override
-  // void dispose() {
-  //   _controller.dispose();
-  //   faceDetector.close();
-  //   super.dispose();
+  // void initState() {
+  //   super.initState();
+  //   _controller = CameraController(cameras[1], ResolutionPreset.max);
+  //   _controller.initialize().then((_) {
+  //     if (!mounted) {
+  //       return;
+  //     }
+  //     // _controller.startImageStream((image) => null);
+  //     setState(() {});
+  //   });
+  //   _initializeControllerFuture = _controller.initialize();
   // }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    faceDetector.close();
+    super.dispose();
+  }
 
   XFile? file;
 
@@ -112,39 +113,27 @@ class _CameraFaceIDPageState extends State<CameraFaceIDPage> {
                   kHeight(515.0).h,
                 ),
               ),
-              child: CameraPreview(_controller),
-              //  child:   CameraView(
-              //       title: 'Face Detector',
-              //       customPaint: customPaint,
-              //       onImage: (inputImage) {
-              //         processImage(inputImage);
-              //         _controller.takePicture();
-              //       },
-              //       initialDirection: CameraLensDirection.front,
-              //     ),
+              // child: CameraPreview(_controller),
+              child: CameraView(
+                title: 'Face Detector',
+                customPaint: customPaint,
+                onImage: (inputImage) {
+                  processImage(inputImage);
+                  _controller.takePicture();
+                },
+                initialDirection: CameraLensDirection.front,
+              ),
             ),
           ),
           _subtitleText(context),
           SizedBox(height: kHeight(50.0).h),
           MainButton(
             "Сделать фото",
-            () async {
-              try {
-                await _initializeControllerFuture;
-
-                final image = await _controller.takePicture();
-
-                await Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => DisplayPictureScreen(
-                      imagePath: image.path,
-                    ),
-                  ),
-                );
-              } catch (e) {
-                print(e);
-              }
-            },
+            hasFace
+                ? () {
+                    Get.to(const IdentificationPage());
+                  }
+                : () {},
           ),
         ],
       ),

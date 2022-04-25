@@ -1,5 +1,6 @@
 import 'package:crm_merchant/constants/exports.dart';
 import 'package:crm_merchant/screens/add_proposal/phone_number_page.dart';
+import 'package:crm_merchant/screens/home/no_item_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -7,7 +8,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     HomePageProvider ctxWatchHomeProvider = context.watch<HomePageProvider>();
-    
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: ZoomIn(
@@ -30,31 +31,43 @@ class HomePage extends StatelessWidget {
                       child: TabBarView(
                         children: [
                           SingleChildScrollView(
-                            child: Column(
-                              children:
-                                  ctxWatchHomeProvider.listOfAllInformation,
-                            ),
+                            child: ctxWatchHomeProvider
+                                    .listOfAllInformation.isEmpty
+                                ? const NoItemPage()
+                                : Column(
+                                    children: ctxWatchHomeProvider
+                                        .listOfAllInformation,
+                                  ),
                             physics: const BouncingScrollPhysics(),
                           ),
                           SingleChildScrollView(
-                            child: Column(
-                              children:
-                                  ctxWatchHomeProvider.listOfDoneInformation,
-                            ),
+                            child: ctxWatchHomeProvider
+                                    .listOfDoneInformation.isEmpty
+                                ? const NoItemPage()
+                                : Column(
+                                    children: ctxWatchHomeProvider
+                                        .listOfDoneInformation,
+                                  ),
                             physics: const BouncingScrollPhysics(),
                           ),
                           SingleChildScrollView(
-                            child: Column(
-                              children:
-                                  ctxWatchHomeProvider.listOfWaitingInformation,
-                            ),
+                            child: ctxWatchHomeProvider
+                                    .listOfWaitingInformation.isEmpty
+                                ? const NoItemPage()
+                                : Column(
+                                    children: ctxWatchHomeProvider
+                                        .listOfWaitingInformation,
+                                  ),
                             physics: const BouncingScrollPhysics(),
                           ),
                           SingleChildScrollView(
-                            child: Column(
-                              children:
-                                  ctxWatchHomeProvider.listOfErrorInformation,
-                            ),
+                            child: ctxWatchHomeProvider
+                                    .listOfErrorInformation.isEmpty
+                                ? const NoItemPage()
+                                : Column(
+                                    children: ctxWatchHomeProvider
+                                        .listOfErrorInformation,
+                                  ),
                             physics: const BouncingScrollPhysics(),
                           ),
                         ],

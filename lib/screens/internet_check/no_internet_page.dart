@@ -6,29 +6,34 @@ class NoInternetPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: RefreshIndicator(
-        triggerMode: RefreshIndicatorTriggerMode.onEdge,
-        child: Column(
-          children: [
-            TitleOfPage(
-              "Что-то\nпошло не так",
-              kWidth(88.0).w,
-            ),
-            SizedBox(height: kHeight(100.0).h),
-            SvgPicture.asset(
-              "assets/icons/no-internet.svg",
-              height: kHeight(240.0).h,
-              width: kWidth(296.0).w,
-            ),
-            SizedBox(height: kHeight(50.0).h),
-            Text(
-              "Проверьте подключение к интернету",
-              style: Theme.of(context).textTheme.labelMedium,
-              textAlign: TextAlign.center,
-            )
-          ],
+      body: SafeArea(
+        child: Center(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+               SizedBox(height: kHeight(100.0).h),
+              TitleOfPage(
+                "Что-то пошло не так",
+                kWidth(25.0).w,
+              ),
+              SizedBox(height: kHeight(100.0).h),
+              Padding(
+                padding: EdgeInsets.only(left: kWidth(20.0).w),
+                child: SvgPicture.asset(
+                  "assets/icons/no-internet.svg",
+                  height: kHeight(240.0).h,
+                  width: kWidth(296.0).w,
+                ),
+              ),
+              SizedBox(height: kHeight(50.0).h),
+              Text(
+                "Проверьте подключение к интернету",
+                style: Theme.of(context).textTheme.labelMedium,
+                textAlign: TextAlign.center,
+              )
+            ],
+          ),
         ),
-        onRefresh: () async {},
       ),
     );
   }

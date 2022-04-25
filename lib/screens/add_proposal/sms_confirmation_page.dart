@@ -1,4 +1,4 @@
-import 'package:crm_merchant/components/variable_elements.dart';
+
 import 'package:crm_merchant/constants/exports.dart';
 import 'package:crm_merchant/screens/add_proposal/card_added_successfully_page.dart';
 
@@ -16,7 +16,7 @@ class _AddProposalSmsConfirmationPageState
   TextEditingController smsChecker = TextEditingController();
   AnimationController? _controller;
   int levelClock = 30;
-  
+
   @override
   void dispose() {
     _controller!.dispose();

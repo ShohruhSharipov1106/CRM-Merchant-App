@@ -28,3 +28,5 @@ export 'package:camera/camera.dart';
 export 'dart:convert';
 export 'package:get_storage/get_storage.dart';
 export '../../components/variable_elements.dart';
+export 'package:flutter/services.dart';
+export 'package:connectivity_plus/connectivity_plus.dart';

@@ -128,6 +128,7 @@ class AddProposalCardPage extends StatelessWidget {
                             .text
                             .length ==
                         5) {
+                  context.read<AddProposalProvider>().getCards();
                   Get.to(const AddProposalSmsConfirmationPage());
                   context.read<AddProposalProvider>().cardNumber.clear();
                   context

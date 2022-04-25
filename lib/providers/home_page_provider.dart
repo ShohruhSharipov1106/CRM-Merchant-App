@@ -13,9 +13,9 @@ class HomePageProvider extends ChangeNotifier {
     FullInformation(kGreyLabelColor),
     FullInformation(kMainColor),
   ];
-  List<Widget> listOfDoneInformation = [FullInformation(kGreenLabelColor)];
+  List<Widget> listOfDoneInformation = [];
   List<Widget> listOfErrorInformation = [FullInformation(kMainColor)];
-  List<Widget> listOfWaitingInformation = [FullInformation(kGreyLabelColor)];
+  List<Widget> listOfWaitingInformation = [];
 
   increaseSize() {
     mainSzbHeight = kHeight(317.0).h;

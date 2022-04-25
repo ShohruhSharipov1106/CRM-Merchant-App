@@ -1,4 +1,4 @@
-
+import 'package:crm_merchant/components/generate_rand_number.dart';
 import 'package:crm_merchant/constants/exports.dart';
 import 'package:crm_merchant/screens/home/offer_confirmation_page.dart';
 import 'package:crm_merchant/services/create_request_service.dart';
@@ -52,10 +52,9 @@ class _AddProposalPhoneNumberPageState
                   .text
                   .length ==
               17) {
-            // CreateRequestService.postPhoneNumberToApi(context
-            //     .read<AddProposalProvider>()
-            //     .addProposalPhoneNumber
-            //     .text);
+            context.read<AddProposalProvider>().getPhoneNumber();
+            GetRandNum();
+            print(GetRandNum.checkSMS);
             phoneNumVarElement =
                 context.read<AddProposalProvider>().addProposalPhoneNumber.text;
             Get.to(const OfferConfirmationPage());

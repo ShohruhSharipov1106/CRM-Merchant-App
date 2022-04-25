@@ -1,3 +1,4 @@
+import 'package:crm_merchant/components/generate_rand_number.dart';
 import 'package:crm_merchant/constants/exports.dart';
 import 'package:crm_merchant/screens/add_proposal/card_page.dart';
 
@@ -43,17 +44,23 @@ class _OfferConfirmationPageState extends State<OfferConfirmationPage>
           children: [
             SizedBox(height: kHeight(72.0).h),
             Padding(
-              padding: EdgeInsets.only(left: kWidth(123.0).w),
+              padding: EdgeInsets.only(left: kWidth(90.0).w),
               child: Text(
                 "Подтверждение оферты",
-                style: Theme.of(context).textTheme.titleMedium,
+                style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                      color: context.watch<AddProposalProvider>().isError
+                          ? kMainColor
+                          : kBlackTextColor,
+                    ),
               ),
             ),
             SizedBox(height: kHeight(99.0).h),
             Padding(
               padding: const EdgeInsets.only(left: kMainPadding),
               child: Text(
-                "Введите код SMS подтверждения  ",
+                context.watch<AddProposalProvider>().isError
+                    ? "Неверный код SMS   "
+                    : "Введите код SMS подтверждения  ",
                 style: Theme.of(context).textTheme.labelMedium,
               ),
             ),
@@ -107,7 +114,9 @@ class _OfferConfirmationPageState extends State<OfferConfirmationPage>
         preFilledWidget: Text(
           "*",
           style: TextStyle(
-            color: kBlackTextColor.withOpacity(0.5),
+            color: context.watch<AddProposalProvider>().isError
+                ? kMainColor
+                : kBlackTextColor.withOpacity(0.5),
             fontSize: 64.0,
           ),
         ),
@@ -123,8 +132,12 @@ class _OfferConfirmationPageState extends State<OfferConfirmationPage>
               width: 1.0,
             ),
           ),
-          textStyle:
-              Theme.of(context).textTheme.titleMedium!.copyWith(fontSize: 48.0),
+          textStyle: Theme.of(context).textTheme.titleMedium!.copyWith(
+                fontSize: 48.0,
+                color: context.watch<AddProposalProvider>().isError
+                    ? kMainColor
+                    : kBlackTextColor.withOpacity(0.5),
+              ),
         ),
       ),
     );
@@ -135,11 +148,14 @@ class _OfferConfirmationPageState extends State<OfferConfirmationPage>
       padding: const EdgeInsets.only(left: kButHorPad),
       child: ListenableButton(
         "Продолжить",
-        () => smsChecker.length == 4
-            ? Get.off(
-                const AddProposalCardPage(),
-              )
-            : () {},
+        () => smsChecker.text == GetRandNum.checkSMS.toString()
+            ? {
+                Get.off(const AddProposalCardPage()),
+                context.read<AddProposalProvider>().hasnotError(),
+              }
+            : {
+                context.read<AddProposalProvider>().hasError(),
+              },
         smsChecker,
         4,
       ),

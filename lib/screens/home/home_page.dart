@@ -76,7 +76,7 @@ class HomePage extends StatelessWidget {
                   ],
                 ),
               ),
-              MainButton(
+              MainButton(context,
                 "Создать заявку",
                 () {
                   Get.to(const AddProposalPhoneNumberPage());

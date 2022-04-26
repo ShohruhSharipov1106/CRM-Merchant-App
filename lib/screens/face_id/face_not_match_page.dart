@@ -57,7 +57,7 @@ class FaceNotMatch extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           SizedBox(height: kHeight(20.0).h),
-          MainButton(
+          MainButton(context,
             "Сделать фото",
             () => Get.back(),
           ),
@@ -68,12 +68,12 @@ class FaceNotMatch extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           SizedBox(height: kHeight(15.0).h),
-          MainButton(
+          MainButton(context,
             "Сделать фото паспотра",
             () => Get.to(const CameraPassportIDPage()),
           ),
           SizedBox(height: kHeight(15.0).h),
-          MainButton(
+          MainButton(context,
             "Загрузить фото паспорта",
             () => Get.to(const CameraPassportIDPage()),
           ),

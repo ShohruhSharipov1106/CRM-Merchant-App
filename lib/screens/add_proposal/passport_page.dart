@@ -43,7 +43,8 @@ class AddProposalPassportPage extends StatelessWidget {
             context.watch<AddProposalProvider>().serialNumberOfpassport,
         builder: (context, v, child) {
           return ListenableButton(
-            "Аутентификация по лицу",
+            context,
+            "pass_identification",
             () {
               if (context.read<AddProposalProvider>().dateOfBirth.text.length ==
                       10 &&

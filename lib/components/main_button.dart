@@ -1,15 +1,16 @@
 import 'package:crm_merchant/constants/exports.dart';
 
 class MainButton extends StatelessWidget {
+  BuildContext kontext;
   String buttonTitle;
   Function buttonFunc;
-  MainButton(this.buttonTitle, this.buttonFunc, {Key? key}) : super(key: key);
+  MainButton(this.kontext,this.buttonTitle, this.buttonFunc, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       child: Text(
-        buttonTitle,
+        Locales.string(kontext, buttonTitle),
         textAlign: TextAlign.center,
         style: Theme.of(context).textTheme.labelMedium,
       ),

@@ -78,7 +78,7 @@ class _PassportIdentificationPageState
                 top: kHeight(50.0).h,
                 left: kWidth(78.0).w,
               ),
-              child: MainButton("Продолжить", () {
+              child: MainButton(context,"continue", () {
                 Get.to(const IdentificationPage());
               }),
             ),

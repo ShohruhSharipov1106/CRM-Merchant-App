@@ -44,7 +44,8 @@ class _AddProposalPhoneNumberPageState
     return Padding(
       padding: const EdgeInsets.only(left: kButHorPad),
       child: ListenableButton(
-        "Продолжить",
+       context,
+                            'continue',
         () {
           if (context
                   .read<AddProposalProvider>()

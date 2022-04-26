@@ -108,8 +108,7 @@ class CardAddedSuccessfullyPage extends StatelessWidget {
   Padding _button(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: kButHorPad),
-      child: MainButton(
-        "Продолжить",
+      child: MainButton(context,"continue",
         () {
           Get.to(const AddProposalPassportPage());
         },

@@ -147,7 +147,8 @@ class _OfferConfirmationPageState extends State<OfferConfirmationPage>
     return Padding(
       padding: const EdgeInsets.only(left: kButHorPad),
       child: ListenableButton(
-        "Продолжить",
+        context,
+                            'continue',
         () => smsChecker.text == GetRandNum.checkSMS.toString()
             ? {
                 Get.off(const AddProposalCardPage()),

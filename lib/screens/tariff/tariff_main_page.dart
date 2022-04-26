@@ -149,6 +149,7 @@ class _TariffMainPageState extends State<TariffMainPage> {
                   Positioned(
                     child: Visibility(
                       child: MainButton(
+                        context,
                         "Перейти к оформлению",
                         () {
                           Get.to(

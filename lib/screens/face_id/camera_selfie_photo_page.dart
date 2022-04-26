@@ -71,7 +71,7 @@ class _CameraSelfiePhotoPageState extends State<CameraSelfiePhotoPage> {
             ),
           ),
           SizedBox(height: kHeight(10.0).h),
-          MainButton(
+          MainButton(context,
             "Сделать фото",
             () => Get.off(const IdentificationPage()),
           ),

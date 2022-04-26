@@ -1,24 +1,11 @@
 import 'package:crm_merchant/constants/exports.dart';
-import 'package:crm_merchant/screens/add_proposal/card_added_successfully_page.dart';
-import 'package:crm_merchant/screens/add_proposal/card_page.dart';
-import 'package:crm_merchant/screens/add_proposal/list_of_item_page.dart';
-import 'package:crm_merchant/screens/add_proposal/make_proposal_page.dart';
-import 'package:crm_merchant/screens/add_proposal/passport_identification_page.dart';
-import 'package:crm_merchant/screens/add_proposal/phone_number_page.dart';
-import 'package:crm_merchant/screens/auth/sign_up_page.dart';
-import 'package:crm_merchant/screens/face_id/camera_face_id_page.dart';
-import 'package:crm_merchant/screens/face_id/camera_passport_id_page.dart';
-import 'package:crm_merchant/screens/home/home_page.dart';
-import 'package:crm_merchant/screens/home/no_item_page.dart';
-import 'package:crm_merchant/screens/internet_check/no_internet_page.dart';
-import 'package:crm_merchant/screens/splash/splash_screen_page.dart';
-import 'package:crm_merchant/screens/tariff/tariff_confirmation_page.dart';
-import 'package:crm_merchant/screens/tariff/tariff_main_page.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:crm_merchant/core/token.dart';
+import 'package:crm_merchant/screens/auth/select_lang_page.dart';
 
 List<CameraDescription> cameras = [];
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Locales.init(['ru', 'uz']);
   cameras = await availableCameras();
   // final firstCamera = cameras.last;
   runApp(
@@ -39,48 +26,54 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Sizer(
-      builder: (context, orientation, deviceType) {
-        return GetMaterialApp(
-          title: 'CRM Merchant',
-          debugShowCheckedModeBanner: false,
-          theme: ThemeData(
-            fontFamily: "Roboto",
-            textTheme: const TextTheme(
-              titleLarge: TextStyle(
-                fontSize: 40.0,
-                color: kBlackTextColor,
-                fontWeight: FontWeight.w400,
+    return LocaleBuilder(
+      builder: (locale) {
+        return Sizer(builder: (context, orientation, deviceType) {
+          return GetMaterialApp(
+            title: 'CRM Merchant',
+            debugShowCheckedModeBanner: false,
+            localizationsDelegates: Locales.delegates,
+            supportedLocales: Locales.supportedLocales,
+            locale: locale,
+            fallbackLocale: const Locale('ru'),
+            theme: ThemeData(
+              fontFamily: "Roboto",
+              textTheme: const TextTheme(
+                titleLarge: TextStyle(
+                  fontSize: 40.0,
+                  color: kBlackTextColor,
+                  fontWeight: FontWeight.w400,
+                ),
+                titleMedium: TextStyle(
+                  fontSize: 20.0,
+                  color: kBlackTextColor,
+                  fontWeight: FontWeight.w400,
+                ),
+                labelMedium: TextStyle(
+                  fontSize: 17.0,
+                  color: kBlackTextColor,
+                  fontWeight: FontWeight.w400,
+                ),
+                displayLarge: TextStyle(
+                  fontSize: 96.0,
+                  color: kWhiteColor,
+                  fontWeight: FontWeight.w400,
+                ),
+                headlineLarge: TextStyle(
+                  fontSize: 24.0,
+                  color: kBlackTextColor,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
-              titleMedium: TextStyle(
-                fontSize: 20.0,
-                color: kBlackTextColor,
-                fontWeight: FontWeight.w400,
-              ),
-              labelMedium: TextStyle(
-                fontSize: 17.0,
-                color: kBlackTextColor,
-                fontWeight: FontWeight.w400,
-              ),
-              displayLarge: TextStyle(
-                fontSize: 96.0,
-                color: kWhiteColor,
-                fontWeight: FontWeight.w400,
-              ),
-              headlineLarge: TextStyle(
-                fontSize: 24.0,
-                color: kBlackTextColor,
-                fontWeight: FontWeight.w700,
+              scaffoldBackgroundColor: kBackgroundColor,
+              appBarTheme: const AppBarTheme(
+                elevation: 0,
+                backgroundColor: Colors.transparent,
               ),
             ),
-            scaffoldBackgroundColor: kBackgroundColor,
-            appBarTheme: const AppBarTheme(
-              elevation: 0,
-              backgroundColor: Colors.transparent,
-            ),
-          ),
-          home: const SignUpPage(),
-        );
+            home: const SelectLangPage(),
+          );
+        });
       },
     );
   }

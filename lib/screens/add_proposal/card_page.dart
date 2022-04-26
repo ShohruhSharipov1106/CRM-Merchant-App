@@ -114,7 +114,8 @@ class AddProposalCardPage extends StatelessWidget {
           valueListenable: context.read<AddProposalProvider>().cardNumber,
           builder: (context, v, child) {
             return ListenableButton(
-              "Выслать код",
+              context,
+              "send_code",
               () {
                 if (context
                             .read<AddProposalProvider>()

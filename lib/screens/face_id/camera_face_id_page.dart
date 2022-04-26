@@ -127,7 +127,7 @@ class _CameraFaceIDPageState extends State<CameraFaceIDPage> {
           ),
           _subtitleText(context),
           SizedBox(height: kHeight(50.0).h),
-          MainButton(
+          MainButton(context,
             "Сделать фото",
             hasFace
                 ? () {

@@ -201,7 +201,7 @@ class _TariffConfirmationPageState extends State<TariffConfirmationPage> {
   Padding _showModalBottom() {
     return Padding(
       padding: const EdgeInsets.only(left: kButHorPad),
-      child: MainButton(
+      child: MainButton(context,
         "Подтвердить",
         () => _scaffoldKey.currentState!.showBottomSheet(
           (context) => Container(
@@ -231,7 +231,7 @@ class _TariffConfirmationPageState extends State<TariffConfirmationPage> {
                   style: Theme.of(context).textTheme.labelMedium,
                 ),
                 SizedBox(height: kHeight(20.0).h),
-                MainButton(
+                MainButton(context,
                   "Завершить",
                   () {
                     Get.offAll(const HomePage());

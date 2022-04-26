@@ -71,7 +71,7 @@ class _CameraPassportIDPageState extends State<CameraPassportIDPage> {
             ),
           ),
           SizedBox(height: kHeight(20.0).h),
-          MainButton(
+          MainButton(context,
             "Сделать фото",
             () => Get.off(const CameraRegistrationPage()),
           ),

@@ -1,12 +1,14 @@
 import 'package:crm_merchant/constants/exports.dart';
 
 class ListenableButton extends StatelessWidget {
+  BuildContext kontext;
   String buttonTitle;
   Function buttonFunc;
   ValueListenable<TextEditingValue> inputController;
   int inputLength;
 
   ListenableButton(
+    this.kontext,
     this.buttonTitle,
     this.buttonFunc,
     this.inputController,
@@ -21,7 +23,7 @@ class ListenableButton extends StatelessWidget {
       builder: (context, value, child) {
         return ElevatedButton(
           child: Text(
-            buttonTitle,
+            Locales.string(kontext, buttonTitle),
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.labelMedium,
           ),

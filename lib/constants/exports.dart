@@ -30,3 +30,5 @@ export 'package:get_storage/get_storage.dart';
 export '../../components/variable_elements.dart';
 export 'package:flutter/services.dart';
 export 'package:connectivity_plus/connectivity_plus.dart';
+export 'package:flutter_locales/flutter_locales.dart';
+export 'package:flutter_localizations/flutter_localizations.dart';

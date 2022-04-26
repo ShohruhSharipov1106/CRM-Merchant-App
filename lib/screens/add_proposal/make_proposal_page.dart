@@ -205,7 +205,8 @@ class _MakeProposalPageState extends State<MakeProposalPage> {
           valueListenable: context.watch<AddProposalProvider>().namingThings,
           builder: (context, v, child) {
             return ListenableButton(
-              "Продолжить",
+               context,
+                            'continue',
               () {
                 if (context
                                 .read<AddProposalProvider>()

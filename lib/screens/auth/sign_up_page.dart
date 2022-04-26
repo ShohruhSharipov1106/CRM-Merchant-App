@@ -1,10 +1,8 @@
 import 'dart:async';
 import 'package:crm_merchant/constants/exports.dart';
-import 'package:crm_merchant/screens/auth/sms_checker_page.dart';
+import 'package:crm_merchant/screens/home/home_page.dart';
 import 'package:crm_merchant/screens/internet_check/no_internet_page.dart';
 import 'package:http/http.dart' as http;
-
-
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -69,15 +67,15 @@ class _SignUpPageState extends State<SignUpPage> {
                     Padding(
                       padding: EdgeInsets.only(left: kWidth(140.0).w),
                       child: Text(
-                        "Привет!",
+                        Locales.string(context, "salom"),
                         style: Theme.of(context).textTheme.titleLarge,
                       ),
                     ),
                     SizedBox(height: kHeight(80.0).h),
                     Padding(
                       padding: const EdgeInsets.only(left: kMainPadding),
-                      child: Text(
-                        "Введите данные",
+                      child: LocaleText(
+                        "enter_data",
                         style: Theme.of(context).textTheme.labelMedium,
                       ),
                     ),
@@ -85,7 +83,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     InputField(
                       context,
                       contexPro.nameController,
-                      "Введите ваше имя",
+                      Locales.string(context, "enter_username"),
                       "Недопустимое имя",
                       TextInputType.name,
                       30,
@@ -96,13 +94,13 @@ class _SignUpPageState extends State<SignUpPage> {
                     InputField(
                       context,
                       contexPro.phoneController,
-                      "Введите ваш номер телефона",
-                      "Недопустимый номер телефона",
+                      Locales.string(context, "enter_password"),
+                      "Неверный пароль",
                       TextInputType.visiblePassword,
-                      17,
-                      "+ 998** *** ** ** ",
-                      "+ 998** *** ** ** ",
-                      {"*": RegExp(r'[0-9]')},
+                      50,
+                      "* * * * * * * * * * * * * * *",
+                      "***************",
+                      {"*": RegExp(r'[a-zA-Z0-9\!\@\#\$\%\^\&\*\(\)\_\+]')},
                     ),
                     SizedBox(height: kHeight(100.0).h),
                     Padding(
@@ -112,7 +110,8 @@ class _SignUpPageState extends State<SignUpPage> {
                             context.watch<SignUpProvider>().nameController,
                         builder: (context, v, child) {
                           return ListenableButton(
-                            "Продолжить",
+                            context,
+                            'continue',
                             () {
                               context
                                               .read<SignUpProvider>()
@@ -125,12 +124,12 @@ class _SignUpPageState extends State<SignUpPage> {
                                               .phoneController
                                               .text
                                               .length ==
-                                          17
-                                  ? Get.to(const SmsCheckerPage())
+                                          6
+                                  ? Get.to(const HomePage())
                                   : () {};
                             },
                             context.watch<SignUpProvider>().phoneController,
-                            v.text.length > 2 ? 17 : 30,
+                            v.text.length > 2 ? 6 : 300,
                           );
                         },
                       ),

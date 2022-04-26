@@ -119,7 +119,8 @@ class _AddProposalSmsConfirmationPageState
     return Padding(
       padding: const EdgeInsets.only(left: kButHorPad),
       child: ListenableButton(
-        "Продолжить",
+        context,
+                            'continue',
         () {
           if (smsChecker.length == 4) {
             Get.to(const CardAddedSuccessfullyPage());

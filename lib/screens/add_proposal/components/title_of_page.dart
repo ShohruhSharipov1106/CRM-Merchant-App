@@ -11,10 +11,9 @@ class TitleOfPage extends StatelessWidget {
       padding: EdgeInsets.only(
         left: leftPadding!,
       ),
-      child: Text(
-        titleText.toString(),
-        style:
-            Theme.of(context).textTheme.headlineLarge,
+      child: LocaleText(
+       titleText!,
+        style: Theme.of(context).textTheme.headlineLarge,
       ),
     );
   }

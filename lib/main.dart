@@ -1,6 +1,8 @@
 import 'package:crm_merchant/constants/exports.dart';
-import 'package:crm_merchant/core/token.dart';
 import 'package:crm_merchant/screens/auth/select_lang_page.dart';
+import 'package:crm_merchant/screens/home/home_page.dart';
+import 'package:crm_merchant/screens/profile/profile_drawer_page.dart';
+import 'package:crm_merchant/screens/profile/test.dart';
 
 List<CameraDescription> cameras = [];
 Future<void> main() async {
@@ -71,7 +73,7 @@ class MyApp extends StatelessWidget {
                 backgroundColor: Colors.transparent,
               ),
             ),
-            home: const SelectLangPage(),
+            home: const  ProfileDrawerPage(),
           );
         });
       },

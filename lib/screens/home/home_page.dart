@@ -1,23 +1,45 @@
 import 'package:crm_merchant/constants/exports.dart';
 import 'package:crm_merchant/screens/add_proposal/phone_number_page.dart';
 import 'package:crm_merchant/screens/home/no_item_page.dart';
+import 'package:crm_merchant/screens/profile/profile_drawer_page.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage>
+    with SingleTickerProviderStateMixin {
+  late AnimationController controller = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 100),
+    value: -1.0,
+  );
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  bool get isPanelVisible {
+    final AnimationStatus status = controller.status;
+    return status == AnimationStatus.completed ||
+        status == AnimationStatus.forward;
+  }
 
   @override
   Widget build(BuildContext context) {
     HomePageProvider ctxWatchHomeProvider = context.watch<HomePageProvider>();
-
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: ZoomIn(
         child: SafeArea(
           child: Column(
             children: [
-              SizedBox(height: kHeight(12.0).h),
-              TitleOfPage("Список заявок", kWidth(20.0).w),
-              SizedBox(height: kHeight(10.0).h),
+              SizedBox(height: kHeight(20.0).h),
               DefaultTabController(
                 length: 4,
                 initialIndex: 0,
@@ -76,8 +98,9 @@ class HomePage extends StatelessWidget {
                   ],
                 ),
               ),
-              MainButton(context,
-                "Создать заявку",
+              MainButton(
+                context,
+                "create_zayavka",
                 () {
                   Get.to(const AddProposalPhoneNumberPage());
                 },
@@ -105,17 +128,17 @@ class HomePage extends StatelessWidget {
       labelStyle: Theme.of(context).textTheme.labelMedium,
       unselectedLabelStyle: Theme.of(context).textTheme.labelMedium,
       tabs: [
-        _aTab("Все"),
-        _aTab("Одобрено"),
-        _aTab("Рассматривается"),
-        _aTab("Отказано"),
+        _aTab("all"),
+        _aTab("approved"),
+        _aTab("under_consideration"),
+        _aTab("denied"),
       ],
     );
   }
 
   Tab _aTab(String tabText) {
     return Tab(
-      text: tabText,
+      text: Locales.string(context, tabText),
       height: kHeight(28.0).h,
     );
   }

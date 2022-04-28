@@ -48,7 +48,7 @@ class _HomePageState extends State<HomePage>
                     _tabBar(context),
                     SizedBox(height: kHeight(19.0).h),
                     SizedBox(
-                      height: kHeight(680.0).h,
+                      height: kHeight(650.0).h,
                       width: 100.w,
                       child: TabBarView(
                         children: [

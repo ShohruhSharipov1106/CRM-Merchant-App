@@ -33,3 +33,4 @@ export 'package:flutter_locales/flutter_locales.dart';
 export 'package:flutter_localizations/flutter_localizations.dart';
 export 'package:flutter_zoom_drawer/config.dart';
 export 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
+export 'package:crm_merchant/core/core.dart';

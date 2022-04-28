@@ -1,8 +1,7 @@
 import 'dart:async';
 
 import 'package:crm_merchant/constants/exports.dart';
-import 'package:crm_merchant/screens/auth/sign_up_page.dart';
-import 'package:crm_merchant/screens/home/home_page.dart';
+import 'package:crm_merchant/screens/auth/select_lang_page.dart';
 
 class SplashScreenPage extends StatefulWidget {
   const SplashScreenPage({Key? key}) : super(key: key);
@@ -17,7 +16,7 @@ class _SplashScreenPageState extends State<SplashScreenPage>
   SequenceAnimation? _sequenceAnimation;
   int firstAnimate = 1;
   int secondAnimateBegin = 1200;
-  int secondAnimateEnd = 2000;
+  int secondAnimateEnd = 2700;
   @override
   void initState() {
     super.initState();
@@ -106,20 +105,15 @@ class _SplashScreenPageState extends State<SplashScreenPage>
 
     _animationController!.forward();
 
-    Timer(const Duration(milliseconds: 2500), () {
+    Timer(Duration(milliseconds: secondAnimateEnd + 300), () {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (_) => GetStorage().read("signUpDone") == "signUpDone"
-              ? const HomePage()
-              : const SignUpPage(),
+          builder: (_) => const SelectLangPage(),
         ),
       );
     });
   }
-
- 
-  
 
   @override
   Widget build(BuildContext context) {

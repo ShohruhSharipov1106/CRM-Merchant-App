@@ -112,7 +112,17 @@ class _SignUpPageState extends State<SignUpPage> {
                           return ListenableButton(
                             context,
                             'continue',
-                            () {
+                            () async {
+                              print(context
+                                  .read<SignUpProvider>()
+                                  .nameController
+                                  .text
+                                  .length);
+                              print(context
+                                  .read<SignUpProvider>()
+                                  .phoneController
+                                  .text
+                                  .length);
                               context
                                               .read<SignUpProvider>()
                                               .nameController
@@ -123,9 +133,29 @@ class _SignUpPageState extends State<SignUpPage> {
                                               .read<SignUpProvider>()
                                               .phoneController
                                               .text
-                                              .length ==
+                                              .length >=
                                           6
-                                  ? Get.to(const HomePage())
+                                  ? {
+                                      await _postTokenfromApi(
+                                        context
+                                            .read<SignUpProvider>()
+                                            .nameController
+                                            .text,
+                                        context
+                                            .read<SignUpProvider>()
+                                            .phoneController
+                                            .text,
+                                      ),
+                                      username = context
+                                          .read<SignUpProvider>()
+                                          .nameController
+                                          .text,
+                                      password = context
+                                          .read<SignUpProvider>()
+                                          .phoneController
+                                          .text,
+                                      Get.to(const HomePage())
+                                    }
                                   : () {};
                             },
                             context.watch<SignUpProvider>().phoneController,

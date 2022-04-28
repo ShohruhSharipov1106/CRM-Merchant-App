@@ -51,6 +51,7 @@ dependencies:
   connectivity_plus: ^2.3.0
   flutter_locales: ^2.0.1
   flutter_zoom_drawer: ^3.0.1
+  toggle_switch: ^2.0.1
   
 dev_dependencies:
   flutter_test:

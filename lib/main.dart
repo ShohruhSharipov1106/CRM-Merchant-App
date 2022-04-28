@@ -1,8 +1,10 @@
 import 'package:crm_merchant/constants/exports.dart';
 import 'package:crm_merchant/screens/auth/select_lang_page.dart';
+import 'package:crm_merchant/screens/auth/sign_up_page.dart';
 import 'package:crm_merchant/screens/home/home_page.dart';
 import 'package:crm_merchant/screens/profile/profile_drawer_page.dart';
 import 'package:crm_merchant/screens/profile/test.dart';
+import 'package:crm_merchant/screens/splash/splash_screen_page.dart';
 
 List<CameraDescription> cameras = [];
 Future<void> main() async {
@@ -36,7 +38,7 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             localizationsDelegates: Locales.delegates,
             supportedLocales: Locales.supportedLocales,
-            locale: locale,
+            locale: chosenLanguage,
             fallbackLocale: const Locale('ru'),
             theme: ThemeData(
               fontFamily: "Roboto",
@@ -73,7 +75,7 @@ class MyApp extends StatelessWidget {
                 backgroundColor: Colors.transparent,
               ),
             ),
-            home: const  ProfileDrawerPage(),
+            home: const  SignUpPage(),
           );
         });
       },

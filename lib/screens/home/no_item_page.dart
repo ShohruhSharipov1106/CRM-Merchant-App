@@ -7,8 +7,8 @@ class NoItemPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text(
-          "У вас пока нет заявок\nсоздайте заявку",
+        LocaleText(
+          "no_item",
           style: Theme.of(context).textTheme.labelMedium,
           textAlign: TextAlign.center,
         ),

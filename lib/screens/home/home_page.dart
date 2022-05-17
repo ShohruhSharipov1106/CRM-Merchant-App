@@ -1,7 +1,7 @@
 import 'package:crm_merchant/constants/exports.dart';
 import 'package:crm_merchant/screens/add_proposal/phone_number_page.dart';
 import 'package:crm_merchant/screens/home/no_item_page.dart';
-import 'package:crm_merchant/screens/profile/profile_drawer_page.dart';
+import 'package:crm_merchant/services/get_home_datas_service.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -39,58 +39,121 @@ class _HomePageState extends State<HomePage>
         child: SafeArea(
           child: Column(
             children: [
-              SizedBox(height: kHeight(20.0).h),
+              SizedBox(height: kHeight(15.0).h),
               DefaultTabController(
-                length: 4,
+                length: 6,
                 initialIndex: 0,
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     _tabBar(context),
                     SizedBox(height: kHeight(19.0).h),
                     SizedBox(
-                      height: kHeight(650.0).h,
+                      height: kHeight(640.0).h,
                       width: 100.w,
                       child: TabBarView(
                         children: [
-                          SingleChildScrollView(
-                            child: ctxWatchHomeProvider
-                                    .listOfAllInformation.isEmpty
-                                ? const NoItemPage()
-                                : Column(
-                                    children: ctxWatchHomeProvider
-                                        .listOfAllInformation,
-                                  ),
-                            physics: const BouncingScrollPhysics(),
+                          FutureBuilder(
+                            future: HomePageDataService.getAllHomeDatas(),
+                            builder: (context, AsyncSnapshot snap) {
+                              return snap.hasData
+                                  ? _snapDataField(snap, ctxWatchHomeProvider)
+                                  : (snap.hasError
+                                      ? _snapErrorField(context)
+                                      : Center(
+                                          child: Lottie.asset(
+                                            "assets/images/lottie/loading_indicator.json",
+                                            height: kHeight(200.0).h,
+                                            width: kWidth(200.0).w,
+                                          ),
+                                        ));
+                            },
                           ),
-                          SingleChildScrollView(
-                            child: ctxWatchHomeProvider
-                                    .listOfDoneInformation.isEmpty
-                                ? const NoItemPage()
-                                : Column(
-                                    children: ctxWatchHomeProvider
-                                        .listOfDoneInformation,
-                                  ),
-                            physics: const BouncingScrollPhysics(),
+                          FutureBuilder(
+                            future: HomePageDataService.getStateHomeDatas(
+                                "Confirmed"),
+                            builder: (context, AsyncSnapshot snap) {
+                              return snap.hasData
+                                  ? _snapDataField(snap, ctxWatchHomeProvider)
+                                  : (snap.hasError
+                                      ? _snapErrorField(context)
+                                      : Center(
+                                          child: Lottie.asset(
+                                            "assets/images/lottie/loading_indicator.json",
+                                            height: kHeight(200.0).h,
+                                            width: kWidth(200.0).w,
+                                          ),
+                                        ));
+                            },
                           ),
-                          SingleChildScrollView(
-                            child: ctxWatchHomeProvider
-                                    .listOfWaitingInformation.isEmpty
-                                ? const NoItemPage()
-                                : Column(
-                                    children: ctxWatchHomeProvider
-                                        .listOfWaitingInformation,
-                                  ),
-                            physics: const BouncingScrollPhysics(),
+                          FutureBuilder(
+                            future: HomePageDataService.getStateHomeDatas(
+                                "Considered"),
+                            builder: (context, AsyncSnapshot snap) {
+                              return snap.hasData
+                                  ? _snapDataField(snap, ctxWatchHomeProvider)
+                                  : (snap.hasError
+                                      ? _snapErrorField(context)
+                                      : Center(
+                                          child: Lottie.asset(
+                                            "assets/images/lottie/loading_indicator.json",
+                                            height: kHeight(200.0).h,
+                                            width: kWidth(200.0).w,
+                                          ),
+                                        ));
+                            },
                           ),
-                          SingleChildScrollView(
-                            child: ctxWatchHomeProvider
-                                    .listOfErrorInformation.isEmpty
-                                ? const NoItemPage()
-                                : Column(
-                                    children: ctxWatchHomeProvider
-                                        .listOfErrorInformation,
-                                  ),
-                            physics: const BouncingScrollPhysics(),
+                          FutureBuilder(
+                            future: HomePageDataService.getStateHomeDatas(
+                                "Declined"),
+                            builder: (context, AsyncSnapshot snap) {
+                              return snap.hasData
+                                  ? _snapDataField(snap, ctxWatchHomeProvider)
+                                  : (snap.hasError
+                                      ? _snapErrorField(context)
+                                      : Center(
+                                          child: Lottie.asset(
+                                            "assets/images/lottie/loading_indicator.json",
+                                            height: kHeight(200.0).h,
+                                            width: kWidth(200.0).w,
+                                          ),
+                                        ));
+                            },
+                          ),
+                          FutureBuilder(
+                            future:
+                                HomePageDataService.getStateHomeDatas("New"),
+                            builder: (context, AsyncSnapshot snap) {
+                              return snap.hasData
+                                  ? _snapDataField(snap, ctxWatchHomeProvider)
+                                  : (snap.hasError
+                                      ? _snapErrorField(context)
+                                      : Center(
+                                          child: Lottie.asset(
+                                            "assets/images/lottie/loading_indicator.json",
+                                            height: kHeight(200.0).h,
+                                            width: kWidth(200.0).w,
+                                          ),
+                                        ));
+                            },
+                          ),
+                          FutureBuilder(
+                            future:
+                                HomePageDataService.getStateHomeDatas("Draft"),
+                            builder: (context, AsyncSnapshot snap) {
+                              return snap.hasData
+                                  ? _snapDataField(snap, ctxWatchHomeProvider)
+                                  : (snap.hasError
+                                      ? _snapErrorField(context)
+                                      : Center(
+                                          child: Lottie.asset(
+                                            "assets/images/lottie/loading_indicator.json",
+                                            height: kHeight(200.0).h,
+                                            width: kWidth(200.0).w,
+                                          ),
+                                        ));
+                            },
                           ),
                         ],
                       ),
@@ -109,6 +172,53 @@ class _HomePageState extends State<HomePage>
           ),
         ),
       ),
+    );
+  }
+
+  RefreshIndicator _snapErrorField(BuildContext context) {
+    return RefreshIndicator(
+      child: Column(
+        children: [
+          SizedBox(
+            height: kHeight(50.0).h,
+            child: ListView(),
+          ),
+          SizedBox(height: kHeight(50.0).h),
+          TitleOfPage("no_internet_title", kWidth(0.0).w),
+          SizedBox(height: kHeight(100.0).h),
+          SvgPicture.asset(
+            "assets/icons/error-internet.svg",
+            height: kHeight(278.0).h,
+            width: kWidth(278.0).w,
+          ),
+          SizedBox(height: kHeight(50.0).h),
+          LocaleText(
+            "internet_data_error",
+            style: Theme.of(context).textTheme.labelMedium,
+            textAlign: TextAlign.center,
+          )
+        ],
+      ),
+      onRefresh: () async {
+        HomePageDataService.getAllHomeDatas();
+      },
+    );
+  }
+
+  SingleChildScrollView _snapDataField(
+      AsyncSnapshot<dynamic> snap, HomePageProvider ctxWatchHomeProvider) {
+    return SingleChildScrollView(
+      child: snap.data['totalCount'] == 0
+          ? const NoItemPage()
+          : ListView.builder(
+              itemCount: snap.data['totalCount'],
+              itemBuilder: (BuildContext context, int index) {
+                return Column(
+                  children: ctxWatchHomeProvider.listOfAllInformation,
+                );
+              },
+            ),
+      physics: const BouncingScrollPhysics(),
     );
   }
 
@@ -132,6 +242,8 @@ class _HomePageState extends State<HomePage>
         _aTab("approved"),
         _aTab("under_consideration"),
         _aTab("denied"),
+        _aTab("new"),
+        _aTab("draft"),
       ],
     );
   }

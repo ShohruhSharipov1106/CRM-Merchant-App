@@ -13,13 +13,13 @@ class _ProfileDrawerPageState extends State<ProfileDrawerPage> {
   final ZoomDrawerController _drawerController = ZoomDrawerController();
   @override
   Widget build(BuildContext context) {
-    return ZoomDrawer(
+    return ZoomDrawer(      
         controller: _drawerController,
         closeCurve: Curves.easeInSine,
         showShadow: true,
         style: DrawerStyle.defaultStyle,
         menuBackgroundColor: kMainColor,
-        angle: -5.0,
+        angle: -2.0,
         mainScreenTapClose: true,
         androidCloseOnBackTap: true,
         drawerShadowsBackgroundColor: kWhiteColor,

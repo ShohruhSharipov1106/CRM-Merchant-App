@@ -15,7 +15,7 @@ class AddProposalCardPage extends StatelessWidget {
             SizedBox(height: kHeight(20.0).h),
             StepsField(context, 2),
             SizedBox(height: kHeight(20.0).h),
-            TitleOfPage("Введите ваши данные", kWidth(88.0).w),
+            TitleOfPage("enter_your_details", kWidth(70.0).w),
             SizedBox(height: kHeight(5.0).h),
             _titleAnimation(context),
             SizedBox(height: kHeight(20.0).h),
@@ -81,8 +81,8 @@ class AddProposalCardPage extends StatelessWidget {
     return InputField(
       context,
       context.watch<AddProposalProvider>().cardExpirationDate,
-      "Введите срок действия карты",
-      "Неверный срок действия карты ",
+      "enter_card_exp_date",
+      "error_card_exp_date",
       TextInputType.number,
       5,
       "**/**",
@@ -95,8 +95,8 @@ class AddProposalCardPage extends StatelessWidget {
     return InputField(
       context,
       context.watch<AddProposalProvider>().cardNumber,
-      "Введите номер карты",
-      "Неверный номер карты",
+      "enter_card_number",
+      "error_card_number",
       TextInputType.number,
       22,
       "****  ****  ****  **** ",
@@ -109,52 +109,49 @@ class AddProposalCardPage extends StatelessWidget {
     BuildContext context,
   ) {
     return Padding(
-      padding: const EdgeInsets.only(left: kButHorPad),
+      padding: EdgeInsets.only(left: kWidth(kButHorPad).w),
       child: ValueListenableBuilder<TextEditingValue>(
-          valueListenable: context.read<AddProposalProvider>().cardNumber,
-          builder: (context, v, child) {
-            return ListenableButton(
-              context,
-              "send_code",
-              () {
-                if (context
-                            .read<AddProposalProvider>()
-                            .cardNumber
-                            .text
-                            .length ==
-                        22 &&
-                    context
-                            .read<AddProposalProvider>()
-                            .cardExpirationDate
-                            .text
-                            .length ==
-                        5) {
-                  context.read<AddProposalProvider>().getCards();
-                  Get.to(const AddProposalSmsConfirmationPage());
-                  context.read<AddProposalProvider>().cardNumber.clear();
+        valueListenable: context.read<AddProposalProvider>().cardNumber,
+        builder: (context, v, child) {
+          return ListenableButton(
+            context,
+            "send_code",
+            () {
+              if (context.read<AddProposalProvider>().cardNumber.text.length ==
+                      22 &&
                   context
-                      .read<AddProposalProvider>()
-                      .cardExpirationDate
-                      .clear();
-                  context.read<AddProposalProvider>().hasnotError();
-                } else {
-                  context.read<AddProposalProvider>().hasError();
-                }
-              },
-              context.watch<AddProposalProvider>().cardExpirationDate,
-              v.text.length == 22 ? 5 : 10,
-            );
-          }),
+                          .read<AddProposalProvider>()
+                          .cardExpirationDate
+                          .text
+                          .length ==
+                      5) {
+                context.read<AddProposalProvider>().getCards(
+                    context.read<AddProposalProvider>().cardNumber.text,
+                    context
+                        .read<AddProposalProvider>()
+                        .cardExpirationDate
+                        .text);
+                Get.to(const AddProposalSmsConfirmationPage());
+                context.read<AddProposalProvider>().hasnotError();
+              } else {
+                context.read<AddProposalProvider>().hasError();
+              }
+            },
+            context.watch<AddProposalProvider>().cardExpirationDate,
+            v.text.length == 22 ? 5 : 10,
+          );
+        },
+      ),
     );
   }
 
   Padding _headlineText(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: kMainPadding),
-      child: Text(
+      child: LocaleText(
         context.watch<AddProposalProvider>().isError
-            ? "Неверные данные карты"
-            : "Введите данные карты",
+            ? "error_card_details"
+            : "enter_card_details",
         style: Theme.of(context).textTheme.labelMedium!.copyWith(
               color: context.watch<AddProposalProvider>().isError
                   ? kMainColor
@@ -165,10 +162,10 @@ class AddProposalCardPage extends StatelessWidget {
   }
 
   Padding _subtitleField() {
-    return const Padding(
-      padding: EdgeInsets.only(left: kInpHorPad),
-      child: Text(
-        "Укажите Вашу зарплатную карту для проведения скоринга. На карте \nдолжна быть сумма для первоначального взноса (150 000 UZS) ",
+    return Padding(
+      padding: EdgeInsets.only(left: kWidth(kInpHorPad).w),
+      child: const LocaleText(
+        "card_subtitle",
         style: TextStyle(
           fontSize: 10.0,
           fontWeight: FontWeight.w400,

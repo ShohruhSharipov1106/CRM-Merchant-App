@@ -1,4 +1,3 @@
-
 import 'package:crm_merchant/constants/exports.dart';
 import 'package:crm_merchant/screens/add_proposal/card_added_successfully_page.dart';
 
@@ -40,6 +39,7 @@ class _AddProposalSmsConfirmationPageState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -47,15 +47,15 @@ class _AddProposalSmsConfirmationPageState
             SizedBox(height: kHeight(20.0).h),
             StepsField(context, 3),
             SizedBox(height: kHeight(20.0).h),
-            TitleOfPage("Подтверждение", kWidth(123.0).w),
+            TitleOfPage("confirmation", kWidth(130.0).w),
             SizedBox(height: kHeight(5.0).h),
             _animationField(context),
             SizedBox(height: kHeight(20.0).h),
-            Padding(
-              padding: const EdgeInsets.only(left: kInpHorPad),
-              child: Text(
-                "Введите код, отправленный на номер телефона (*${phoneNumVarElement.substring(12)}), привязанный к \nкарте",
-                style: const TextStyle(
+            const Padding(
+              padding: EdgeInsets.only(left: kInpHorPad),
+              child: LocaleText(
+                "card_sms_subtitle",
+                style: TextStyle(
                   fontSize: 10.0,
                   fontWeight: FontWeight.w400,
                   color: kBlackTextColor,
@@ -83,32 +83,31 @@ class _AddProposalSmsConfirmationPageState
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Visibility(
-            visible: context.watch<AddProposalProvider>().isError ||
-                    _controller!.isCompleted
-                ? false
-                : true,
-            child: Countdown(
-              animation: StepTween(
-                begin: levelClock,
-                end: 0,
-              ).animate(_controller!),
-            ),
+          Countdown(
+            animation: StepTween(
+              begin: levelClock,
+              end: 0,
+            ).animate(_controller!),
           ),
           InkWell(
-            child: Text(
+            child: LocaleText(
               context.watch<AddProposalProvider>().isError
-                  ? "Отправить заново"
-                  : "Не пришло SMS ?",
+                  ? "resend_sms"
+                  : "sms_not_received",
               style: TextStyle(
                 color: kBlackTextColor.withOpacity(0.5),
                 fontSize: 12.0,
                 fontWeight: FontWeight.w400,
               ),
             ),
-
-            // unreceived sms function
-            onTap: () {},
+            onTap: () {
+              // GetRandNum.increaseRandPlace < 99
+              //     ? GetRandNum.increaseRandPlace += 1
+              //     : GetRandNum.increaseRandPlace = 0;
+              // SendSMSService.sendSmsToClient(
+              //     context.read<AddProposalProvider>().clientPhoneNumber,
+              //     GetRandNum().checkSMS.toString());
+            },
           ),
         ],
       ),
@@ -117,10 +116,10 @@ class _AddProposalSmsConfirmationPageState
 
   Padding _buttonField(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: kButHorPad),
+      padding: EdgeInsets.only(left: kWidth(kButHorPad).w),
       child: ListenableButton(
         context,
-                            'continue',
+        'continue',
         () {
           if (smsChecker.length == 4) {
             Get.to(const CardAddedSuccessfullyPage());
@@ -138,10 +137,10 @@ class _AddProposalSmsConfirmationPageState
   Padding _headText(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: kMainPadding),
-      child: Text(
+      child: LocaleText(
         context.watch<AddProposalProvider>().isError
-            ? "Неверный код SMS   "
-            : "Введите код SMS подтверждения  ",
+            ? "error_sms_code"
+            : "enter_sms_verification_code",
         style: Theme.of(context).textTheme.labelMedium!.copyWith(
               color: context.watch<AddProposalProvider>().isError
                   ? kMainColor
@@ -209,7 +208,7 @@ class _AddProposalSmsConfirmationPageState
         closeKeyboardWhenCompleted: false,
         defaultPinTheme: PinTheme(
           width: kWidth(50.0).w,
-          height: kHeight(60.0).h,
+          height: kHeight(70.0).h,
           decoration: BoxDecoration(
             color: kWhiteColor,
             borderRadius: BorderRadius.circular(10.0),
@@ -230,6 +229,7 @@ class _AddProposalSmsConfirmationPageState
   }
 }
 
+// ignore: must_be_immutable
 class Countdown extends AnimatedWidget {
   Countdown({Key? key, required this.animation})
       : super(key: key, listenable: animation);
@@ -239,12 +239,17 @@ class Countdown extends AnimatedWidget {
   build(BuildContext context) {
     Duration clockTimer = Duration(seconds: animation.value);
     String timerText = clockTimer.inSeconds.remainder(60).toString();
-    return Text(
-      timerText + " сек  ",
-      style: TextStyle(
-        color: kBlackTextColor.withOpacity(0.5),
-        fontSize: 12.0,
-        fontWeight: FontWeight.w400,
+    return Visibility(
+      visible: timerText == "0" || context.watch<AddProposalProvider>().isError
+          ? false
+          : true,
+      child: Text(
+        timerText + " " + Locales.string(context, "sekund") + "  ",
+        style: TextStyle(
+          color: kBlackTextColor.withOpacity(0.5),
+          fontSize: 12.0,
+          fontWeight: FontWeight.w400,
+        ),
       ),
     );
   }

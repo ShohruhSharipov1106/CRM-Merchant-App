@@ -20,10 +20,7 @@ class _SelectLangPageState extends State<SelectLangPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(height: kHeight(100.0).h),
-            TitleOfPage(
-              "choose_language",
-              0,
-            ),
+            TitleOfPage("choose_language", 0),
             SizedBox(height: kHeight(60.0).h),
             SvgPicture.asset("assets/icons/language.svg"),
             SizedBox(height: kHeight(55.0).h),
@@ -37,7 +34,7 @@ class _SelectLangPageState extends State<SelectLangPage> {
                     chosenLanguage == const Locale('uz'), 'uz'),
               ],
             ),
-            SizedBox(height: kHeight(180.0).h),
+            SizedBox(height: kHeight(100.0).h),
             MainButton(context, "continue", () {
               if (isFirstTime.read("firstTime") == "firstTime") {
                 Get.off(const HomePage());

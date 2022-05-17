@@ -8,11 +8,12 @@ class StepsField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: kHeight(30.0).h,
+      height: kHeight(40.0).h,
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Container(
-            height: kHeight(20.0).h,
+            height: kHeight(30.0).h,
             padding: EdgeInsets.only(left: kWidth(kMainPadding).w),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -53,9 +54,6 @@ class StepsField extends StatelessWidget {
                 ),
               ],
             ),
-          ),
-          SizedBox(
-            height: kHeight(4.0).h,
           ),
           Container(
             height: kHeight(5.0).h,

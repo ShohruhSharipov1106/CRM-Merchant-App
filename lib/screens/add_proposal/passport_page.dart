@@ -1,6 +1,7 @@
 import 'package:crm_merchant/constants/exports.dart';
 import 'package:crm_merchant/screens/face_id/camera_face_id_page.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class AddProposalPassportPage extends StatelessWidget {
   const AddProposalPassportPage({Key? key}) : super(key: key);
@@ -68,22 +69,16 @@ class AddProposalPassportPage extends StatelessWidget {
     );
   }
 
-  InputField _dateOfBirth(BuildContext context) {
-    return InputField(
+  CalendarInputField _dateOfBirth(BuildContext context) {
+    return CalendarInputField(
       context,
       context.watch<AddProposalProvider>().dateOfBirth,
       "Дата рождения ",
       "Недопустимая дата рождения",
-      TextInputType.number,
-      16,
       "**/**/****",
-      "**/%%/####",
-      {
-        // "@": RegExp(r'[0-3]'),
-        "*": RegExp(r'[0-9]'),
-        "%": RegExp(r'[0-9]'),
-        "#": RegExp(r'[0-9]'),
-      },
+      "dd/MM/yyyy",
+      DateTime(1900),
+      DateTime.now(),
     );
   }
 

@@ -6,7 +6,6 @@ class ListenableButton extends StatelessWidget {
   Function buttonFunc;
   ValueListenable<TextEditingValue> inputController;
   int inputLength;
-
   ListenableButton(
     this.kontext,
     this.buttonTitle,

@@ -1,7 +1,6 @@
 import 'package:crm_merchant/components/generate_rand_number.dart';
 import 'package:crm_merchant/constants/exports.dart';
 import 'package:crm_merchant/screens/home/offer_confirmation_page.dart';
-import 'package:crm_merchant/services/create_request_service.dart';
 
 class AddProposalPhoneNumberPage extends StatefulWidget {
   const AddProposalPhoneNumberPage({Key? key}) : super(key: key);
@@ -24,7 +23,7 @@ class _AddProposalPhoneNumberPageState
             SizedBox(height: kHeight(20.0).h),
             StepsField(context, 1),
             SizedBox(height: kHeight(20.0).h),
-            TitleOfPage("Создать заявку", kWidth(126.0).w),
+            TitleOfPage("create_zayavka", kWidth(126.0).w),
             SizedBox(height: kHeight(25.0).h),
             _titleAnimation(context),
             SizedBox(height: kHeight(50.0).h),
@@ -42,10 +41,10 @@ class _AddProposalPhoneNumberPageState
 
   Padding _button(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: kButHorPad),
+      padding: EdgeInsets.only(left: kWidth(kButHorPad).w),
       child: ListenableButton(
-       context,
-                            'continue',
+        context,
+        'continue',
         () {
           if (context
                   .read<AddProposalProvider>()
@@ -53,11 +52,22 @@ class _AddProposalPhoneNumberPageState
                   .text
                   .length ==
               17) {
+                
             context.read<AddProposalProvider>().getPhoneNumber();
-            GetRandNum();
-            print(GetRandNum.checkSMS);
+
+            SendSMSService.sendSmsToClient(
+                context
+                    .read<AddProposalProvider>()
+                    .addProposalPhoneNumber
+                    .text
+                    .removeAllWhitespace
+                    .substring(1),
+                GetRandNum().checkSMS.toString());
             phoneNumVarElement =
                 context.read<AddProposalProvider>().addProposalPhoneNumber.text;
+            // GetRandNum.increaseRandPlace < 99
+            //     ? GetRandNum.increaseRandPlace += 1
+            //     : GetRandNum.increaseRandPlace = 0;
             Get.to(const OfferConfirmationPage());
             context.read<AddProposalProvider>().hasnotError();
           } else {
@@ -73,10 +83,10 @@ class _AddProposalPhoneNumberPageState
   Padding _titleField(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: kMainPadding),
-      child: Text(
+      child: LocaleText(
         context.watch<AddProposalProvider>().isError
-            ? "Недопустимый номер телефона"
-            : "Введите номер телефона клиента ",
+            ? "error_client_phone_number"
+            : "client_phone_number",
         style: Theme.of(context).textTheme.labelMedium!.copyWith(
               color: context.watch<AddProposalProvider>().isError
                   ? kMainColor
@@ -90,8 +100,8 @@ class _AddProposalPhoneNumberPageState
     return InputField(
       context,
       context.watch<AddProposalProvider>().addProposalPhoneNumber,
-      "Введите ваш номер телефона",
-      "Недопустимый номер телефона",
+      "client_phone_number",
+      "error_client_phone_number",
       TextInputType.number,
       17,
       "+ 998** *** ** ** ",

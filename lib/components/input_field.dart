@@ -1,4 +1,6 @@
 import 'package:crm_merchant/constants/exports.dart';
+import 'package:intl/intl.dart';
+
 class InputField extends StatefulWidget {
   BuildContext kontext;
   TextEditingController kontroller;
@@ -19,8 +21,7 @@ class InputField extends StatefulWidget {
     this.maxLen,
     this.hintTitle,
     this.maskText,
-    this.maskFilter,
-     {
+    this.maskFilter, {
     Key? key,
     this.capitalText = false,
   }) : super(key: key);
@@ -37,9 +38,9 @@ class _InputFieldState extends State<InputField> {
     return Container(
       height: kHeight(50.0).h,
       width: kWidth(368.0).w,
-      margin: const EdgeInsets.symmetric(
-        horizontal: kInpHorPad,
-        vertical: kInpVerPad,
+      margin: EdgeInsets.symmetric(
+        horizontal: kWidth(kInpHorPad).w,
+        vertical: kHeight(kInpVerPad).h,
       ),
       child: TextFormField(
         controller: widget.kontroller,
@@ -61,8 +62,8 @@ class _InputFieldState extends State<InputField> {
         decoration: InputDecoration(
           floatingLabelBehavior: FloatingLabelBehavior.always,
           labelText: widget.kontext.watch<AddProposalProvider>().isError
-              ? widget.errorTitle
-              : widget.labelTitle,
+              ? Locales.string(context, widget.errorTitle)
+              : Locales.string(context, widget.labelTitle),
           errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
             borderSide: const BorderSide(
@@ -81,10 +82,11 @@ class _InputFieldState extends State<InputField> {
               ? null
               : const TextStyle(fontSize: 0.0, height: 0),
           labelStyle: Theme.of(context).textTheme.titleMedium!.copyWith(
-              fontSize: 12.0,
-              color: widget.kontext.watch<AddProposalProvider>().isError
-                  ? kMainColor
-                  : kBlackTextColor),
+                fontSize: 12.0,
+                color: widget.kontext.watch<AddProposalProvider>().isError
+                    ? kMainColor
+                    : kBlackTextColor,
+              ),
           prefixIcon: Text(
             "   ",
             style: Theme.of(context).textTheme.titleMedium,

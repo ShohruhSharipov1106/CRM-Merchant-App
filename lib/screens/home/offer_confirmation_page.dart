@@ -43,27 +43,9 @@ class _OfferConfirmationPageState extends State<OfferConfirmationPage>
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: kHeight(72.0).h),
-            Padding(
-              padding: EdgeInsets.only(left: kWidth(90.0).w),
-              child: Text(
-                "Подтверждение оферты",
-                style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                      color: context.watch<AddProposalProvider>().isError
-                          ? kMainColor
-                          : kBlackTextColor,
-                    ),
-              ),
-            ),
+            _mainTitle(context),
             SizedBox(height: kHeight(99.0).h),
-            Padding(
-              padding: const EdgeInsets.only(left: kMainPadding),
-              child: Text(
-                context.watch<AddProposalProvider>().isError
-                    ? "Неверный код SMS   "
-                    : "Введите код SMS подтверждения  ",
-                style: Theme.of(context).textTheme.labelMedium,
-              ),
-            ),
+            _title(context),
             _smsCode(context),
             Padding(
               padding: EdgeInsets.only(
@@ -79,17 +61,24 @@ class _OfferConfirmationPageState extends State<OfferConfirmationPage>
                     ).animate(_controller!),
                   ),
                   InkWell(
-                    child: Text(
-                      "Не пришло SMS ?",
+                    child: LocaleText(
+                      context.watch<AddProposalProvider>().isError
+                          ? "resend_sms"
+                          : "sms_not_received",
                       style: TextStyle(
                         color: kBlackTextColor.withOpacity(0.5),
                         fontSize: 12.0,
                         fontWeight: FontWeight.w400,
                       ),
                     ),
-
-                    // unreceived sms function
-                    onTap: () {},
+                    onTap: () {
+                      GetRandNum.increaseRandPlace < 99
+                          ? GetRandNum.increaseRandPlace += 1
+                          : GetRandNum.increaseRandPlace = 0;
+                      SendSMSService.sendSmsToClient(
+                          context.read<AddProposalProvider>().clientPhoneNumber,
+                          GetRandNum().checkSMS.toString());
+                    },
                   ),
                 ],
               ),
@@ -100,6 +89,32 @@ class _OfferConfirmationPageState extends State<OfferConfirmationPage>
         ),
       ),
     );
+  }
+
+  Padding _title(BuildContext context) {
+    return Padding(
+            padding: const EdgeInsets.only(left: kMainPadding),
+            child: LocaleText(
+              context.watch<AddProposalProvider>().isError
+                  ? "error_sms_code"
+                  : "enter_sms_verification_code",
+              style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                    color: context.watch<AddProposalProvider>().isError
+                        ? kMainColor
+                        : kBlackTextColor,
+                  ),
+            ),
+          );
+  }
+
+  Padding _mainTitle(BuildContext context) {
+    return Padding(
+            padding: EdgeInsets.only(left: kWidth(100.0).w),
+            child: LocaleText(
+              "offer_confirmation",
+              style: Theme.of(context).textTheme.headlineLarge,
+            ),
+          );
   }
 
   Padding _smsCode(BuildContext context) {
@@ -123,7 +138,7 @@ class _OfferConfirmationPageState extends State<OfferConfirmationPage>
         closeKeyboardWhenCompleted: false,
         defaultPinTheme: PinTheme(
           width: kWidth(50.0).w,
-          height: kHeight(60.0).h,
+          height: kHeight(70.0).h,
           decoration: BoxDecoration(
             color: kWhiteColor,
             borderRadius: BorderRadius.circular(10.0),
@@ -145,11 +160,11 @@ class _OfferConfirmationPageState extends State<OfferConfirmationPage>
 
   Padding _button() {
     return Padding(
-      padding: const EdgeInsets.only(left: kButHorPad),
+      padding: EdgeInsets.only(left: kWidth(kButHorPad).w),
       child: ListenableButton(
         context,
-                            'continue',
-        () => smsChecker.text == GetRandNum.checkSMS.toString()
+        'continue',
+        () => smsChecker.text == GetRandNum().checkSMS.toString()
             ? {
                 Get.off(const AddProposalCardPage()),
                 context.read<AddProposalProvider>().hasnotError(),
@@ -174,12 +189,17 @@ class Countdown extends AnimatedWidget {
   build(BuildContext context) {
     Duration clockTimer = Duration(seconds: animation.value);
     String timerText = clockTimer.inSeconds.remainder(60).toString();
-    return Text(
-      timerText + " сек  ",
-      style: TextStyle(
-        color: kBlackTextColor.withOpacity(0.5),
-        fontSize: 12.0,
-        fontWeight: FontWeight.w400,
+    return Visibility(
+      visible: timerText == "0" || context.watch<AddProposalProvider>().isError
+          ? false
+          : true,
+      child: Text(
+        timerText + " " + Locales.string(context, "sekund") + "  ",
+        style: TextStyle(
+          color: kBlackTextColor.withOpacity(0.5),
+          fontSize: 12.0,
+          fontWeight: FontWeight.w400,
+        ),
       ),
     );
   }

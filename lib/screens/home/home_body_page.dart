@@ -33,6 +33,7 @@ class _HomeBodyPageState extends State<HomeBodyPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: LocaleText(
           "list_of_zayavka",

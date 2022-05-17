@@ -1,9 +1,16 @@
 import 'package:crm_merchant/constants/exports.dart';
+import 'package:crm_merchant/screens/add_proposal/card_added_successfully_page.dart';
+import 'package:crm_merchant/screens/add_proposal/card_page.dart';
+import 'package:crm_merchant/screens/add_proposal/full_personal_information_page.dart';
+import 'package:crm_merchant/screens/add_proposal/passport_page.dart';
+import 'package:crm_merchant/screens/add_proposal/phone_number_page.dart';
+import 'package:crm_merchant/screens/add_proposal/sms_confirmation_page.dart';
 import 'package:crm_merchant/screens/auth/select_lang_page.dart';
 import 'package:crm_merchant/screens/auth/sign_up_page.dart';
+import 'package:crm_merchant/screens/home/home_body_page.dart';
 import 'package:crm_merchant/screens/home/home_page.dart';
+import 'package:crm_merchant/screens/home/offer_confirmation_page.dart';
 import 'package:crm_merchant/screens/profile/profile_drawer_page.dart';
-import 'package:crm_merchant/screens/profile/test.dart';
 import 'package:crm_merchant/screens/splash/splash_screen_page.dart';
 
 List<CameraDescription> cameras = [];
@@ -39,7 +46,6 @@ class MyApp extends StatelessWidget {
             localizationsDelegates: Locales.delegates,
             supportedLocales: Locales.supportedLocales,
             locale: chosenLanguage,
-            fallbackLocale: const Locale('ru'),
             theme: ThemeData(
               fontFamily: "Roboto",
               textTheme: const TextTheme(
@@ -75,7 +81,7 @@ class MyApp extends StatelessWidget {
                 backgroundColor: Colors.transparent,
               ),
             ),
-            home: const  SignUpPage(),
+            home:  const FullPersonalInformationPage(),
           );
         });
       },

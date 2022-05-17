@@ -12,7 +12,7 @@ class TitleOfPage extends StatelessWidget {
         left: leftPadding!,
       ),
       child: LocaleText(
-       titleText!,
+        titleText!,
         style: Theme.of(context).textTheme.headlineLarge,
       ),
     );

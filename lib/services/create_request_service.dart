@@ -3,7 +3,7 @@ import 'package:crm_merchant/models/marketplace/create_request_model.dart';
 import 'package:http/http.dart' as http;
 
 class CreateRequestService {
-  static Future postPhoneNumberToApi(String phoneNumber) async {
+  static Future postClientToApi(String phoneNumber) async {
     Uri url = Uri.parse(
         "https://crm.creditexpress.uz:6262/api/marketplace/CreateRequest");
     http.Response res = await http.post(
@@ -19,14 +19,14 @@ class CreateRequestService {
         "Accept": "application/json",
         "content-type": "application/json",
         'Authorization':
-            'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoibWFnbyIsImNvbXBhbnlfaWQiOiJiNTU4MGE0Ni1lZWM3LTRiM2MtYTJkYi0xNmQxYTBkNzBiYmMiLCJ1c2VyX3R5cGUiOiIxMCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6Im1hcmtldHBsYWNlIiwibmJmIjoxNjUwNzA3MzIyLCJleHAiOjE2NTA3MTA5MjIsImlzcyI6ImNybS5jcmVkaXRleHByZXNzIiwiYXVkIjoiaHR0cHM6Ly9jcm0uY3JlZGl0ZXhwcmVzcy51ei8ifQ.m6OiS_HslxWA-rP6gpWtuf0r97jh2EGuxP4EaFGIdE4'
+            'Bearer ${clientMainData.read('token')}'
       },
     );
     if (res.statusCode == 200) {
       print("postdan bajarildi");
       return (jsonDecode(res.body) as List).map((e) => CreateRequest).toList();
     } else {
-      throw Exception("Xato: ${res.statusCode} ${res.body}");
+      throw Exception("Xato: ${res.statusCode}");
     }
   }
 

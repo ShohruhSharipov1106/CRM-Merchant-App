@@ -1,44 +1,89 @@
 import 'package:crm_merchant/constants/exports.dart';
+import 'package:crm_merchant/screens/add_proposal/passport_page.dart';
 import 'package:crm_merchant/screens/add_proposal/sms_confirmation_page.dart';
 
-class AddProposalCardPage extends StatelessWidget {
+class AddProposalCardPage extends StatefulWidget {
   const AddProposalCardPage({Key? key}) : super(key: key);
 
   @override
+  State<AddProposalCardPage> createState() => _AddProposalCardPageState();
+}
+
+class _AddProposalCardPageState extends State<AddProposalCardPage> {
+  late bool _showLoader = false;
+  ConnectivityResult _connectionStatus = ConnectivityResult.none;
+  final Connectivity _connectivity = Connectivity();
+  late StreamSubscription<ConnectivityResult> _connectivitySubscription;
+
+  @override
+  void initState() {
+    super.initState();
+    initConnectivity();
+
+    _connectivitySubscription =
+        _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+  }
+
+  @override
+  void dispose() {
+    _connectivitySubscription.cancel();
+    super.dispose();
+  }
+
+  Future<void> initConnectivity() async {
+    late ConnectivityResult result;
+    try {
+      result = await _connectivity.checkConnectivity();
+    } on PlatformException catch (e) {
+      debugPrint("Couldn't check connectivity status error: $e");
+      return;
+    }
+
+    if (!mounted) {
+      return Future.value(null);
+    }
+
+    return _updateConnectionStatus(result);
+  }
+
+  Future<void> _updateConnectionStatus(ConnectivityResult result) async {
+    setState(() {
+      _connectionStatus = result;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: kHeight(20.0).h),
-            StepsField(context, 2),
-            SizedBox(height: kHeight(20.0).h),
-            TitleOfPage("enter_your_details", kWidth(70.0).w),
-            SizedBox(height: kHeight(5.0).h),
-            _titleAnimation(context),
-            SizedBox(height: kHeight(20.0).h),
-            _subtitleField(),
-            SizedBox(height: kHeight(25.0).h),
-            _headlineText(context),
-            SizedBox(height: kHeight(15.0).h),
-            Form(
-              key: context.watch<AddProposalProvider>().formKey,
+    return _connectionStatus == ConnectivityResult.mobile ||
+            _connectionStatus == ConnectivityResult.wifi ||
+            _connectionStatus == ConnectivityResult.ethernet
+        ? Scaffold(
+            resizeToAvoidBottomInset: false,
+            body: SafeArea(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  SizedBox(height: kHeight(20.0).h),
+                  StepsField(context, 2),
+                  SizedBox(height: kHeight(20.0).h),
+                  TitleOfPage("enter_your_details", kWidth(70.0).w),
+                  SizedBox(height: kHeight(5.0).h),
+                  _titleAnimation(context),
+                  SizedBox(height: kHeight(20.0).h),
+                  _subtitleField(),
+                  SizedBox(height: kHeight(25.0).h),
+                  _headlineText(context),
+                  SizedBox(height: kHeight(15.0).h),
                   _cardNumber(context),
                   _cardExpirationDate(context),
+                  SizedBox(height: kHeight(22.0).h),
+                  _button(context),
+                  SizedBox(height: kHeight(53.0).h),
                 ],
               ),
             ),
-            SizedBox(height: kHeight(22.0).h),
-            _button(context),
-            SizedBox(height: kHeight(53.0).h),
-          ],
-        ),
-      ),
-    );
+          )
+        : const NoInternetPage();
   }
 
   Padding _titleAnimation(BuildContext context) {
@@ -109,7 +154,9 @@ class AddProposalCardPage extends StatelessWidget {
     BuildContext context,
   ) {
     return Padding(
-      padding: EdgeInsets.only(left: kWidth(kButHorPad).w),
+      padding: EdgeInsets.only(
+        left: _showLoader ? kWidth(160.0).w : kWidth(kButHorPad).w,
+      ),
       child: ValueListenableBuilder<TextEditingValue>(
         valueListenable: context.read<AddProposalProvider>().cardNumber,
         builder: (context, v, child) {
@@ -125,20 +172,21 @@ class AddProposalCardPage extends StatelessWidget {
                           .text
                           .length ==
                       5) {
-                context.read<AddProposalProvider>().getCards(
-                    context.read<AddProposalProvider>().cardNumber.text,
-                    context
-                        .read<AddProposalProvider>()
-                        .cardExpirationDate
-                        .text);
-                Get.to(const AddProposalSmsConfirmationPage());
-                context.read<AddProposalProvider>().hasnotError();
+                setState(() {
+                  _showLoader = true;
+                });
+                sendForConfirm().whenComplete(() => {
+                      setState(() {
+                        _showLoader = false;
+                      }),
+                    });
               } else {
                 context.read<AddProposalProvider>().hasError();
               }
             },
             context.watch<AddProposalProvider>().cardExpirationDate,
             v.text.length == 22 ? 5 : 10,
+            showLoader: _showLoader,
           );
         },
       ),
@@ -173,5 +221,23 @@ class AddProposalCardPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future sendForConfirm() async {
+    await CardService.sendSmsCard(
+            context.read<AddProposalProvider>().cardNumber.text,
+            context.read<AddProposalProvider>().cardExpirationDate.text)
+        .then((value) => {
+              value.number =
+                  context.read<AddProposalProvider>().cardNumber.text,
+              value.expire =
+                  context.read<AddProposalProvider>().cardExpirationDate.text,
+              Get.to(AddProposalSmsConfirmationPage(value)),
+              Get.to(const AddProposalPassportPage()),
+
+              context.read<AddProposalProvider>().hasnotError()
+            })
+        .onError((error, stackTrace) =>
+            {context.read<AddProposalProvider>().hasError()});
   }
 }

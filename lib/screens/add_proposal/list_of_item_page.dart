@@ -24,8 +24,8 @@ class _ListOfItemState extends State<ListOfItem> {
             size: 24.0,
           ),
         ),
-        title: Text(
-          "Список заявок",
+        title: LocaleText(
+          "list_of_zayavka",
           style: Theme.of(context).textTheme.headlineLarge,
         ),
         centerTitle: true,
@@ -91,9 +91,21 @@ class _ListOfItemState extends State<ListOfItem> {
                   left: kWidth(30.0).w,
                   top: kHeight(25.0).h,
                 ),
-                child: Text(
-                  "Итого-${NumberFormat('###,###,###,###,###,###').format(summValue).replaceAll(",", " ")} сум",
-                  style: Theme.of(context).textTheme.headlineLarge,
+                child: Row(
+                  children: [
+                    LocaleText(
+                      "sum_of_price",
+                      style: Theme.of(context).textTheme.headlineLarge,
+                    ),
+                    Text(
+                      " - ${NumberFormat('###,###,###,###,###,###').format(summValue).replaceAll(",", " ")}  ",
+                      style: Theme.of(context).textTheme.headlineLarge,
+                    ),
+                    LocaleText(
+                      "valyuta",
+                      style: Theme.of(context).textTheme.headlineLarge,
+                    ),
+                  ],
                 ),
               ),
               Padding(
@@ -101,7 +113,9 @@ class _ListOfItemState extends State<ListOfItem> {
                   top: kHeight(50.0).h,
                   left: kWidth(78.0).w,
                 ),
-                child: MainButton(context,"continue",
+                child: MainButton(
+                  context,
+                  "continue",
                   () {
                     Get.to(const MakeProposalPage());
                   },

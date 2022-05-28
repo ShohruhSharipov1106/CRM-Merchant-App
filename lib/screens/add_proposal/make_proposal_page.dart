@@ -2,7 +2,6 @@ import 'package:collection/collection.dart';
 import 'package:crm_merchant/constants/exports.dart';
 import 'package:crm_merchant/screens/add_proposal/list_of_item_page.dart';
 import 'package:crm_merchant/screens/tariff/tariff_main_page.dart';
-import 'package:crm_merchant/services/create_request_service.dart';
 
 class MakeProposalPage extends StatefulWidget {
   const MakeProposalPage({Key? key}) : super(key: key);
@@ -30,8 +29,8 @@ class _MakeProposalPageState extends State<MakeProposalPage> {
                   children: [
                     Row(
                       children: [
-                        TitleOfPage("Создание заявки", kWidth(88.0).w),
-                        SizedBox(width: kWidth(44.0).w),
+                        TitleOfPage("make_proposal", kWidth(120.0).w),
+                        SizedBox(width: kWidth(80.0).w),
                         InkWell(
                           child: Stack(
                             children: [
@@ -60,7 +59,10 @@ class _MakeProposalPageState extends State<MakeProposalPage> {
                                       style: Theme.of(context)
                                           .textTheme
                                           .titleMedium!
-                                          .copyWith(color: kWhiteColor),
+                                          .copyWith(
+                                            color: kWhiteColor,
+                                            fontSize: 14.0,
+                                          ),
                                       textAlign: TextAlign.center,
                                     ),
                                   ),
@@ -121,18 +123,7 @@ class _MakeProposalPageState extends State<MakeProposalPage> {
                             ],
                           );
                           summValue = summ.sum;
-                          print("post boshlandi");
-                          // CreateRequestService.postProductsToApi(
-                          //     context
-                          //         .read<AddProposalProvider>()
-                          //         .namingThings
-                          //         .text,
-                          //     int.parse(context
-                          //         .read<AddProposalProvider>()
-                          //         .summThings
-                          //         .text
-                          //         .removeAllWhitespace));
-                          print("postdan otib ketti");
+
                           context
                               .read<AddProposalProvider>()
                               .namingThings
@@ -171,8 +162,8 @@ class _MakeProposalPageState extends State<MakeProposalPage> {
     return InputField(
       context,
       context.watch<AddProposalProvider>().summThings,
-      "Сумма",
-      "Недопустимая сумма",
+      "price",
+      "error_price",
       TextInputType.number,
       29,
       "* * * * * * * * * * * * * * *",
@@ -188,25 +179,25 @@ class _MakeProposalPageState extends State<MakeProposalPage> {
     return InputField(
       context,
       context.watch<AddProposalProvider>().namingThings,
-      "Наименование товара",
-      "Недопустимые символы для товара",
+      "rename",
+      "error_rename",
       TextInputType.text,
       29,
       "* * * * * * * * * * * * * * *",
       "* * * * * * * * * * * * * * *",
-      {"*": RegExp(r'[A-z]')},
+      {"*": RegExp(r'[A-zЁёА-я]')},
     );
   }
 
   Padding _button(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: kButHorPad),
+      padding: EdgeInsets.only(left: kWidth(kButHorPad).w),
       child: ValueListenableBuilder<TextEditingValue>(
           valueListenable: context.watch<AddProposalProvider>().namingThings,
           builder: (context, v, child) {
             return ListenableButton(
-               context,
-                            'continue',
+              context,
+              'continue',
               () {
                 if (context
                                 .read<AddProposalProvider>()
@@ -236,11 +227,9 @@ class _MakeProposalPageState extends State<MakeProposalPage> {
 
   Padding _headlineText(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: kMainPadding),
-      child: Text(
-        context.watch<AddProposalProvider>().isError
-            ? "Недопустимые символы для товара"
-            : "Заполните заявку",
+      padding: EdgeInsets.only(left: kWidth(kMainPadding).w),
+      child: LocaleText(
+        "fullfill_proposal",
         style: Theme.of(context).textTheme.labelMedium!.copyWith(
               color: context.watch<AddProposalProvider>().isError
                   ? kMainColor

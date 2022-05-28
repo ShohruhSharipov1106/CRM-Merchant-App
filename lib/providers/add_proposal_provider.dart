@@ -9,12 +9,11 @@ class AddProposalProvider extends ChangeNotifier {
   TextEditingController namingThings = TextEditingController();
   TextEditingController summThings = TextEditingController();
   GlobalKey formKey = GlobalKey<FormState>();
+  final fullPersonalFormKey = GlobalKey<FormState>();
 
   TextEditingController name = TextEditingController();
   TextEditingController surname = TextEditingController();
   TextEditingController dadname = TextEditingController();
-  TextEditingController birthday = TextEditingController();
-  TextEditingController seriesNumber = TextEditingController();
   TextEditingController tin = TextEditingController();
   TextEditingController pinfl = TextEditingController();
   TextEditingController placeOfResidence = TextEditingController();
@@ -27,23 +26,57 @@ class AddProposalProvider extends ChangeNotifier {
   String addressOfResidence = 'place_of_residence';
   String placeOfResidencevalue = 'place_of_residence';
   String another = 'another';
-
-  RoundedLoadingButtonController addPropPhoneNumbBtnController =
-      RoundedLoadingButtonController();
-  RoundedLoadingButtonController makePropBtnController =
-      RoundedLoadingButtonController();
-  RoundedLoadingButtonController addPropPassportBtnController =
-      RoundedLoadingButtonController();
-  RoundedLoadingButtonController addPropCardBtnController =
-      RoundedLoadingButtonController();
-  RoundedLoadingButtonController addPropPhoneSMSBtnController =
-      RoundedLoadingButtonController();
-  RoundedLoadingButtonController addPropCardSMSBtnController =
-      RoundedLoadingButtonController();
-
+  bool isAccessButton = false;
+  double? prePaymentSum;
   bool isError = false;
   late String clientPhoneNumber;
-  late List clientDatas = [];
+  late Map clientDatas = {
+    "marketplaceId": "string",
+    "partnerId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "contractor": {
+      "givenName": "string",
+      "surName": "string",
+      "patronymic": "string",
+      "sex": "Female",
+      "language": "Russian",
+      "docTypeId": 0,
+      "pinfl": "string",
+      "tin": "string",
+      "docSeries": "string",
+      "docNumber": "string",
+      "docDateOfIssue": "2022-05-19T15:26:10.655Z",
+      "docDateOfExpire": "2022-05-19T15:26:10.655Z",
+      "docAuthority": "string",
+      "dateOfBirth": "2022-05-19T15:26:10.655Z",
+      "address": "string",
+      "residenceAddress": "string",
+      "phone1": "stringstring",
+      "phone2": "string",
+      "phone3": "string"
+    },
+    "cards": [
+      {
+        "contractorId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        "number": "string",
+        "validity": "2022-05-19T15:26:10.655Z",
+        "token": "string",
+        "holderName": "string",
+        "phone": "string",
+        "ps": "string"
+      }
+    ],
+    "products": [
+      {
+        "productCode": "string",
+        "productName": "string",
+        "serialNumber": "string",
+        "quantity": 0,
+        "tariffId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        "price": 0,
+        "prepay": 0
+      }
+    ]
+  };
   late List<List> clientCards = [];
   late List<String> cardItems = [];
   late List cards;
@@ -51,42 +84,22 @@ class AddProposalProvider extends ChangeNotifier {
   late String clientPassportData;
   late String clientBirth;
 
-  getPhoneNumber() {
-    clientPhoneNumber =
-        addProposalPhoneNumber.text.removeAllWhitespace.substring(1);
-    clientDatas.add(clientPhoneNumber);
+  changePrePay(
+      TextEditingController _kontroller, double prePercentSum, int sumItems) {
+    prePaymentSum = double.parse(_kontroller.text);
     notifyListeners();
+    if (prePaymentSum! < prePercentSum) {
+      prePaymentSum = prePercentSum;
+      notifyListeners();
+    } else if (prePaymentSum! > sumItems) {
+      prePaymentSum = double.parse(sumItems.toString());
+      notifyListeners();
+    }
   }
 
   getPassport() {
     clientPassportData = serialNumberOfpassport.text;
     clientBirth = dateOfBirth.text;
-
-    clientDatas.add(clientPassportData);
-    clientDatas.add(clientBirth);
-  }
-
-  getCards(String cardNumb, String cardExpDate) {
-    // String cardnum = cardNumb;
-    // String cardexpdate = cardExpDate;
-    cardItems.add(cardNumb);
-    cardItems.add(cardExpDate);
-    // items = cardItems;
-    debugPrint("cardItems 1: " + cardItems.toString());
-    // debugPrint("items 1: " + items.toString());
-    clientCards.add(cardItems);
-    clientCards.setAll(0, [cardItems]);
-
-    // cards = clientCards;
-    debugPrint("clientCards 1: " + clientCards.toString());
-    // debugPrint("cards 1: " + cards.toString());
-    cardItems.clear();
-    debugPrint("cardItems 2: " + cardItems.toString());
-    debugPrint("clientCards 2: " + clientCards.toString());
-
-    // debugPrint("items 2: " + items.toString());
-    // debugPrint("cards 2: " + cards.toString());
-    notifyListeners();
   }
 
   changeGender() {
@@ -109,5 +122,13 @@ class AddProposalProvider extends ChangeNotifier {
   hasnotError() {
     isError = false;
     notifyListeners();
+  }
+
+  getClientDatas() {}
+  void updateIsAccessButton(bool isAccess) {
+    if (isAccessButton != isAccess) {
+      isAccessButton = isAccess;
+      notifyListeners();
+    }
   }
 }

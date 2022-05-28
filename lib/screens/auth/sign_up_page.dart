@@ -1,10 +1,5 @@
-import 'dart:async';
 import 'package:crm_merchant/constants/exports.dart';
-import 'package:crm_merchant/screens/home/home_body_page.dart';
-import 'package:crm_merchant/screens/internet_check/no_internet_page.dart';
 import 'package:crm_merchant/screens/profile/profile_drawer_page.dart';
-import 'package:crm_merchant/services/sign_up_service.dart';
-import 'package:http/http.dart' as http;
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -14,13 +9,17 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+  late bool _showLoader = false;
+  late String _userName = "";
+  late String _password = "";
   ConnectivityResult _connectionStatus = ConnectivityResult.none;
   final Connectivity _connectivity = Connectivity();
   late StreamSubscription<ConnectivityResult> _connectivitySubscription;
+
   @override
   void initState() {
     super.initState();
-    initConnectivity;
+    initConnectivity();
 
     _connectivitySubscription =
         _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
@@ -37,12 +36,14 @@ class _SignUpPageState extends State<SignUpPage> {
     try {
       result = await _connectivity.checkConnectivity();
     } on PlatformException catch (e) {
-      debugPrint('Couldn\'t check connectivity status $e');
+      debugPrint("Couldn't check connectivity status error: $e");
       return;
     }
+
     if (!mounted) {
       return Future.value(null);
     }
+
     return _updateConnectionStatus(result);
   }
 
@@ -54,7 +55,6 @@ class _SignUpPageState extends State<SignUpPage> {
 
   @override
   Widget build(BuildContext context) {
-    bool isConnected = false;
     SignUpProvider contexPro = context.watch<SignUpProvider>();
     return _connectionStatus == ConnectivityResult.mobile ||
             _connectionStatus == ConnectivityResult.wifi ||
@@ -78,10 +78,20 @@ class _SignUpPageState extends State<SignUpPage> {
                       ),
                       SizedBox(height: kHeight(80.0).h),
                       Padding(
-                        padding: const EdgeInsets.only(left: kMainPadding),
+                        padding: EdgeInsets.only(left: kWidth(kMainPadding).w),
                         child: LocaleText(
-                          "enter_data",
-                          style: Theme.of(context).textTheme.labelMedium,
+                          context.watch<AddProposalProvider>().isError
+                              ? "error_enter_data"
+                              : "enter_data",
+                          style: Theme.of(context)
+                              .textTheme
+                              .labelMedium!
+                              .copyWith(
+                                  color: context
+                                          .watch<AddProposalProvider>()
+                                          .isError
+                                      ? kMainColor
+                                      : kBlackTextColor),
                         ),
                       ),
                       SizedBox(height: kHeight(10.5).h),
@@ -94,7 +104,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         30,
                         "* * * * * * * * * * * * * * *",
                         "##############################",
-                        {"#": RegExp(r'[A-Za-z]')},
+                        {"#": RegExp(r'[A-Za-zЁёА-я]')},
                       ),
                       InputField(
                         context,
@@ -105,11 +115,17 @@ class _SignUpPageState extends State<SignUpPage> {
                         50,
                         "* * * * * * * * * * * * * * *",
                         "***************",
-                        {"*": RegExp(r'[a-zA-Z0-9\?\!\@\#\$\%\^\&\*\(\)\_\+]')},
+                        {
+                          "*": RegExp(
+                              r'[a-zA-ZЁёА-я0-9\?\!\@\#\$\%\^\&\*\(\)\_\+]')
+                        },
                       ),
-                      SizedBox(height: kHeight(100.0).h),
+                      SizedBox(height: kHeight(80.0).h),
                       Padding(
-                        padding: EdgeInsets.only(left: kWidth(kButHorPad).w),
+                        padding: EdgeInsets.only(
+                            left: _showLoader
+                                ? kWidth(160.0).w
+                                : kWidth(kButHorPad).w),
                         child: ValueListenableBuilder<TextEditingValue>(
                           valueListenable:
                               context.watch<SignUpProvider>().nameController,
@@ -131,50 +147,26 @@ class _SignUpPageState extends State<SignUpPage> {
                                                 .length >=
                                             6
                                     ? {
-                                        userName = context
+                                        _userName = context
                                             .read<SignUpProvider>()
                                             .nameController
-                                            .text,
-                                        passWord = context
+                                            .text
+                                            .toString(),
+                                        _password = context
                                             .read<SignUpProvider>()
                                             .phoneController
                                             .text,
-                                        await clientMainData.write(
-                                          "username",
-                                          userName,
-                                        ),
-                                        await clientMainData.write(
-                                          "password",
-                                          passWord,
-                                        ),
-                                        await SignUpService.postTokentoApi(
-                                          context
-                                              .read<SignUpProvider>()
-                                              .nameController
-                                              .text,
-                                          context
-                                              .read<SignUpProvider>()
-                                              .phoneController
-                                              .text,
-                                        )
-                                            .whenComplete(
-                                              () => {
-                                                isConnected = clientMainData
-                                                    .hasData('token'),
-                                                if (isConnected)
-                                                  Get.off(
-                                                      const ProfileDrawerPage()),
-                                              },
-                                            )
-                                            .onError((error, stackTrace) =>
-                                                context
-                                                    .read<AddProposalProvider>()
-                                                    .hasError()),
+
+                                        
+                                        await signin(),
+
+                                        
                                       }
                                     : () {};
                               },
                               context.watch<SignUpProvider>().phoneController,
                               v.text.length > 2 ? 6 : 300,
+                              showLoader: _showLoader,
                             );
                           },
                         ),
@@ -186,5 +178,25 @@ class _SignUpPageState extends State<SignUpPage> {
             ),
           )
         : const NoInternetPage();
+  }
+
+  Future<bool> signin() async {
+    setState(() {
+      _showLoader = true;
+    });
+    var result =
+        await ApiData().getToken(username: _userName, passpord: _password);
+
+    setState(() {
+      _showLoader = false;
+    });
+    if (result.isSuccess) {
+      await clientMainData.write("username", _userName);
+      await clientMainData.write("password", _password);
+      Get.off(const ProfileDrawerPage());
+    } else {
+      context.read<AddProposalProvider>().hasError();
+    }
+    return true;
   }
 }

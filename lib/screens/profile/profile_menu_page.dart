@@ -76,8 +76,6 @@ class _ProfileMenuPageState extends State<ProfileMenuPage> {
   _logOut() {
     Get.offAll(const SignUpPage());
     clientMainData.remove("username");
-    clientMainData.remove('password');
-    clientMainData.remove('token');
-    clientMainData.remove('expData');
+    clientMainData.remove("password");
   }
 }

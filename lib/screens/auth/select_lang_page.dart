@@ -1,7 +1,6 @@
 import 'package:crm_merchant/constants/exports.dart';
 
 import 'package:crm_merchant/screens/auth/sign_up_page.dart';
-import 'package:crm_merchant/screens/home/home_page.dart';
 
 class SelectLangPage extends StatefulWidget {
   const SelectLangPage({Key? key}) : super(key: key);
@@ -36,12 +35,7 @@ class _SelectLangPageState extends State<SelectLangPage> {
             ),
             SizedBox(height: kHeight(100.0).h),
             MainButton(context, "continue", () {
-              if (isFirstTime.read("firstTime") == "firstTime") {
-                Get.off(const HomePage());
-              } else {
-                isFirstTime.write("firstTime", "firstTime");
-                Get.off(const SignUpPage());
-              }
+              Get.off(const SignUpPage());
             }),
           ],
         ),
@@ -52,21 +46,13 @@ class _SelectLangPageState extends State<SelectLangPage> {
   ElevatedButton _langButton(
       BuildContext context, String title, bool isUzbek, String lang) {
     return ElevatedButton(
-      child: Text(
-        title,
-        textAlign: TextAlign.center,
-        style: Theme.of(context).textTheme.labelMedium,
-      ),
+      child: Text(title,
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.labelMedium),
       style: ElevatedButton.styleFrom(
         primary: !isUzbek ? kUnselectedLangColor : kYellowButtonColor,
-        fixedSize: Size(
-          kWidth(153.0).w,
-          kHeight(60.0).h,
-        ),
-        minimumSize: Size(
-          kWidth(153.0).w,
-          kHeight(60.0).h,
-        ),
+        fixedSize: Size(kWidth(153.0).w, kHeight(60.0).h),
+        minimumSize: Size(kWidth(153.0).w, kHeight(60.0).h),
         elevation: 4.0,
         alignment: Alignment.center,
         shape: RoundedRectangleBorder(
@@ -77,6 +63,7 @@ class _SelectLangPageState extends State<SelectLangPage> {
         setState(() {});
         chosenLanguage = Locale(lang);
         Get.updateLocale(chosenLanguage);
+        clientMainData.writeInMemory('locale', lang);
       },
     );
   }

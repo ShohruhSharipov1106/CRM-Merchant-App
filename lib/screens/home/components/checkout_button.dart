@@ -1,5 +1,4 @@
 import 'package:crm_merchant/constants/exports.dart';
-import 'package:crm_merchant/screens/home/offer_confirmation_page.dart';
 
 class CheckOutButton extends StatelessWidget {
   const CheckOutButton({Key? key}) : super(key: key);
@@ -9,8 +8,8 @@ class CheckOutButton extends StatelessWidget {
     return Visibility(
       visible: context.watch<HomePageProvider>().isVisible,
       child: ElevatedButton(
-        child: Text(
-          "Оформить",
+        child: LocaleText(
+          "checkout",
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.labelMedium,
         ),

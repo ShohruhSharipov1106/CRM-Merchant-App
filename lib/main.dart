@@ -1,31 +1,21 @@
 import 'package:crm_merchant/constants/exports.dart';
-import 'package:crm_merchant/screens/add_proposal/card_added_successfully_page.dart';
-import 'package:crm_merchant/screens/add_proposal/card_page.dart';
-import 'package:crm_merchant/screens/add_proposal/full_personal_information_page.dart';
-import 'package:crm_merchant/screens/add_proposal/passport_page.dart';
-import 'package:crm_merchant/screens/add_proposal/phone_number_page.dart';
-import 'package:crm_merchant/screens/add_proposal/sms_confirmation_page.dart';
-import 'package:crm_merchant/screens/auth/select_lang_page.dart';
-import 'package:crm_merchant/screens/auth/sign_up_page.dart';
-import 'package:crm_merchant/screens/home/home_body_page.dart';
-import 'package:crm_merchant/screens/home/home_page.dart';
-import 'package:crm_merchant/screens/home/offer_confirmation_page.dart';
-import 'package:crm_merchant/screens/profile/profile_drawer_page.dart';
-import 'package:crm_merchant/screens/splash/splash_screen_page.dart';
-
+import 'package:crm_merchant/providers/save_models_provider.dart';
+import 'package:crm_merchant/screens/face_id/camera_face_id_page.dart';
 List<CameraDescription> cameras = [];
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Locales.init(['ru', 'uz']);
+  clientMainData.initStorage;
+  await GetStorage.init();
   cameras = await availableCameras();
   // final firstCamera = cameras.last;
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => SignUpProvider()),
-        ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (_) => AddProposalProvider()),
         ChangeNotifierProvider(create: (_) => HomePageProvider()),
+        ChangeNotifierProvider(create: (_) => SaveModelsProvider()),
       ],
       child: const MyApp(),
     ),
@@ -39,13 +29,17 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return LocaleBuilder(
       builder: (locale) {
+        clientMainData.initStorage;
         return Sizer(builder: (context, orientation, deviceType) {
+          clientMainData.remove('expDate');
           return GetMaterialApp(
             title: 'CRM Merchant',
             debugShowCheckedModeBanner: false,
             localizationsDelegates: Locales.delegates,
             supportedLocales: Locales.supportedLocales,
-            locale: chosenLanguage,
+            locale: clientMainData.hasData('locale')
+                ? Locale(clientMainData.read('locale'))
+                : const Locale('ru'),
             theme: ThemeData(
               fontFamily: "Roboto",
               textTheme: const TextTheme(
@@ -81,7 +75,7 @@ class MyApp extends StatelessWidget {
                 backgroundColor: Colors.transparent,
               ),
             ),
-            home:  const FullPersonalInformationPage(),
+            home: const CameraFaceIDPage(),
           );
         });
       },

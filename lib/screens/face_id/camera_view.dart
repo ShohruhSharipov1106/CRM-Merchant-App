@@ -16,7 +16,7 @@ class CameraView extends StatefulWidget {
 
   final String title;
   final CustomPaint? customPaint;
-  final Function(InputImage inputImage) onImage;
+  final Function(InputImage inputImage, CameraImage image) onImage;
   final CameraLensDirection initialDirection;
 
   @override
@@ -27,13 +27,13 @@ class _CameraViewState extends State<CameraView> {
   final ScreenMode _mode = ScreenMode.liveFeed;
   CameraController? _controller;
   File? _image;
-  
+
   int _cameraIndex = 0;
 
   @override
   void initState() {
     super.initState();
-  
+
     if (cameras.any(
       (element) =>
           element.lensDirection == widget.initialDirection &&
@@ -97,7 +97,7 @@ class _CameraViewState extends State<CameraView> {
       fit: StackFit.expand,
       children: <Widget>[
         Transform.scale(
-          scale: scale*1.1,
+          scale: scale * 1.2,
           child: Center(
             child: CameraPreview(_controller!),
           ),
@@ -184,6 +184,6 @@ class _CameraViewState extends State<CameraView> {
     final inputImage =
         InputImage.fromBytes(bytes: bytes, inputImageData: inputImageData);
 
-    widget.onImage(inputImage);
+    widget.onImage(inputImage, image);
   }
 }

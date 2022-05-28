@@ -1,8 +1,13 @@
 import 'package:crm_merchant/constants/exports.dart';
+import 'package:crm_merchant/core/static_datas.dart';
+import 'package:crm_merchant/models/marketplace/card_model.dart';
 import 'package:crm_merchant/screens/add_proposal/card_added_successfully_page.dart';
+import 'package:crm_merchant/screens/add_proposal/passport_page.dart';
 
+// ignore: must_be_immutable
 class AddProposalSmsConfirmationPage extends StatefulWidget {
-  const AddProposalSmsConfirmationPage({Key? key}) : super(key: key);
+  CardModel model;
+  AddProposalSmsConfirmationPage(this.model, {Key? key}) : super(key: key);
 
   @override
   State<AddProposalSmsConfirmationPage> createState() =>
@@ -38,6 +43,7 @@ class _AddProposalSmsConfirmationPageState
 
   @override
   Widget build(BuildContext context) {
+    cardToken = widget.model.cardToken!;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: SafeArea(
@@ -51,11 +57,13 @@ class _AddProposalSmsConfirmationPageState
             SizedBox(height: kHeight(5.0).h),
             _animationField(context),
             SizedBox(height: kHeight(20.0).h),
-            const Padding(
-              padding: EdgeInsets.only(left: kInpHorPad),
-              child: LocaleText(
-                "card_sms_subtitle",
-                style: TextStyle(
+            Padding(
+              padding: EdgeInsets.only(left: kWidth(kInpHorPad).w),
+              child: Text(
+                Locales.string(context, "card_sms_subtitle") +
+                    "(${widget.model.phone.toString()})  " +
+                    Locales.string(context, "card_sms_subtitle_2"),
+                style: const TextStyle(
                   fontSize: 10.0,
                   fontWeight: FontWeight.w400,
                   color: kBlackTextColor,
@@ -77,8 +85,8 @@ class _AddProposalSmsConfirmationPageState
 
   Padding _unreceivedSmsField() {
     return Padding(
-      padding: EdgeInsets.only(
-        left: kWidth(140.0).w,
+      padding: const EdgeInsets.only(
+        left: 150,
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -101,12 +109,7 @@ class _AddProposalSmsConfirmationPageState
               ),
             ),
             onTap: () {
-              // GetRandNum.increaseRandPlace < 99
-              //     ? GetRandNum.increaseRandPlace += 1
-              //     : GetRandNum.increaseRandPlace = 0;
-              // SendSMSService.sendSmsToClient(
-              //     context.read<AddProposalProvider>().clientPhoneNumber,
-              //     GetRandNum().checkSMS.toString());
+              confirm();
             },
           ),
         ],
@@ -121,12 +124,21 @@ class _AddProposalSmsConfirmationPageState
         context,
         'continue',
         () {
-          if (smsChecker.length == 4) {
-            Get.to(const CardAddedSuccessfullyPage());
-            context.read<AddProposalProvider>().hasnotError();
-          } else {
-            context.read<AddProposalProvider>().hasError();
-          }
+          CardService.sendSmsCard(
+                  context.read<AddProposalProvider>().cardNumber.text,
+                  context.read<AddProposalProvider>().cardExpirationDate.text)
+              .then((value) => {
+                    value.number =
+                        context.read<AddProposalProvider>().cardNumber.text,
+                    value.expire = context
+                        .read<AddProposalProvider>()
+                        .cardExpirationDate
+                        .text,
+                    Get.to(AddProposalSmsConfirmationPage(value)),
+                    context.read<AddProposalProvider>().hasnotError()
+                  })
+              .onError((error, stackTrace) =>
+                  {context.read<AddProposalProvider>().hasError()});
         },
         smsChecker,
         4,
@@ -226,6 +238,19 @@ class _AddProposalSmsConfirmationPageState
         ),
       ),
     );
+  }
+
+  Future confirm() async {
+    await CardService.sendConfirmCard(widget.model.cardToken!, smsChecker.text)
+        .then((value) => {
+              value.number = widget.model.number,
+              value.expire = widget.model.expire,
+              StaticData.addCard(value),
+              Get.off(const CardAddedSuccessfullyPage()),
+              context.read<AddProposalProvider>().hasnotError(),
+            })
+        .catchError(
+            (error) => {context.read<AddProposalProvider>().hasError()});
   }
 }
 

@@ -1,10 +1,21 @@
 import 'package:crm_merchant/constants/exports.dart';
 import 'package:crm_merchant/screens/home/components/checkout_button.dart';
 
+// ignore: must_be_immutable
 class FullInformation extends StatelessWidget {
-  Color? situationColor;
-  FullInformation(this.situationColor, {Key? key}) : super(key: key);
-  
+  String? situationColor;
+  int numb;
+  String dateProposal;
+  String amount;
+  String createdBy;
+  String reasonCancellation;
+  String customer;
+
+  FullInformation(this.situationColor, this.numb, this.dateProposal,
+      this.amount, this.createdBy, this.reasonCancellation, this.customer,
+      {Key? key})
+      : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     HomePageProvider ctxWatchHomeProvider = context.watch<HomePageProvider>();
@@ -12,112 +23,99 @@ class FullInformation extends StatelessWidget {
 
     return Stack(
       children: [
-        SizedBox(
-          height: ctxWatchHomeProvider.mainSzbHeight,
-          width: ctxWatchHomeProvider.mainSzbWidth,
-        ),
-        Positioned(
-          child: Container(
-            margin: EdgeInsets.symmetric(horizontal: kWidth(kMainPadding).w),
-            padding: EdgeInsets.only(
-              left: kWidth(20.0).w,
-              right: kWidth(20.0).w,
-              top: kHeight(20.0).h,
-            ),
-            height: ctxWatchHomeProvider.mainContainerHeight,
-            width: ctxWatchHomeProvider.mainContainerWidth,
-            child: ctxWatchHomeProvider.isVisible
-                ? Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        height: kHeight(176.0).h,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            _informations(
-                              context,
-                              "Дата подачи заявки",
-                              "11.11.2012 11:15",
-                            ),
-                            _informations(
-                              context,
-                              "Сумма рассрочки",
-                              "20 468 455",
-                            ),
-                            _informations(
-                              context,
-                              "Магазин",
-                              "Tashkent",
-                            ),
-                            _informations(
-                              context,
-                              "Создал",
-                              "Tashkent",
-                            ),
-                            _informations(
-                              context,
-                              "Причина",
-                              "Tashkent",
-                            ),
-                            _informations(
-                              context,
-                              "Клиент",
-                              "VIKTOR KAMAROV",
-                            ),
-                          ],
-                        ),
-                      ),
-                      const CheckOutButton(),
-                      _hideUnhideText(
-                          ctxWatchHomeProvider, ctxReadHomeProvider),
-                    ],
-                  )
-                : Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        height: kHeight(53.0).h,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            _informations(
-                              context,
-                              "Дата подачи заявки",
-                              "11.11.2012 11:15",
-                            ),
-                            _informations(
-                              context,
-                              "Сумма рассрочки",
-                              "20 468 455",
-                            ),
-                          ],
-                        ),
-                      ),
-                      _hideUnhideText(
-                          ctxWatchHomeProvider, ctxReadHomeProvider),
-                    ],
+        Container(
+          margin: const EdgeInsets.symmetric(
+            horizontal: kMainPadding,
+            vertical: 15,
+          ),
+          padding: const EdgeInsets.only(
+            left: 20,
+            right: 20,
+            top: 20,
+            bottom: 5,
+          ),
+          //height: ctxWatchHomeProvider.mainContainerHeight,
+          //width: ctxWatchHomeProvider.mainContainerWidth,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  _informations(context, "date_proposal", dateProposal),
+                  const SizedBox(
+                    height: 11,
                   ),
-            decoration: const BoxDecoration(
-              color: kWhiteColor,
-              borderRadius: BorderRadius.only(
-                topRight: Radius.circular(30.0),
-                bottomLeft: Radius.circular(30.0),
-                bottomRight: Radius.circular(30.0),
+                  _informations(
+                    context,
+                    "proposal_amount",
+                    amount.toString(),
+                  ),
+                  Column(
+                    children: ctxWatchHomeProvider.isVisible
+                        ? [
+                            const SizedBox(
+                              height: 11,
+                            ),
+                            const SizedBox(
+                              height: 11,
+                            ),
+                            _informations(
+                              context,
+                              "created",
+                              createdBy,
+                            ),
+                            const SizedBox(
+                              height: 11,
+                            ),
+                            situationColor == "Declined"
+                                ? _informations(
+                                    context,
+                                    "cause",
+                                    reasonCancellation,
+                                  )
+                                : const SizedBox(),
+                            const SizedBox(
+                              height: 11,
+                            ),
+                            _informations(
+                              context,
+                              "customer",
+                              customer,
+                            ),
+                            situationColor == "Confirmed"
+                                ? const CheckOutButton()
+                                : const SizedBox(),
+                          ]
+                        : [],
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  _hideUnhideText(
+                      context, ctxWatchHomeProvider, ctxReadHomeProvider),
+                ],
               ),
+            ],
+          ),
+          decoration: const BoxDecoration(
+            color: kWhiteColor,
+            borderRadius: BorderRadius.only(
+              topRight: Radius.circular(30.0),
+              bottomLeft: Radius.circular(30.0),
+              bottomRight: Radius.circular(30.0),
             ),
           ),
-          top: kHeight(25.0).h,
-          left: 0,
         ),
         _chipField(context),
       ],
     );
   }
 
-  InkWell _hideUnhideText(HomePageProvider ctxWatchHomeProvider,
+  InkWell _hideUnhideText(
+      BuildContext context,
+      HomePageProvider ctxWatchHomeProvider,
       HomePageProvider ctxReadHomeProvider) {
     return InkWell(
       child: Text(
@@ -129,32 +127,33 @@ class FullInformation extends StatelessWidget {
         ),
       ),
       splashColor: kGreenLabelColor,
-      onTap: () => ctxWatchHomeProvider.mainContainerHeight == kHeight(98.0).h
-          ? ctxReadHomeProvider.increaseSize()
-          : ctxReadHomeProvider.decreaseSize(),
+      onTap: () =>
+          ctxWatchHomeProvider.hideText == Locales.string(context, 'hide')
+              ? ctxReadHomeProvider.increaseSize()
+              : ctxReadHomeProvider.decreaseSize(),
     );
   }
 
-  Row _informations(
-    BuildContext context,
-    String title,
-    String information,
-  ) {
+  Row _informations(BuildContext context, String title, String information) {
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
+        LocaleText(
           title,
           style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                fontWeight: FontWeight.w900,
+                fontWeight: FontWeight.w700,
               ),
         ),
-        Text(
-          information,
-          style: Theme.of(context).textTheme.labelMedium,
-          textAlign: TextAlign.right,
-          overflow: TextOverflow.fade,
+        Expanded(
+          child: Text(
+            information,
+            style: Theme.of(context)
+                .textTheme
+                .labelMedium!
+                .copyWith(overflow: TextOverflow.fade),
+            textAlign: TextAlign.right,
+            overflow: TextOverflow.ellipsis,
+          ),
         ),
       ],
     );
@@ -162,37 +161,43 @@ class FullInformation extends StatelessWidget {
 
   Positioned _chipField(BuildContext context) {
     return Positioned(
-      child: Chip(
-        label: Text.rich(
-          TextSpan(
-            children: [
-              TextSpan(
-                text: "№1  ",
-                style: Theme.of(context)
-                    .textTheme
-                    .labelMedium!
-                    .copyWith(fontWeight: FontWeight.w900),
-              ),
-              TextSpan(
-                text: situationColor == kGreenLabelColor
-                    ? "Одобрено"
-                    : situationColor == kGreyLabelColor
-                        ? "Рассматривается"
-                        : "Отказано",
-                style: Theme.of(context)
-                    .textTheme
-                    .labelMedium!
-                    .copyWith(color: situationColor),
-              ),
-            ],
+      child: SizedBox(
+        height: 30,
+        child: Chip(
+          label: Text.rich(
+            TextSpan(
+              children: [
+                TextSpan(
+                  text: "№$numb  ",
+                  style: Theme.of(context)
+                      .textTheme
+                      .labelMedium!
+                      .copyWith(fontWeight: FontWeight.w700),
+                ),
+                TextSpan(
+                  text: situationColor == "Confirmed"
+                      ? Locales.string(context, "approved")
+                      : situationColor == 'Declined'
+                          ? Locales.string(context, "denied")
+                          : Locales.string(context, "under_consideration"),
+                  style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                        color: situationColor == "Confirmed"
+                            ? kGreenLabelColor
+                            : situationColor == 'Declined'
+                                ? kMainColor
+                                : kGreyLabelColor,
+                      ),
+                ),
+              ],
+            ),
           ),
+          backgroundColor: kWhiteColor,
+          elevation: kHeight(8.0).h,
+          shadowColor: kBlackTextColor.withOpacity(0.75),
         ),
-        backgroundColor: kWhiteColor,
-        elevation: 5.0,
-        shadowColor: kBlackTextColor,
       ),
-      top: -kHeight(2.0).h,
-      left: kWidth(10.0).w,
+      top: kHeight(0.0).h,
+      left: kWidth(16.0).w,
     );
   }
 }

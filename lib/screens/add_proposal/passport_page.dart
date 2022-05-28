@@ -1,7 +1,5 @@
 import 'package:crm_merchant/constants/exports.dart';
 import 'package:crm_merchant/screens/face_id/camera_face_id_page.dart';
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class AddProposalPassportPage extends StatelessWidget {
   const AddProposalPassportPage({Key? key}) : super(key: key);
@@ -14,22 +12,22 @@ class AddProposalPassportPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: kHeight(20.0).h),
+            const SizedBox(height: 20.0),
             StepsField(context, 4),
-            SizedBox(height: kHeight(20.0).h),
-            TitleOfPage("Введите ваши данные", kWidth(88.0).w),
-            SizedBox(height: kHeight(5.0).h),
+            const SizedBox(height: 20.0),
+            TitleOfPage("enter_your_details", kWidth(65.0).w),
+            const SizedBox(height: 5.0),
             _animationField(context),
-            SizedBox(height: kHeight(20.0).h),
+            const SizedBox(height: 20.0),
             _subtitleField(),
-            SizedBox(height: kHeight(25.0).h),
+            const SizedBox(height: 25.0),
             _titleField(context),
-            SizedBox(height: kHeight(4.0).h),
+            const SizedBox(height: 4.0),
             _serialNumberOfpassport(context),
             _dateOfBirth(context),
-            SizedBox(height: kHeight(7.0).h),
+            const SizedBox(height: 10.0),
             _buttonField(context),
-            SizedBox(height: kHeight(53.0).h),
+            const SizedBox(height: 30.0),
           ],
         ),
       ),
@@ -38,14 +36,14 @@ class AddProposalPassportPage extends StatelessWidget {
 
   Padding _buttonField(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: kButHorPad),
+      padding: EdgeInsets.only(left: kWidth(kButHorPad).w),
       child: ValueListenableBuilder<TextEditingValue>(
         valueListenable:
             context.watch<AddProposalProvider>().serialNumberOfpassport,
         builder: (context, v, child) {
           return ListenableButton(
             context,
-            "pass_identification",
+            "go_identification",
             () {
               if (context.read<AddProposalProvider>().dateOfBirth.text.length ==
                       10 &&
@@ -73,8 +71,8 @@ class AddProposalPassportPage extends StatelessWidget {
     return CalendarInputField(
       context,
       context.watch<AddProposalProvider>().dateOfBirth,
-      "Дата рождения ",
-      "Недопустимая дата рождения",
+      "birthday",
+      "error_birthday",
       "**/**/****",
       "dd/MM/yyyy",
       DateTime(1900),
@@ -86,27 +84,26 @@ class AddProposalPassportPage extends StatelessWidget {
     return InputField(
       context,
       context.watch<AddProposalProvider>().serialNumberOfpassport,
-      "Введите серийный номер паспорта",
-      "Неверный срок действия карты ",
+      "serial_number_passport",
+      "serial_number_passport_error",
       TextInputType.visiblePassword,
-      26,
+      25,
       "*  *  *  *  *  *  *  *  * ",
       "#  #  *  *  *  *  *  *  *",
       {
-        "#": RegExp(r'[A-Za-z]'),
+        "#": RegExp(r'[A-Za-zЁёА-я]'),
         "*": RegExp(r'[0-9]'),
       },
-      capitalText: true,
     );
   }
 
   Padding _titleField(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: kMainPadding),
-      child: Text(
+      padding: EdgeInsets.only(left: kWidth(kMainPadding).w),
+      child: LocaleText(
         context.watch<AddProposalProvider>().isError
-            ? "Неверные паспортные данные"
-            : "Введите паспортные данные",
+            ? "error_passport_details"
+            : "passport_details",
         style: Theme.of(context).textTheme.labelMedium!.copyWith(
               color: context.watch<AddProposalProvider>().isError
                   ? kMainColor
@@ -117,10 +114,10 @@ class AddProposalPassportPage extends StatelessWidget {
   }
 
   Padding _subtitleField() {
-    return const Padding(
-      padding: EdgeInsets.only(left: kInpHorPad),
-      child: Text(
-        "Введите номер паспорта и дату рождения. Затем сделайте селфи с \nкамеры для аутентификации по лицу",
+    return Padding(
+      padding: EdgeInsets.only(left: kWidth(65.0).w),
+      child: const LocaleText(
+        "passport_page_subtitle",
         style: TextStyle(
           fontSize: 10.0,
           fontWeight: FontWeight.w400,

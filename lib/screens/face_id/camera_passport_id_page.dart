@@ -1,5 +1,5 @@
 import 'package:crm_merchant/constants/exports.dart';
-import 'package:crm_merchant/screens/face_id/camera_registration_page.dart';
+import 'package:crm_merchant/screens/face_id/camera_address_page.dart';
 
 class CameraPassportIDPage extends StatefulWidget {
   const CameraPassportIDPage({Key? key}) : super(key: key);
@@ -27,10 +27,12 @@ class _CameraPassportIDPageState extends State<CameraPassportIDPage> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const Center(
+          Center(
             child: Text(
-              "Идетификация по паспорту\nФотография паспорта",
-              style: TextStyle(
+              Locales.string(context, "identification_by_passport") +
+                  "\n" +
+                  Locales.string(context, "passport_photo"),
+              style: const TextStyle(
                 fontSize: 24.0,
                 color: kWhiteColor,
                 fontWeight: FontWeight.w700,
@@ -39,8 +41,8 @@ class _CameraPassportIDPageState extends State<CameraPassportIDPage> {
             ),
           ),
           SizedBox(height: kHeight(10.0).h),
-          Text(
-            "Сделайте фото с камеры для идентификации по паспорту",
+          LocaleText(
+            "identification_by_passport_subtitle",
             style: Theme.of(context).textTheme.labelMedium!.copyWith(
                   fontSize: 10.0,
                   color: kWhiteColor,
@@ -71,9 +73,10 @@ class _CameraPassportIDPageState extends State<CameraPassportIDPage> {
             ),
           ),
           SizedBox(height: kHeight(20.0).h),
-          MainButton(context,
-            "Сделать фото",
-            () => Get.off(const CameraRegistrationPage()),
+          MainButton(
+            context,
+            "take_photo",
+            () => Get.off(const CameraAddressPage()),
           ),
         ],
       ),

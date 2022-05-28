@@ -1,9 +1,12 @@
-import 'package:crm_merchant/components/generate_rand_number.dart';
+import 'dart:math';
+
 import 'package:crm_merchant/constants/exports.dart';
 import 'package:crm_merchant/screens/add_proposal/card_page.dart';
 
+// ignore: must_be_immutable
 class OfferConfirmationPage extends StatefulWidget {
-  const OfferConfirmationPage({Key? key}) : super(key: key);
+  int _smsCode;
+  OfferConfirmationPage(this._smsCode, {Key? key}) : super(key: key);
 
   @override
   State<OfferConfirmationPage> createState() => _OfferConfirmationPageState();
@@ -72,12 +75,17 @@ class _OfferConfirmationPageState extends State<OfferConfirmationPage>
                       ),
                     ),
                     onTap: () {
-                      GetRandNum.increaseRandPlace < 99
-                          ? GetRandNum.increaseRandPlace += 1
-                          : GetRandNum.increaseRandPlace = 0;
+                      final int _sendSMSAgain = Random().nextInt(8999) + 1000;
+                      widget._smsCode = _sendSMSAgain;
                       SendSMSService.sendSmsToClient(
-                          context.read<AddProposalProvider>().clientPhoneNumber,
-                          GetRandNum().checkSMS.toString());
+                        context
+                            .read<AddProposalProvider>()
+                            .addProposalPhoneNumber
+                            .text
+                            .removeAllWhitespace
+                            .substring(1),
+                        _sendSMSAgain.toString(),
+                      );
                     },
                   ),
                 ],
@@ -93,28 +101,28 @@ class _OfferConfirmationPageState extends State<OfferConfirmationPage>
 
   Padding _title(BuildContext context) {
     return Padding(
-            padding: const EdgeInsets.only(left: kMainPadding),
-            child: LocaleText(
-              context.watch<AddProposalProvider>().isError
-                  ? "error_sms_code"
-                  : "enter_sms_verification_code",
-              style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                    color: context.watch<AddProposalProvider>().isError
-                        ? kMainColor
-                        : kBlackTextColor,
-                  ),
+      padding: const EdgeInsets.only(left: kMainPadding),
+      child: LocaleText(
+        context.watch<AddProposalProvider>().isError
+            ? "error_sms_code"
+            : "enter_sms_verification_code",
+        style: Theme.of(context).textTheme.labelMedium!.copyWith(
+              color: context.watch<AddProposalProvider>().isError
+                  ? kMainColor
+                  : kBlackTextColor,
             ),
-          );
+      ),
+    );
   }
 
   Padding _mainTitle(BuildContext context) {
     return Padding(
-            padding: EdgeInsets.only(left: kWidth(100.0).w),
-            child: LocaleText(
-              "offer_confirmation",
-              style: Theme.of(context).textTheme.headlineLarge,
-            ),
-          );
+      padding: EdgeInsets.only(left: kWidth(100.0).w),
+      child: LocaleText(
+        "offer_confirmation",
+        style: Theme.of(context).textTheme.headlineLarge,
+      ),
+    );
   }
 
   Padding _smsCode(BuildContext context) {
@@ -129,12 +137,11 @@ class _OfferConfirmationPageState extends State<OfferConfirmationPage>
         preFilledWidget: Text(
           "*",
           style: TextStyle(
-            color: context.watch<AddProposalProvider>().isError
-                ? kMainColor
-                : kBlackTextColor.withOpacity(0.5),
+            color: kBlackTextColor.withOpacity(0.5),
             fontSize: 64.0,
           ),
         ),
+        showCursor: false,
         closeKeyboardWhenCompleted: false,
         defaultPinTheme: PinTheme(
           width: kWidth(50.0).w,
@@ -151,7 +158,7 @@ class _OfferConfirmationPageState extends State<OfferConfirmationPage>
                 fontSize: 48.0,
                 color: context.watch<AddProposalProvider>().isError
                     ? kMainColor
-                    : kBlackTextColor.withOpacity(0.5),
+                    : kBlackTextColor,
               ),
         ),
       ),
@@ -164,7 +171,7 @@ class _OfferConfirmationPageState extends State<OfferConfirmationPage>
       child: ListenableButton(
         context,
         'continue',
-        () => smsChecker.text == GetRandNum().checkSMS.toString()
+        () => smsChecker.text == widget._smsCode.toString()
             ? {
                 Get.off(const AddProposalCardPage()),
                 context.read<AddProposalProvider>().hasnotError(),

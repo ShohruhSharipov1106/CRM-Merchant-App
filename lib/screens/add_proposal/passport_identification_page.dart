@@ -1,9 +1,7 @@
 import 'dart:io';
 
-import 'package:crm_merchant/constants/constants.dart';
 import 'package:crm_merchant/constants/exports.dart';
-import 'package:crm_merchant/screens/add_proposal/identification_page.dart';
-import 'package:flutter/services.dart';
+import 'package:crm_merchant/screens/add_proposal/full_personal_information_page.dart';
 
 class PassportIdentificationPage extends StatefulWidget {
   const PassportIdentificationPage({Key? key}) : super(key: key);
@@ -39,7 +37,7 @@ class _PassportIdentificationPageState
         }
       });
     } on PlatformException catch (e) {
-      debugPrint("Failed to pick image: $e");
+      print("Failed to pick image: $e");
     }
   }
 
@@ -55,34 +53,37 @@ class _PassportIdentificationPageState
             size: 24.0,
           ),
         ),
-        leadingWidth: 15.0,
-        title: Text(
-          "Идентификация по паспорту",
+        leadingWidth: 13.0,
+        title: LocaleText(
+          "identification_by_passport",
           style: Theme.of(context).textTheme.headlineLarge,
           overflow: TextOverflow.visible,
         ),
       ),
       body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: kHeight(50.0).h),
-            _imageTitle(context, "1.Загрузите фото паспорта  "),
-            _imageContainer(passportImage, 1),
-            _imageTitle(context, "2.Загрузите фото прописки"),
-            _imageContainer(registrationImage, 2),
-            _imageTitle(context, "3.Загрузите фото паспорта на фоне лица"),
-            _imageContainer(selfieImage, 3),
-            Padding(
-              padding: EdgeInsets.only(
-                top: kHeight(50.0).h,
-                left: kWidth(78.0).w,
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _imageTitle(context, "upload_passport"),
+              _imageContainer(passportImage, 1),
+              _imageTitle(context, "upload_address"),
+              _imageContainer(registrationImage, 2),
+              _imageTitle(context, "upload_selfie"),
+              _imageContainer(selfieImage, 3),
+              Padding(
+                padding: EdgeInsets.only(
+                  top: kHeight(50.0).h,
+                  left: kWidth(78.0).w,
+                  bottom:  kHeight(50.0).h,
+                ),
+                child: MainButton(context, "continue", () {
+                  Get.to(const FullPersonalInformationPage());
+                }),
               ),
-              child: MainButton(context,"continue", () {
-                Get.to(const IdentificationPage());
-              }),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -95,8 +96,8 @@ class _PassportIdentificationPageState
         top: kHeight(20.0).h,
         bottom: kHeight(15.0).h,
       ),
-      child: Text(
-        "",
+      child: LocaleText(
+        title,
         style: Theme.of(context).textTheme.labelMedium,
       ),
     );
@@ -105,9 +106,9 @@ class _PassportIdentificationPageState
   InkWell _imageContainer(File? imageFile, int index) {
     return InkWell(
         child: Container(
-          height: kHeight(60).h,
-          width: kWidth(60.0).w,
-          margin: EdgeInsets.only(left: kWidth(31.0).w),
+          height: kHeight(367).h,
+          width: kWidth(368.0).w,
+          margin: const EdgeInsets.symmetric(horizontal: 30),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10.0),
             color: kWhiteColor,
@@ -120,16 +121,17 @@ class _PassportIdentificationPageState
           child: imageFile == null
               ? const Icon(
                   Icons.add,
-                  size: 28.0,
+                  size: 72.0,
                   color: kBlackTextColor,
                 )
               : Image.file(
                   imageFile,
+                  height: kHeight(367).h,
+                  width: kWidth(368.0).w,
                   fit: BoxFit.cover,
                 ),
         ),
         onTap: () {
-       
           getImage(index);
         });
   }

@@ -1,5 +1,5 @@
 import 'package:crm_merchant/constants/exports.dart';
-import 'package:crm_merchant/screens/add_proposal/identification_page.dart';
+import 'package:crm_merchant/screens/add_proposal/full_personal_information_page.dart';
 
 class CameraSelfiePhotoPage extends StatefulWidget {
   const CameraSelfiePhotoPage({Key? key}) : super(key: key);
@@ -27,10 +27,12 @@ class _CameraSelfiePhotoPageState extends State<CameraSelfiePhotoPage> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const Center(
+          Center(
             child: Text(
-              "Идетификация по паспорту\nФотография паспорта\nна фоне лица",
-              style: TextStyle(
+              Locales.string(context, "identification_by_passport") +
+                  "\n" +
+                  Locales.string(context, "selfie_photo"),
+              style: const TextStyle(
                 fontSize: 24.0,
                 color: kWhiteColor,
                 fontWeight: FontWeight.w700,
@@ -38,9 +40,9 @@ class _CameraSelfiePhotoPageState extends State<CameraSelfiePhotoPage> {
               textAlign: TextAlign.center,
             ),
           ),
-          SizedBox(height: kHeight(10.0).h),
-          Text(
-            "Сделайте фото с камеры для идентификации по паспорту",
+          const SizedBox(height: 10),
+          LocaleText(
+            "identification_by_passport_subtitle",
             style: Theme.of(context).textTheme.labelMedium!.copyWith(
                   fontSize: 10.0,
                   color: kWhiteColor,
@@ -48,20 +50,20 @@ class _CameraSelfiePhotoPageState extends State<CameraSelfiePhotoPage> {
             textAlign: TextAlign.center,
           ),
           Padding(
-            padding: EdgeInsets.only(
-              top: kHeight(20.0).h,
-              bottom: kHeight(50.0).h,
-              left: kWidth(kMainPadding).w,
-              right: kWidth(kMainPadding).w,
+            padding: const EdgeInsets.only(
+              top: 20,
+              bottom: 50,
+              left: 16,
+              right: 16,
             ),
             child: CustomPaint(
               foregroundPainter: BorderPainter(),
               child: Container(
-                height: kHeight(515.0).h,
+                height: kHeight(450.0).h,
                 width: kWidth(368.0).w,
-                margin: EdgeInsets.symmetric(
-                  vertical: kHeight(15.0).h,
-                  horizontal: kWidth(14.0).w,
+                margin: const EdgeInsets.symmetric(
+                  vertical: 15,
+                  horizontal: 14,
                 ),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(30.0),
@@ -70,11 +72,10 @@ class _CameraSelfiePhotoPageState extends State<CameraSelfiePhotoPage> {
               ),
             ),
           ),
-          SizedBox(height: kHeight(10.0).h),
-          MainButton(context,
-            "Сделать фото",
-            () => Get.off(const IdentificationPage()),
-          ),
+          const SizedBox(height: 10),
+          MainButton(context, "take_photo", () {
+            Get.to(const FullPersonalInformationPage());
+          }),
         ],
       ),
     );

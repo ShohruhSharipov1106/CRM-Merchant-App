@@ -1,7 +1,12 @@
 import 'package:crm_merchant/constants/exports.dart';
+import 'package:crm_merchant/models/marketplace/home_request_model.dart';
 import 'package:crm_merchant/screens/add_proposal/phone_number_page.dart';
+import 'package:crm_merchant/screens/auth/sign_up_page.dart';
+import 'package:crm_merchant/screens/home/components/full_information.dart';
 import 'package:crm_merchant/screens/home/no_item_page.dart';
 import 'package:crm_merchant/services/get_home_datas_service.dart';
+import 'package:intl/intl.dart';
+import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -30,6 +35,8 @@ class _HomePageState extends State<HomePage>
         status == AnimationStatus.forward;
   }
 
+  late bool _showLoader = false;
+
   @override
   Widget build(BuildContext context) {
     HomePageProvider ctxWatchHomeProvider = context.watch<HomePageProvider>();
@@ -39,7 +46,7 @@ class _HomePageState extends State<HomePage>
         child: SafeArea(
           child: Column(
             children: [
-              SizedBox(height: kHeight(15.0).h),
+              const SizedBox(height: 15),
               DefaultTabController(
                 length: 6,
                 initialIndex: 0,
@@ -48,125 +55,83 @@ class _HomePageState extends State<HomePage>
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     _tabBar(context),
-                    SizedBox(height: kHeight(19.0).h),
+                    const SizedBox(height: 15),
                     SizedBox(
-                      height: kHeight(640.0).h,
+                      height: kHeight(600.0).h,
                       width: 100.w,
                       child: TabBarView(
                         children: [
-                          FutureBuilder(
-                            future: HomePageDataService.getAllHomeDatas(),
-                            builder: (context, AsyncSnapshot snap) {
-                              return snap.hasData
-                                  ? _snapDataField(snap, ctxWatchHomeProvider)
-                                  : (snap.hasError
-                                      ? _snapErrorField(context)
-                                      : Center(
-                                          child: Lottie.asset(
-                                            "assets/images/lottie/loading_indicator.json",
-                                            height: kHeight(200.0).h,
-                                            width: kWidth(200.0).w,
-                                          ),
-                                        ));
-                            },
+                        _stateInforms(ctxWatchHomeProvider, RequestState.all),
+                        _stateInforms(
+                            ctxWatchHomeProvider,
+                            RequestState.confirmed,
                           ),
-                          FutureBuilder(
-                            future: HomePageDataService.getStateHomeDatas(
-                                "Confirmed"),
-                            builder: (context, AsyncSnapshot snap) {
-                              return snap.hasData
-                                  ? _snapDataField(snap, ctxWatchHomeProvider)
-                                  : (snap.hasError
-                                      ? _snapErrorField(context)
-                                      : Center(
-                                          child: Lottie.asset(
-                                            "assets/images/lottie/loading_indicator.json",
-                                            height: kHeight(200.0).h,
-                                            width: kWidth(200.0).w,
-                                          ),
-                                        ));
-                            },
+                          _stateInforms(
+                            ctxWatchHomeProvider,
+                            RequestState.considered,
                           ),
-                          FutureBuilder(
-                            future: HomePageDataService.getStateHomeDatas(
-                                "Considered"),
-                            builder: (context, AsyncSnapshot snap) {
-                              return snap.hasData
-                                  ? _snapDataField(snap, ctxWatchHomeProvider)
-                                  : (snap.hasError
-                                      ? _snapErrorField(context)
-                                      : Center(
-                                          child: Lottie.asset(
-                                            "assets/images/lottie/loading_indicator.json",
-                                            height: kHeight(200.0).h,
-                                            width: kWidth(200.0).w,
-                                          ),
-                                        ));
-                            },
+                          _stateInforms(
+                            ctxWatchHomeProvider,
+                            RequestState.declined
                           ),
-                          FutureBuilder(
-                            future: HomePageDataService.getStateHomeDatas(
-                                "Declined"),
-                            builder: (context, AsyncSnapshot snap) {
-                              return snap.hasData
-                                  ? _snapDataField(snap, ctxWatchHomeProvider)
-                                  : (snap.hasError
-                                      ? _snapErrorField(context)
-                                      : Center(
-                                          child: Lottie.asset(
-                                            "assets/images/lottie/loading_indicator.json",
-                                            height: kHeight(200.0).h,
-                                            width: kWidth(200.0).w,
-                                          ),
-                                        ));
-                            },
+                          _stateInforms(
+                            ctxWatchHomeProvider,
+                            RequestState.neww,
                           ),
-                          FutureBuilder(
-                            future:
-                                HomePageDataService.getStateHomeDatas("New"),
-                            builder: (context, AsyncSnapshot snap) {
-                              return snap.hasData
-                                  ? _snapDataField(snap, ctxWatchHomeProvider)
-                                  : (snap.hasError
-                                      ? _snapErrorField(context)
-                                      : Center(
-                                          child: Lottie.asset(
-                                            "assets/images/lottie/loading_indicator.json",
-                                            height: kHeight(200.0).h,
-                                            width: kWidth(200.0).w,
-                                          ),
-                                        ));
-                            },
+                          _stateInforms(
+                            ctxWatchHomeProvider,
+                            RequestState.draft,
                           ),
-                          FutureBuilder(
-                            future:
-                                HomePageDataService.getStateHomeDatas("Draft"),
-                            builder: (context, AsyncSnapshot snap) {
-                              return snap.hasData
-                                  ? _snapDataField(snap, ctxWatchHomeProvider)
-                                  : (snap.hasError
-                                      ? _snapErrorField(context)
-                                      : Center(
-                                          child: Lottie.asset(
-                                            "assets/images/lottie/loading_indicator.json",
-                                            height: kHeight(200.0).h,
-                                            width: kWidth(200.0).w,
-                                          ),
-                                        ));
-                            },
-                          ),
+
+                          // LiquidPullToRefresh(
+                          //   color: kMainColor,
+                          //   onRefresh: () {
+                          //     setState(() {});
+                          //     return Future.delayed(const Duration(seconds: 1));
+                          //   },
+                          //   child: ListView.builder(
+                          //     physics: const BouncingScrollPhysics(),
+                          //     itemCount: 4,
+                          //     itemBuilder: (BuildContext context, int index) {
+                          //       return Column(
+                          //         children:
+                          //             ctxWatchHomeProvider.listOfAllInformation,
+                          //       );
+                          //     },
+                          //   ),
+                          // ),
                         ],
                       ),
                     ),
                   ],
                 ),
               ),
+              const SizedBox(height: 15.0),
               MainButton(
                 context,
                 "create_zayavka",
                 () {
-                  Get.to(const AddProposalPhoneNumberPage());
+                  setState(() {
+                    _showLoader = true;
+                  });
+                  ApiData()
+                      .getToken(
+                        username: clientMainData.read('username'),
+                        passpord: clientMainData.read('password'),
+                      )
+                      .whenComplete(() => {
+                            setState(
+                              () {
+                                _showLoader = false;
+                              },
+                            )
+                          })
+                      // ignore: invalid_return_type_for_catch_error
+                      .catchError((err) => Get.offAll(const SignUpPage()))
+                      .then((value) =>
+                          Get.to(const AddProposalPhoneNumberPage()));
                 },
+                showLoader: _showLoader,
               ),
             ],
           ),
@@ -175,48 +140,61 @@ class _HomePageState extends State<HomePage>
     );
   }
 
-  RefreshIndicator _snapErrorField(BuildContext context) {
-    return RefreshIndicator(
-      child: Column(
-        children: [
-          SizedBox(
-            height: kHeight(50.0).h,
-            child: ListView(),
-          ),
-          SizedBox(height: kHeight(50.0).h),
-          TitleOfPage("no_internet_title", kWidth(0.0).w),
-          SizedBox(height: kHeight(100.0).h),
-          SvgPicture.asset(
-            "assets/icons/error-internet.svg",
-            height: kHeight(278.0).h,
-            width: kWidth(278.0).w,
-          ),
-          SizedBox(height: kHeight(50.0).h),
-          LocaleText(
-            "internet_data_error",
-            style: Theme.of(context).textTheme.labelMedium,
-            textAlign: TextAlign.center,
-          )
-        ],
-      ),
-      onRefresh: () async {
-        HomePageDataService.getAllHomeDatas();
+  FutureBuilder<HomeRequestModel> _stateInforms(
+      HomePageProvider ctxWatchHomeProvider, RequestState state) {
+    return FutureBuilder(
+      future: HomePageDataService.getStateRequest(state),
+      builder: (context, AsyncSnapshot<HomeRequestModel> snap) {
+        return snap.hasData
+            ? _snapDataField(snap, ctxWatchHomeProvider, state)
+            : (snap.hasError
+                      ? const InternetErrorPage()
+                      : Center(
+                          child: Lottie.asset(
+                            "assets/images/lottie/loading_indicator.json",
+                            height: kHeight(160.0).h,
+                            width: kWidth(160.0).w,
+                          ),
+                        ));
       },
     );
   }
 
-  SingleChildScrollView _snapDataField(
-      AsyncSnapshot<dynamic> snap, HomePageProvider ctxWatchHomeProvider) {
+  SingleChildScrollView _snapDataField(AsyncSnapshot<HomeRequestModel> snap,
+      HomePageProvider ctxWatchHomeProvider, RequestState state) {
     return SingleChildScrollView(
-      child: snap.data['totalCount'] == 0
+      child: snap.data!.totalCount == 0
           ? const NoItemPage()
-          : ListView.builder(
-              itemCount: snap.data['totalCount'],
-              itemBuilder: (BuildContext context, int index) {
-                return Column(
-                  children: ctxWatchHomeProvider.listOfAllInformation,
-                );
+          : LiquidPullToRefresh(
+              color: kYellowButtonColor,
+              onRefresh: () {
+                setState(() {});
+                return Future.delayed(const Duration(microseconds: 1));
               },
+              child: ListView.builder(
+                physics: const BouncingScrollPhysics(),
+                itemCount: snap.data!.totalCount,
+                itemBuilder: (BuildContext context, int index) {
+                  List<RequestModel> value = snap.data!.value!;
+                  return state.name == value[index].state || state.name == " "
+                      ? FullInformation(
+                          value[index].state,
+                          value[index].number!,
+                          value[index]
+                              .createdTime
+                              .toString()
+                              .replaceAll("T", " ")
+                              .substring(20),
+                          NumberFormat('###,###,###,###,###,###')
+                              .format(value[index].amount)
+                              .replaceAll(",", " "),
+                          value[index].createdBy!,
+                          value[index].reasonForCancellation!,
+                          value[index].contractor!,
+                        )
+                      : const SizedBox();
+                },
+              ),
             ),
       physics: const BouncingScrollPhysics(),
     );

@@ -1,5 +1,7 @@
 import 'package:crm_merchant/constants/exports.dart';
+import 'package:crm_merchant/core/static_datas.dart';
 import 'package:crm_merchant/screens/add_proposal/card_page.dart';
+import 'package:crm_merchant/screens/add_proposal/passport_page.dart';
 
 class CardAddedSuccessfullyPage extends StatelessWidget {
   const CardAddedSuccessfullyPage({Key? key}) : super(key: key);
@@ -7,93 +9,145 @@ class CardAddedSuccessfullyPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: kHeight(20.0).h),
             StepsField(context, 3),
-            SizedBox(height: kHeight(20.0).h),
+            const SizedBox(height: 20),
             TitleOfPage("card_add_success", kWidth(40.0).w),
-            SizedBox(height: kHeight(30.0).h),
-            SizedBox(
-              height: kHeight(550.0).h,
-              child: ListView.builder(
-                itemBuilder: (context, i) {
-                  return Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: kWidth(56.0).w,
-                      vertical: kHeight(25.0).h,
-                    ),
-                    child: Material(
-                      elevation: 5.0,
-                      borderRadius: BorderRadius.circular(30.0),
-                      child: SizedBox(
-                        height: kHeight(190.0).h,
-                        width: kWidth(316.0).w,
-                        child: Padding(
-                          padding: EdgeInsets.only(
-                            left: kWidth(30.0).w,
-                            top: kHeight(15.0).h,
-                          ),
-                          child: Text.rich(
-                            TextSpan(
-                              children: [
-                                const TextSpan(text: "HUMO\n"),
-                                TextSpan(
-                                  text:
-                                      "${context.read<AddProposalProvider>().cards[i][0]}\n",
-                                  style:
-                                      Theme.of(context).textTheme.headlineLarge,
-                                ),
-                                TextSpan(
-                                    text:
-                                        "${context.read<AddProposalProvider>().cards[i][1]}\n"),
-                                const TextSpan(
-                                  text: "VIKTOR KAMAROV VIKTOROVICH"),
-                              ],
+            const SizedBox(height: 20),
+            Expanded(
+              child: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+                child: Column(
+                  children: [
+                    for (int i = 0; i < StaticData.cards.length; i++)
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          left: 25,
+                          right: 25,
+                          bottom: 20,
+                        ),
+                        child: Material(
+                          elevation: 5.0,
+                          borderRadius: BorderRadius.circular(30.0),
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                              left: 27,
+                              top: 15,
+                              bottom: 14,
                             ),
-                            style: Theme.of(context).textTheme.labelMedium,
-                            textAlign: TextAlign.start,
+                            child: Text.rich(
+                              TextSpan(
+                                children: [
+                                  TextSpan(
+                                      text:
+                                          "${StaticData.cards[i].ps.toString().toUpperCase()}\n"),
+                                  TextSpan(
+                                    text: "\n${StaticData.cards[i].number}\n",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headlineLarge!
+                                        .copyWith(fontWeight: FontWeight.w500),
+                                  ),
+                                  TextSpan(
+                                      text: "${StaticData.cards[i].expire}\n"),
+                                  TextSpan(
+                                      text:
+                                          "\n${StaticData.cards[i].holderName}"),
+                                ],
+                              ),
+                              style: Theme.of(context).textTheme.labelMedium,
+                              textAlign: TextAlign.start,
+                            ),
                           ),
                         ),
                       ),
+                    Center(
+                      child: InkWell(
+                        child: const Material(
+                          elevation: 4.0,
+                          color: kYellowButtonColor,
+                          shape: CircleBorder(),
+                          child: Icon(
+                            Icons.add,
+                            size: 57,
+                            color: kWhiteColor,
+                          ),
+                        ),
+                        onTap: () {
+                          context
+                              .read<AddProposalProvider>()
+                              .cardNumber
+                              .clear();
+                          context
+                              .read<AddProposalProvider>()
+                              .cardExpirationDate
+                              .clear();
+                          Get.to(const AddProposalCardPage());
+                        },
+                      ),
                     ),
-                  );
-                },
-                itemCount:
-                    context.read<AddProposalProvider>().cards.length,
-              ),
-            ),
-            SizedBox(height: kHeight(22.0).h),
-            Padding(
-              padding: EdgeInsets.only(left: kWidth(180.0).w),
-              child: InkWell(
-                child: Material(
-                  elevation: 4.0,
-                  color: kYellowButtonColor,
-                  shape: const CircleBorder(),
-                  child: Padding(
-                    padding: EdgeInsets.all(kHeight(5.0).h),
-                    child: Icon(
-                      Icons.add,
-                      size: kHeight(47.0).h,
-                      color: kWhiteColor,
-                    ),
-                  ),
+                    const SizedBox(height: 10),
+                  ],
                 ),
-                // add phone number
-                onTap: () {
-                  context.read<AddProposalProvider>().cardNumber.clear();
-                  context
-                      .read<AddProposalProvider>()
-                      .cardExpirationDate
-                      .clear();
-                  Get.to(const AddProposalCardPage());
-                },
               ),
             ),
-            SizedBox(height: kHeight(50.0).h),
+
+            // SizedBox(
+            //   height: kHeight(530.0).h,
+            //   child: ListView.builder(
+            //     itemBuilder: (context, i) {
+            //       return Padding(
+            //         padding: const EdgeInsets.only(
+            //           left: 35,
+            //           right: 35,
+            //           bottom: 30,
+            //         ),
+            //         child: Material(
+            //           elevation: 5.0,
+            //           borderRadius: BorderRadius.circular(30.0),
+            //           child: Padding(
+            //             padding: const EdgeInsets.only(
+            //               left: 37,
+            //               top: 15,
+            //               bottom: 14,
+            //             ),
+            //             child: Text.rich(
+            //               TextSpan(
+            //                 children: [
+            //                   TextSpan(
+            //                       text:
+            //                           "${StaticData.cards[i].ps.toString().toUpperCase()}\n"),
+            //                   TextSpan(
+            //                     text: "\n${StaticData.cards[i].number}\n",
+            //                     style: Theme.of(context)
+            //                         .textTheme
+            //                         .headlineLarge!
+            //                         .copyWith(fontWeight: FontWeight.w500),
+            //                   ),
+            //                   TextSpan(
+            //                       text: "${StaticData.cards[i].expire}\n"),
+            //                   TextSpan(
+            //                       text:
+            //                           "\n${StaticData.cards[i].holderName}"),
+            //                 ],
+            //               ),
+            //               style: Theme.of(context).textTheme.labelMedium,
+            //               textAlign: TextAlign.start,
+            //             ),
+            //           ),
+            //         ),
+            //       );
+            //     },
+            //     itemCount: StaticData.cards.length,
+            //   ),
+            // ),
+
+            const SizedBox(height: 20),
             _button(context),
           ],
         ),
@@ -103,15 +157,12 @@ class CardAddedSuccessfullyPage extends StatelessWidget {
 
   Padding _button(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: kButHorPad),
+      padding: EdgeInsets.only(left: kWidth(kButHorPad).w, bottom: 30),
       child: MainButton(
         context,
         "continue",
         () {
-          // // Get.to(const AddProposalPassportPage());
-          // print(context.read<AddProposalProvider>().clientCards[0][1]);
-          // print(context.read<AddProposalProvider>().clientCards[0][0]);
-          print(context.read<AddProposalProvider>().clientCards);
+          Get.to(const AddProposalPassportPage());
         },
       ),
     );

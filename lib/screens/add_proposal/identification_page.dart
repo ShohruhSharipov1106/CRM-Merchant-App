@@ -7,7 +7,7 @@ class IdentificationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      // resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -29,7 +29,7 @@ class IdentificationPage extends StatelessWidget {
                       Get.back();
                     },
                   ),
-                  TitleOfPage("Идентификация", kWidth(90.0).w),
+                  TitleOfPage("identification", kWidth(90.0).w),
                 ],
               ),
             ),
@@ -39,7 +39,7 @@ class IdentificationPage extends StatelessWidget {
             _titleField(context),
             SizedBox(height: kHeight(20.0).h),
             _mainBody(context),
-            SizedBox(height: kHeight(310.0).h),
+            SizedBox(height: kHeight(270.0).h),
             _button(context),
             SizedBox(height: kHeight(20.0).h),
           ],
@@ -50,52 +50,58 @@ class IdentificationPage extends StatelessWidget {
 
   Container _mainBody(BuildContext context) {
     return Container(
-            height: kHeight(235.0).h,
-            width: kWidth(316.0).w,
-            margin: EdgeInsets.symmetric(horizontal: kWidth(56.0).w),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(30.0),
-              color: kWhiteColor,
-            ),
-            padding: EdgeInsets.symmetric(horizontal: kWidth(kMainPadding).w),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _pieceOfInformations(
-                  context,
-                  "Ф.И.О",
-                  "VIKTOR KAMAROV VIKTOROVICH",
-                ),
-                _pieceOfInformations(
-                  context,
-                  "Адрес прописки",
-                  " г.Ташкент,Садыка Азимова,1/28",
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _pieceOfInformations(
-                      context,
-                      "Номер паспорта",
-                      "АА1564457",
-                    ),
-                    _pieceOfInformations(
-                      context,
-                      "Дата рождения",
-                      "11.04.2020",
-                    ),
-                  ],
-                ),
-                _pieceOfInformations(
-                  context,
-                  "Номер телефона",
-                  "+998 90 900 90 90",
-                ),
-              ],
-            ),
-          );
+      height: kHeight(280.0).h,
+      width: kWidth(316.0).w,
+      margin: EdgeInsets.symmetric(horizontal: kWidth(56.0).w),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(30.0),
+        color: kWhiteColor,
+      ),
+      padding: EdgeInsets.symmetric(
+          horizontal: kWidth(kMainPadding).w, vertical: kHeight(5.0).h),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          _pieceOfInformations(
+            context,
+            "full_name",
+            "${context.watch<AddProposalProvider>().name.text.removeAllWhitespace} ${context.watch<AddProposalProvider>().surname.text.removeAllWhitespace}\n${context.watch<AddProposalProvider>().dadname.text.removeAllWhitespace}",
+          ),
+          _pieceOfInformations(
+            context,
+            "place_of_residence",
+            " г.Ташкент,Садыка Азимова,1/28",
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _pieceOfInformations(
+                context,
+                "passportNumber",
+                context
+                    .read<AddProposalProvider>()
+                    .serialNumberOfpassport
+                    .text
+                    .removeAllWhitespace
+                    .toUpperCase(),
+              ),
+              _pieceOfInformations(
+                context,
+                "birthday",
+                context.watch<AddProposalProvider>().dateOfBirth.text,
+              ),
+            ],
+          ),
+          _pieceOfInformations(
+            context,
+            "phoneNumber",
+            context.watch<AddProposalProvider>().addProposalPhoneNumber.text,
+          ),
+        ],
+      ),
+    );
   }
 
   Column _pieceOfInformations(
@@ -106,18 +112,18 @@ class IdentificationPage extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
+        LocaleText(
           title,
-          style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                fontSize: 10.0,
-              ),
+          style:
+              Theme.of(context).textTheme.labelMedium!.copyWith(fontSize: 10.0),
         ),
         SizedBox(height: kHeight(5.0).h),
         Text(
           informText,
-          style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                fontWeight: FontWeight.w900,
-              ),
+          style: Theme.of(context)
+              .textTheme
+              .labelMedium!
+              .copyWith(fontWeight: FontWeight.w900),
         ),
       ],
     );
@@ -125,9 +131,9 @@ class IdentificationPage extends StatelessWidget {
 
   Padding _titleField(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: kMainPadding),
-      child: Text(
-        "Проверьте свои данные",
+      padding: EdgeInsets.only(left: kWidth(kMainPadding).w),
+      child: LocaleText(
+        "check_details",
         style: Theme.of(context).textTheme.labelMedium,
       ),
     );
@@ -135,8 +141,10 @@ class IdentificationPage extends StatelessWidget {
 
   Padding _button(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: kButHorPad),
-      child: MainButton(context,"continue",
+      padding: EdgeInsets.only(left: kWidth(kButHorPad).w),
+      child: MainButton(
+        context,
+        "continue",
         () {
           Get.to(const MakeProposalPage());
         },

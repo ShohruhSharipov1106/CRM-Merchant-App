@@ -1,5 +1,5 @@
-
 String phoneNumVarElement = "";
 List<List> itemList = [];
 List<int> summ = [];
-int summValue = 0;
+int summValue = 5000000;
+String cardToken = "";

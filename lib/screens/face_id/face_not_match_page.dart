@@ -1,4 +1,6 @@
 import 'package:crm_merchant/constants/exports.dart';
+import 'package:crm_merchant/screens/add_proposal/passport_identification_page.dart';
+import 'package:crm_merchant/screens/face_id/camera_face_id_page.dart';
 import 'package:crm_merchant/screens/face_id/camera_passport_id_page.dart';
 
 class FaceNotMatch extends StatelessWidget {
@@ -22,8 +24,8 @@ class FaceNotMatch extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const Center(
-            child: Text(
-              "Не удалось подтвердить жизненость",
+            child: LocaleText(
+              "failed_viability",
               style: TextStyle(
                 fontSize: 20.0,
                 color: kMainColor,
@@ -33,9 +35,9 @@ class FaceNotMatch extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: EdgeInsets.symmetric(
-              vertical: kHeight(54.0).h,
-              horizontal: kWidth(94.0),
+            padding: const EdgeInsets.symmetric(
+              vertical: 27,
+              horizontal: 94,
             ),
             child: SvgPicture.asset(
               "assets/icons/face_not_match.svg",
@@ -43,42 +45,33 @@ class FaceNotMatch extends StatelessWidget {
               width: kWidth(239.0).w,
             ),
           ),
-          Text(
-            """Протрите фронтальную камера смартфона
-
-Убедитесь, что в комнате достаточно 
-светло и на камере отчетливо видно
-Ваше лицо
-
-Держите смартфон на уровне лица, 
-убедитесь, что все лицо помещается 
-в кадре""",
-            style: Theme.of(context).textTheme.labelMedium,
+          LocaleText(
+            "subtitle_take_photo",
+            style: Theme.of(context).textTheme.labelMedium!.copyWith(fontSize: 15.0),
             textAlign: TextAlign.center,
           ),
-          SizedBox(height: kHeight(20.0).h),
-          MainButton(context,
-            "Сделать фото",
-            () => Get.back(),
+          const SizedBox(height: 20.0),
+          MainButton(
+            context,
+            "take_photo",
+            () => Get.off(const CameraFaceIDPage()),
           ),
-          SizedBox(height: kHeight(15.0).h),
-          Text(
-            "Или",
-            style: Theme.of(context).textTheme.labelMedium,
-            textAlign: TextAlign.center,
-          ),
-          SizedBox(height: kHeight(15.0).h),
-          MainButton(context,
-            "Сделать фото паспотра",
+          const SizedBox(height: 15.0),
+          MainButton(
+            context,
+            "take_passport_photo",
             () => Get.to(const CameraPassportIDPage()),
           ),
-          SizedBox(height: kHeight(15.0).h),
-          MainButton(context,
-            "Загрузить фото паспорта",
-            () => Get.to(const CameraPassportIDPage()),
+          const SizedBox(height: 15.0),
+          MainButton(
+            context,
+            "upload_passport_photo",
+            () => Get.to(const PassportIdentificationPage()),
           ),
         ],
       ),
     );
   }
 }
+
+

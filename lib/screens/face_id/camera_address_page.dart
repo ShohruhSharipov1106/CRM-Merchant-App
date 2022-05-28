@@ -1,17 +1,14 @@
 import 'package:crm_merchant/constants/exports.dart';
 import 'package:crm_merchant/screens/face_id/camera_selfie_photo_page.dart';
 
-class CameraRegistrationPage extends StatefulWidget {
-  const CameraRegistrationPage({Key? key}) : super(key: key);
+class CameraAddressPage extends StatefulWidget {
+  const CameraAddressPage({Key? key}) : super(key: key);
 
   @override
-  State<CameraRegistrationPage> createState() => _CameraRegistrationPageState();
+  State<CameraAddressPage> createState() => _CameraAddressPageState();
 }
 
-class _CameraRegistrationPageState extends State<CameraRegistrationPage> {
-  
-
-
+class _CameraAddressPageState extends State<CameraAddressPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,10 +27,12 @@ class _CameraRegistrationPageState extends State<CameraRegistrationPage> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const Center(
+          Center(
             child: Text(
-              "Идетификация по паспорту\nФотография прописки",
-              style: TextStyle(
+              Locales.string(context, "identification_by_passport") +
+                  "\n" +
+                  Locales.string(context, "address_photo"),
+              style: const TextStyle(
                 fontSize: 24.0,
                 color: kWhiteColor,
                 fontWeight: FontWeight.w700,
@@ -42,8 +41,8 @@ class _CameraRegistrationPageState extends State<CameraRegistrationPage> {
             ),
           ),
           SizedBox(height: kHeight(10.0).h),
-          Text(
-            "Сделайте фото с камеры для идентификации по паспорту",
+          LocaleText(
+            "identification_by_passport_subtitle",
             style: Theme.of(context).textTheme.labelMedium!.copyWith(
                   fontSize: 10.0,
                   color: kWhiteColor,
@@ -51,7 +50,7 @@ class _CameraRegistrationPageState extends State<CameraRegistrationPage> {
             textAlign: TextAlign.center,
           ),
           Padding(
-           padding: EdgeInsets.only(
+            padding: EdgeInsets.only(
               top: kHeight(20.0).h,
               bottom: kHeight(50.0).h,
               left: kWidth(kMainPadding).w,
@@ -74,8 +73,9 @@ class _CameraRegistrationPageState extends State<CameraRegistrationPage> {
             ),
           ),
           SizedBox(height: kHeight(20.0).h),
-          MainButton(context,
-            "Сделать фото",
+          MainButton(
+            context,
+            "take_photo",
             () => Get.off(const CameraSelfiePhotoPage()),
           ),
         ],

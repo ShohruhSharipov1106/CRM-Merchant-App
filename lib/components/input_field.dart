@@ -1,6 +1,6 @@
 import 'package:crm_merchant/constants/exports.dart';
-import 'package:intl/intl.dart';
 
+// ignore: must_be_immutable
 class InputField extends StatefulWidget {
   BuildContext kontext;
   TextEditingController kontroller;
@@ -11,7 +11,7 @@ class InputField extends StatefulWidget {
   String hintTitle;
   String maskText;
   Map<String, RegExp> maskFilter;
-  bool capitalText;
+  
   InputField(
     this.kontext,
     this.kontroller,
@@ -22,8 +22,8 @@ class InputField extends StatefulWidget {
     this.hintTitle,
     this.maskText,
     this.maskFilter, {
+   
     Key? key,
-    this.capitalText = false,
   }) : super(key: key);
 
   @override
@@ -56,6 +56,7 @@ class _InputFieldState extends State<InputField> {
             filter: widget.maskFilter,
           )
         ],
+        
         cursorColor: kBlackTextColor,
         textCapitalization: TextCapitalization.sentences,
         style: Theme.of(context).textTheme.titleMedium,

@@ -1,4 +1,4 @@
-import 'package:crm_merchant/components/generate_rand_number.dart';
+import 'dart:math';
 import 'package:crm_merchant/constants/exports.dart';
 import 'package:crm_merchant/screens/home/offer_confirmation_page.dart';
 
@@ -12,70 +12,104 @@ class AddProposalPhoneNumberPage extends StatefulWidget {
 
 class _AddProposalPhoneNumberPageState
     extends State<AddProposalPhoneNumberPage> {
+  late bool _showLoader = false;
+  ConnectivityResult _connectionStatus = ConnectivityResult.none;
+  final Connectivity _connectivity = Connectivity();
+  late StreamSubscription<ConnectivityResult> _connectivitySubscription;
+  int _checkSMS = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    initConnectivity();
+
+    _connectivitySubscription =
+        _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+  }
+
+  @override
+  void dispose() {
+    _connectivitySubscription.cancel();
+    super.dispose();
+  }
+
+  Future<void> initConnectivity() async {
+    late ConnectivityResult result;
+    try {
+      result = await _connectivity.checkConnectivity();
+    } on PlatformException catch (e) {
+      debugPrint("Couldn't check connectivity status error: $e");
+      return;
+    }
+
+    if (!mounted) {
+      return Future.value(null);
+    }
+
+    return _updateConnectionStatus(result);
+  }
+
+  Future<void> _updateConnectionStatus(ConnectivityResult result) async {
+    setState(() {
+      _connectionStatus = result;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: kHeight(20.0).h),
-            StepsField(context, 1),
-            SizedBox(height: kHeight(20.0).h),
-            TitleOfPage("create_zayavka", kWidth(126.0).w),
-            SizedBox(height: kHeight(25.0).h),
-            _titleAnimation(context),
-            SizedBox(height: kHeight(50.0).h),
-            _titleField(context),
-            SizedBox(height: kHeight(15.0).h),
-            _inputField(context),
-            SizedBox(height: kHeight(52.0).h),
-            _button(context),
-            SizedBox(height: kHeight(53.0).h),
-          ],
-        ),
-      ),
-    );
+    return _connectionStatus == ConnectivityResult.mobile ||
+            _connectionStatus == ConnectivityResult.wifi ||
+            _connectionStatus == ConnectivityResult.ethernet
+        ? Scaffold(
+            resizeToAvoidBottomInset: false,
+            body: SafeArea(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: kHeight(20.0).h),
+                  StepsField(context, 1),
+                  SizedBox(height: kHeight(20.0).h),
+                  TitleOfPage("create_zayavka", kWidth(126.0).w),
+                  SizedBox(height: kHeight(25.0).h),
+                  _titleAnimation(context),
+                  SizedBox(height: kHeight(50.0).h),
+                  _titleField(context),
+                  SizedBox(height: kHeight(15.0).h),
+                  _inputField(context),
+                  SizedBox(height: kHeight(52.0).h),
+                  _button(context),
+                  SizedBox(height: kHeight(53.0).h),
+                ],
+              ),
+            ),
+          )
+        : const NoInternetPage();
   }
 
   Padding _button(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(left: kWidth(kButHorPad).w),
+      padding: EdgeInsets.only(
+        left: _showLoader ? kWidth(160.0).w : kWidth(kButHorPad).w,
+      ),
       child: ListenableButton(
         context,
         'continue',
-        () {
+        () async {
           if (context
                   .read<AddProposalProvider>()
                   .addProposalPhoneNumber
                   .text
                   .length ==
               17) {
-                
-            context.read<AddProposalProvider>().getPhoneNumber();
-
-            SendSMSService.sendSmsToClient(
-                context
-                    .read<AddProposalProvider>()
-                    .addProposalPhoneNumber
-                    .text
-                    .removeAllWhitespace
-                    .substring(1),
-                GetRandNum().checkSMS.toString());
-            phoneNumVarElement =
-                context.read<AddProposalProvider>().addProposalPhoneNumber.text;
-            // GetRandNum.increaseRandPlace < 99
-            //     ? GetRandNum.increaseRandPlace += 1
-            //     : GetRandNum.increaseRandPlace = 0;
-            Get.to(const OfferConfirmationPage());
-            context.read<AddProposalProvider>().hasnotError();
-          } else {
-            context.read<AddProposalProvider>().hasError();
+            setState(() {
+              _showLoader = true;
+            });
+            _sendSmsToPhone();
           }
         },
         context.watch<AddProposalProvider>().addProposalPhoneNumber,
         17,
+        showLoader: _showLoader,
       ),
     );
   }
@@ -144,5 +178,29 @@ class _AddProposalPhoneNumberPageState
         ],
       ),
     );
+  }
+
+  Future _sendSmsToPhone() async {
+    _checkSMS = Random().nextInt(8999) + 1000;
+    await SendSMSService.sendSmsToClient(
+      context
+          .read<AddProposalProvider>()
+          .addProposalPhoneNumber
+          .text
+          .removeAllWhitespace
+          .substring(1),
+      _checkSMS.toString(),
+    )
+        .then((value) => {
+              Get.to(OfferConfirmationPage(_checkSMS)),
+              context.read<AddProposalProvider>().hasnotError()
+            })
+        .onError((error, stackTrace) =>
+            {context.read<AddProposalProvider>().hasError()})
+        .whenComplete(() => {
+              setState(() {
+                _showLoader = false;
+              })
+            });
   }
 }

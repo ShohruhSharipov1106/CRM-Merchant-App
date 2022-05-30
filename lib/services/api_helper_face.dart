@@ -4,7 +4,7 @@ import 'package:crm_merchant/constants/exports.dart';
 import 'package:http/http.dart' as http;
 
 class FaceApiData {
-  static const String _url = "crm.creditexpress.uz:8399";
+  static const String _url = "crm.creditexpress.uz:6262";
   static DateTime? _tokenGetDate;
   static String token = "";
   static const String _urlToken = "api/account/token";
@@ -84,8 +84,7 @@ class FaceApiData {
       _password = clientMainData.read('password');
     }
 
-    var param =
-        json.encode({"userName": "app", "password": "AbEIFPbxYSuQqQAn"});
+    var param = json.encode({"userName": _userName, "password": _password});
 
     var response = await http.post(uri,
         headers: await _getHeaders(withToken: false), body: param);

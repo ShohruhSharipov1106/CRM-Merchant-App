@@ -1,7 +1,8 @@
 import 'package:crm_merchant/constants/exports.dart';
 import 'package:crm_merchant/screens/add_proposal/passport_identification_page.dart';
-import 'package:crm_merchant/screens/face_id/camera_face_id_page.dart';
-import 'package:crm_merchant/screens/face_id/camera_passport_id_page.dart';
+import 'package:crm_merchant/screens/camera_id/document_id/camera_passport_id_page.dart';
+import 'package:crm_merchant/screens/camera_id/face_id/camera_face_id_page.dart';
+
 
 class FaceNotMatch extends StatelessWidget {
   const FaceNotMatch({Key? key}) : super(key: key);
@@ -47,7 +48,10 @@ class FaceNotMatch extends StatelessWidget {
           ),
           LocaleText(
             "subtitle_take_photo",
-            style: Theme.of(context).textTheme.labelMedium!.copyWith(fontSize: 15.0),
+            style: Theme.of(context)
+                .textTheme
+                .labelMedium!
+                .copyWith(fontSize: 15.0),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 20.0),
@@ -73,5 +77,3 @@ class FaceNotMatch extends StatelessWidget {
     );
   }
 }
-
-

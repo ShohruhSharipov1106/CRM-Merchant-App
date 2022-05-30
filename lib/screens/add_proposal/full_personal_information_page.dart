@@ -2,7 +2,6 @@ import 'package:crm_merchant/components/custom_button.dart';
 import 'package:crm_merchant/constants/exports.dart';
 import 'package:crm_merchant/screens/add_proposal/identification_page.dart';
 
-
 // ignore: must_be_immutable
 class FullPersonalInformationPage extends StatefulWidget {
   const FullPersonalInformationPage({Key? key}) : super(key: key);
@@ -65,149 +64,143 @@ class _FullPersonalInformationPageState
             body: FutureBuilder(builder: (context, AsyncSnapshot snap) {
               return snap.hasData
                   ? SingleChildScrollView(
-                      child: Form(
-                        key: context
-                            .watch<AddProposalProvider>()
-                            .fullPersonalFormKey,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(height: kHeight(20.0).h),
-                            Padding(
-                              padding:
-                                  EdgeInsets.only(left: kWidth(kInpHorPad).w),
-                              child: LocaleText(
-                                "fill_in_the_details",
-                                style: Theme.of(context).textTheme.labelMedium,
-                              ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: kHeight(20.0).h),
+                          Padding(
+                            padding:
+                                EdgeInsets.only(left: kWidth(kInpHorPad).w),
+                            child: LocaleText(
+                              "fill_in_the_details",
+                              style: Theme.of(context).textTheme.labelMedium,
                             ),
-                            SizedBox(height: kHeight(20.0).h),
-                            _name(context),
-                            _surname(context),
-                            _dadname(context),
-                            _birthday(context),
-                            _seriesNumber(context),
-                            _tin(context),
-                            _pinfl(context),
-                            Padding(
-                              padding:
-                                  EdgeInsets.only(left: kWidth(kInpHorPad).w),
-                              child: LocaleText(
-                                "gender",
-                                style: Theme.of(context).textTheme.labelMedium,
-                              ),
+                          ),
+                          SizedBox(height: kHeight(20.0).h),
+                          _name(context),
+                          _surname(context),
+                          _dadname(context),
+                          _birthday(context),
+                          _seriesNumber(context),
+                          _tin(context),
+                          _pinfl(context),
+                          Padding(
+                            padding:
+                                EdgeInsets.only(left: kWidth(kInpHorPad).w),
+                            child: LocaleText(
+                              "gender",
+                              style: Theme.of(context).textTheme.labelMedium,
                             ),
-                            _genderField(context),
-                            Container(
-                              height: kHeight(50.0).h,
-                              width: kWidth(368.0).w,
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: kWidth(10.0).w),
-                              margin: EdgeInsets.symmetric(
-                                horizontal: kWidth(kInpHorPad).w,
-                                vertical: kHeight(kInpVerPad).h,
-                              ),
-                              child: InkWell(
-                                child: InputDecorator(
-                                  expands: true,
-                                  decoration: InputDecoration(
-                                    labelText: Locales.string(
-                                        context, 'place_of_residence'),
-                                    labelStyle: Theme.of(context)
-                                        .textTheme
-                                        .titleMedium!
-                                        .copyWith(
-                                          fontSize: 12.0,
-                                          color: context
-                                                  .watch<AddProposalProvider>()
-                                                  .isError
-                                              ? kMainColor
-                                              : kBlackTextColor,
-                                        ),
-                                    hintText: "* * * * * * * * * * * * * * *",
-                                    hintStyle: Theme.of(context)
-                                        .textTheme
-                                        .titleMedium!
-                                        .copyWith(
-                                          color:
-                                              kBlackTextColor.withOpacity(0.5),
-                                        ),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                      borderSide: BorderSide(
-                                          width: 1.0,
-                                          color:
-                                              kBlackTextColor.withOpacity(0.5)),
+                          ),
+                          _genderField(context),
+                          Container(
+                            height: kHeight(50.0).h,
+                            width: kWidth(368.0).w,
+                            padding: EdgeInsets.symmetric(
+                                horizontal: kWidth(10.0).w),
+                            margin: EdgeInsets.symmetric(
+                              horizontal: kWidth(kInpHorPad).w,
+                              vertical: kHeight(kInpVerPad).h,
+                            ),
+                            child: InkWell(
+                              child: InputDecorator(
+                                expands: true,
+                                decoration: InputDecoration(
+                                  labelText: Locales.string(
+                                      context, 'place_of_residence'),
+                                  labelStyle: Theme.of(context)
+                                      .textTheme
+                                      .titleMedium!
+                                      .copyWith(
+                                        fontSize: 12.0,
+                                        color: context
+                                                .watch<AddProposalProvider>()
+                                                .isError
+                                            ? kMainColor
+                                            : kBlackTextColor,
+                                      ),
+                                  hintText: "* * * * * * * * * * * * * * *",
+                                  hintStyle: Theme.of(context)
+                                      .textTheme
+                                      .titleMedium!
+                                      .copyWith(
+                                        color: kBlackTextColor.withOpacity(0.5),
+                                      ),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    borderSide: BorderSide(
+                                        width: 1.0,
+                                        color:
+                                            kBlackTextColor.withOpacity(0.5)),
+                                  ),
+                                ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "abshfaeslj",
+                                      // filter: {"*": RegExp(r'[A-Za-zЁёА-я0-9]')},
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium,
                                     ),
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        "abshfaeslj",
-                                        // filter: {"*": RegExp(r'[A-Za-zЁёА-я0-9]')},
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .titleMedium,
+                                    SizedBox(
+                                      height: kHeight(15.0).h,
+                                      width: kWidth(30.0).w,
+                                      child: SvgPicture.asset(
+                                        "assets/icons/down_black.svg",
                                       ),
-                                      SizedBox(
-                                        height: kHeight(15.0).h,
-                                        width: kWidth(30.0).w,
-                                        child: SvgPicture.asset(
-                                          "assets/icons/down_black.svg",
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
                               ),
-
-                              // labelStyle: Theme.of(context)
-                              //     .textTheme
-                              //     .titleMedium!
-                              //     .copyWith(
-                              //       fontSize: 12.0,
-                              //       color:
-                              //           context.watch<AddProposalProvider>().isError
-                              //               ? kMainColor
-                              //               : kBlackTextColor,
-                              //     ),
-
-                              // hintStyle:
-                              //     Theme.of(context).textTheme.titleMedium!.copyWith(
-                              //           color: kBlackTextColor.withOpacity(0.5),
-                              //         ),
-                              // prefixStyle: Theme.of(context).textTheme.titleMedium,
                             ),
-                            SizedBox(height: kHeight(16.0).h),
-                            Padding(
-                              padding:
-                                  EdgeInsets.only(left: kWidth(kInpHorPad).w),
-                              child: LocaleText(
-                                "address_of_residence",
-                                style: Theme.of(context).textTheme.labelMedium,
+
+                            // labelStyle: Theme.of(context)
+                            //     .textTheme
+                            //     .titleMedium!
+                            //     .copyWith(
+                            //       fontSize: 12.0,
+                            //       color:
+                            //           context.watch<AddProposalProvider>().isError
+                            //               ? kMainColor
+                            //               : kBlackTextColor,
+                            //     ),
+
+                            // hintStyle:
+                            //     Theme.of(context).textTheme.titleMedium!.copyWith(
+                            //           color: kBlackTextColor.withOpacity(0.5),
+                            //         ),
+                            // prefixStyle: Theme.of(context).textTheme.titleMedium,
+                          ),
+                          SizedBox(height: kHeight(16.0).h),
+                          Padding(
+                            padding:
+                                EdgeInsets.only(left: kWidth(kInpHorPad).w),
+                            child: LocaleText(
+                              "address_of_residence",
+                              style: Theme.of(context).textTheme.labelMedium,
+                            ),
+                          ),
+                          _addressOfResidenceField(context),
+                          _givenByField(context),
+                          _dateOfGivenField(context),
+                          _validityField(context),
+                          Padding(
+                              padding: EdgeInsets.only(
+                                  left: kWidth(75.0).w,
+                                  bottom: kHeight(50.0).h),
+                              child: MainButton(context, 'continue', () {
+                                // context.read<AddProposalProvider>().getClientDatas();
+                                Get.to(const IdentificationPage());
+                              })
+                              // CustomButton(context, 'continue', () {
+                              //   context.read<AddProposalProvider>().getClientDatas();
+                              //   Get.to(const IdentificationPage());
+                              // }, context.watch<AddProposalProvider>().isAccessButton),
                               ),
-                            ),
-                            _addressOfResidenceField(context),
-                            _givenByField(context),
-                            _dateOfGivenField(context),
-                            _validityField(context),
-                            Padding(
-                                padding: EdgeInsets.only(
-                                    left: kWidth(75.0).w,
-                                    bottom: kHeight(50.0).h),
-                                child: MainButton(context, 'continue', () {
-                                  // context.read<AddProposalProvider>().getClientDatas();
-                                  Get.to(const IdentificationPage());
-                                })
-                                // CustomButton(context, 'continue', () {
-                                //   context.read<AddProposalProvider>().getClientDatas();
-                                //   Get.to(const IdentificationPage());
-                                // }, context.watch<AddProposalProvider>().isAccessButton),
-                                ),
-                          ],
-                        ),
+                        ],
                       ),
                       physics: const BouncingScrollPhysics(),
                     )
@@ -475,7 +468,7 @@ class _FullPersonalInformationPageState
   CalendarInputField _dateOfGivenField(BuildContext context) {
     return CalendarInputField(
       context,
-      context.watch<AddProposalProvider>().dateOfGiven,
+      context.watch<AddProposalProvider>().givenDate,
       'date_of_given',
       '',
       "**  **  ****",
@@ -488,7 +481,7 @@ class _FullPersonalInformationPageState
   CalendarInputField _validityField(BuildContext context) {
     return CalendarInputField(
       context,
-      context.watch<AddProposalProvider>().validity,
+      context.watch<AddProposalProvider>().expiryDate,
       'validity',
       '',
       "**  **  ****",

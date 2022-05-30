@@ -1,6 +1,5 @@
 import 'package:crm_merchant/constants/exports.dart';
-import 'package:crm_merchant/screens/face_id/camera_face_id_page.dart';
-
+import 'package:crm_merchant/screens/camera_id/face_id/camera_face_id_page.dart';
 class AddProposalPassportPage extends StatelessWidget {
   const AddProposalPassportPage({Key? key}) : super(key: key);
 

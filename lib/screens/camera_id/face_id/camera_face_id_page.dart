@@ -1,13 +1,13 @@
 import 'dart:io';
 import 'dart:ui' as ui;
 import 'dart:typed_data';
-import 'package:crm_merchant/providers/save_models_provider.dart';
 import 'package:crm_merchant/screens/add_proposal/identification_page.dart';
+import 'package:crm_merchant/screens/camera_id/face_id/camera_view.dart';
+import 'package:crm_merchant/screens/camera_id/face_id/face_not_match_page.dart';
+import 'package:crm_merchant/screens/camera_id/painters/face_detector_painter.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image/image.dart' as imglib;
 import 'package:crm_merchant/constants/exports.dart';
-import 'package:crm_merchant/screens/face_id/camera_view.dart';
-import 'package:crm_merchant/screens/face_id/face_not_match_page.dart';
-import 'package:crm_merchant/screens/face_id/painters/face_detector_painter.dart';
 import 'package:crm_merchant/services/face_id_service.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:merge_images/merge_images.dart';
@@ -183,7 +183,24 @@ class _CameraFaceIDPageState extends State<CameraFaceIDPage> {
                         return header + base64String;
                       }
 
-                      _base64 = uint8ListTob64(bytes!);
+                      Future<Uint8List> uint8ListComporessList(
+                          Uint8List list) async {
+                        var result =
+                            await FlutterImageCompress.compressWithList(
+                          list,
+                          minHeight: 1080,
+                          minWidth: 720,
+                          quality: 72,
+                          rotate: 270,
+                          format: CompressFormat.png,
+                        );
+                        return result;
+                      }
+
+                      Uint8List compressUint8List =
+                          await uint8ListComporessList(bytes!);
+
+                      _base64 = uint8ListTob64(compressUint8List);
                       await _sendFaceApi(_base64!).whenComplete(
                         () => setState(() {
                           _showloader = false;
@@ -244,13 +261,11 @@ class _CameraFaceIDPageState extends State<CameraFaceIDPage> {
         () {
           if (faces.length == 1) {
             hasFace = true;
-            _showloader = true;
             if ((inputImage.bytes?.length ?? 0) > 0 && takePicture == false) {
               imageDatas = inputImage.bytes;
             }
           } else {
             hasFace = false;
-            _showloader = true;
           }
         },
       );
@@ -287,8 +302,6 @@ class _CameraFaceIDPageState extends State<CameraFaceIDPage> {
         }
       }
       imglib.PngEncoder pngEncoder = imglib.PngEncoder(level: 0, filter: 0);
-
-      // imglib.PngEncoder pngEncoder = imglib.PngEncoder(level: 0, filter: 0);
       List<int> png = pngEncoder.encodeImage(img);
 
       return Image.memory(Uint8List.fromList(png));
@@ -317,20 +330,22 @@ class _CameraFaceIDPageState extends State<CameraFaceIDPage> {
           .read<AddProposalProvider>()
           .serialNumberOfpassport
           .text
+          .removeAllWhitespace
           .toUpperCase(),
-      "${context.read<AddProposalProvider>().dateOfBirth.text.replaceAll('/', '-')}T08:15:27.858Z",
+      "${context.read<AddProposalProvider>().dateOfBirth.text.substring(6)}-${context.read<AddProposalProvider>().dateOfBirth.text.substring(3, 5)}-${context.read<AddProposalProvider>().dateOfBirth.text.substring(0, 2)}T00:00:00.000Z",
       _base64,
       deviceId!,
-    ).catchError((onError) {
-      Get.to(const FaceNotMatch());
-    }).then((value) => {
-          if (value.resultCode == 1 || value.resultCode == 200)
-            {
-              context.read<SaveModelsProvider>().faceIdModel = value,
-              Get.to(const IdentificationPage())
-            }
-          else
-            {Get.to(const FaceNotMatch())}
-        });
+    )
+        .then((value) => {
+              print(value),
+              if (value.resultCode == 1 || value.resultCode == 200)
+                {
+                  context.read<AddProposalProvider>().getClientDatas(value),
+                  Get.to(const IdentificationPage())
+                }
+              else
+                {Get.to(const FaceNotMatch())}
+            })
+        .onError((error, stackTrace) => {Get.to(const FaceNotMatch())});
   }
 }

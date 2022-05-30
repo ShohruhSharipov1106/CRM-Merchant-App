@@ -4,7 +4,7 @@ import 'package:crm_merchant/services/api_helper_face.dart';
 import '../constants/exports.dart';
 
 class FaceIdService {
-  static const String _apiSend = "app/personInfo";
+  static const String _apiSend = "MyId/personInfo";
 
   static Future<FaceIdModel> sendFacetoId(
     String passData,

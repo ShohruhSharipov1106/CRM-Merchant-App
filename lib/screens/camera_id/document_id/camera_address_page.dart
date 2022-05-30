@@ -1,5 +1,5 @@
 import 'package:crm_merchant/constants/exports.dart';
-import 'package:crm_merchant/screens/face_id/camera_selfie_photo_page.dart';
+import 'package:crm_merchant/screens/camera_id/document_id/camera_selfie_photo_page.dart';
 
 class CameraAddressPage extends StatefulWidget {
   const CameraAddressPage({Key? key}) : super(key: key);

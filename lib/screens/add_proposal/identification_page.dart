@@ -7,12 +7,12 @@ class IdentificationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: kHeight(20.0).h),
+            const SizedBox(height: 20),
             Container(
               height: kHeight(32.0).h,
               padding: EdgeInsets.only(left: kWidth(kMainPadding).w),
@@ -33,15 +33,15 @@ class IdentificationPage extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(height: kHeight(10.0).h),
+            const SizedBox(height: 10),
             _titleAnimation(),
-            SizedBox(height: kHeight(11.0).h),
+            const SizedBox(height: 11),
             _titleField(context),
-            SizedBox(height: kHeight(20.0).h),
+            const SizedBox(height: 20),
             _mainBody(context),
-            SizedBox(height: kHeight(270.0).h),
+            const Spacer(),
             _button(context),
-            SizedBox(height: kHeight(20.0).h),
+            const SizedBox(height: 20),
           ],
         ),
       ),
@@ -50,15 +50,12 @@ class IdentificationPage extends StatelessWidget {
 
   Container _mainBody(BuildContext context) {
     return Container(
-      height: kHeight(280.0).h,
-      width: kWidth(316.0).w,
-      margin: EdgeInsets.symmetric(horizontal: kWidth(56.0).w),
+      margin: const EdgeInsets.symmetric(horizontal: 56),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30.0),
         color: kWhiteColor,
       ),
-      padding: EdgeInsets.symmetric(
-          horizontal: kWidth(kMainPadding).w, vertical: kHeight(5.0).h),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -66,12 +63,12 @@ class IdentificationPage extends StatelessWidget {
           _pieceOfInformations(
             context,
             "full_name",
-            "${context.watch<AddProposalProvider>().name.text.removeAllWhitespace} ${context.watch<AddProposalProvider>().surname.text.removeAllWhitespace}\n${context.watch<AddProposalProvider>().dadname.text.removeAllWhitespace}",
+            "${context.watch<AddProposalProvider>().fullName}",
           ),
           _pieceOfInformations(
             context,
             "place_of_residence",
-            " г.Ташкент,Садыка Азимова,1/28",
+            "${context.watch<AddProposalProvider>().permanentAddress}",
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -90,14 +87,14 @@ class IdentificationPage extends StatelessWidget {
               _pieceOfInformations(
                 context,
                 "birthday",
-                context.watch<AddProposalProvider>().dateOfBirth.text,
+                context.watch<AddProposalProvider>().birthDate!,
               ),
             ],
           ),
           _pieceOfInformations(
             context,
             "phoneNumber",
-            context.watch<AddProposalProvider>().addProposalPhoneNumber.text,
+            context.watch<AddProposalProvider>().addProposalPhoneNumber.text.removeAllWhitespace,
           ),
         ],
       ),

@@ -1,6 +1,7 @@
 import 'package:crm_merchant/constants/exports.dart';
 import 'package:crm_merchant/providers/save_models_provider.dart';
-import 'package:crm_merchant/screens/face_id/camera_face_id_page.dart';
+import 'package:crm_merchant/screens/camera_id/face_id/camera_face_id_page.dart';
+import 'package:crm_merchant/screens/camera_id/face_id/face_not_match_page.dart';
 List<CameraDescription> cameras = [];
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -8,7 +9,6 @@ Future<void> main() async {
   clientMainData.initStorage;
   await GetStorage.init();
   cameras = await availableCameras();
-  // final firstCamera = cameras.last;
   runApp(
     MultiProvider(
       providers: [
@@ -75,7 +75,7 @@ class MyApp extends StatelessWidget {
                 backgroundColor: Colors.transparent,
               ),
             ),
-            home: const CameraFaceIDPage(),
+            home: const FaceNotMatch(),
           );
         });
       },

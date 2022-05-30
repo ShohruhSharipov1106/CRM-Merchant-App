@@ -1,5 +1,5 @@
 import 'package:crm_merchant/constants/exports.dart';
-import 'package:crm_merchant/screens/face_id/camera_address_page.dart';
+import 'package:crm_merchant/screens/camera_id/document_id/camera_address_page.dart';
 
 class CameraPassportIDPage extends StatefulWidget {
   const CameraPassportIDPage({Key? key}) : super(key: key);
@@ -9,6 +9,19 @@ class CameraPassportIDPage extends StatefulWidget {
 }
 
 class _CameraPassportIDPageState extends State<CameraPassportIDPage> {
+  // final TextRecognizer _textRecognizer = TextRecognizer();
+  bool _canProcess = true;
+  bool _isBusy = false;
+  CustomPaint? _customPaint;
+  String? _text;
+
+  @override
+  void dispose() async {
+    _canProcess = false;
+    // _textRecognizer.close();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -82,37 +95,63 @@ class _CameraPassportIDPageState extends State<CameraPassportIDPage> {
       ),
     );
   }
+
+  // Future<void> processImage(InputImage inputTextImage) async {
+  //   if (!_canProcess) return;
+  //   if (_isBusy) return;
+  //   _isBusy = true;
+  //   setState(() {
+  //     _text = '';
+  //   });
+  //   final recognizedText = await _textRecognizer.processImage(inputTextImage);
+  //   if (inputTextImage.inputImageData?.size != null &&
+  //       inputTextImage.inputImageData?.imageRotation != null) {
+  //     final painter = TextRecognizerPainter(
+  //         recognizedText,
+  //         inputTextImage.inputImageData!.size,
+  //         inputTextImage.inputImageData!.imageRotation);
+  //     _customPaint = CustomPaint(painter: painter);
+  //   } else {
+  //     _text = 'Recognized text:\n\n${recognizedText.text}';
+  //     // TODO: set _customPaint to draw boundingRect on top of image
+  //     _customPaint = null;
+  //   }
+  //   _isBusy = false;
+  //   if (mounted) {
+  //     setState(() {});
+  //   }
+  // }
 }
 
-class BorderPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    double sh = size.height; // for convenient shortage
-    double sw = size.width; // for convenient shortage
-    double cornerSide = sh * 0.1; // desirable value for corners side
+// class BorderPainter extends CustomPainter {
+//   @override
+//   void paint(Canvas canvas, Size size) {
+//     double sh = size.height; // for convenient shortage
+//     double sw = size.width; // for convenient shortage
+//     double cornerSide = sh * 0.1; // desirable value for corners side
 
-    Paint paint = Paint()
-      ..color = kWhiteColor
-      ..strokeWidth = 2.0
-      ..style = PaintingStyle.stroke
-      ..strokeCap = StrokeCap.round;
+//     Paint paint = Paint()
+//       ..color = kWhiteColor
+//       ..strokeWidth = 2.0
+//       ..style = PaintingStyle.stroke
+//       ..strokeCap = StrokeCap.round;
 
-    Path path = Path()
-      ..moveTo(cornerSide, 0)
-      ..quadraticBezierTo(0, 0, 0, cornerSide)
-      ..moveTo(0, sh - cornerSide)
-      ..quadraticBezierTo(0, sh, cornerSide, sh)
-      ..moveTo(sw - cornerSide, sh)
-      ..quadraticBezierTo(sw, sh, sw, sh - cornerSide)
-      ..moveTo(sw, cornerSide)
-      ..quadraticBezierTo(sw, 0, sw - cornerSide, 0);
+//     Path path = Path()
+//       ..moveTo(cornerSide, 0)
+//       ..quadraticBezierTo(0, 0, 0, cornerSide)
+//       ..moveTo(0, sh - cornerSide)
+//       ..quadraticBezierTo(0, sh, cornerSide, sh)
+//       ..moveTo(sw - cornerSide, sh)
+//       ..quadraticBezierTo(sw, sh, sw, sh - cornerSide)
+//       ..moveTo(sw, cornerSide)
+//       ..quadraticBezierTo(sw, 0, sw - cornerSide, 0);
 
-    canvas.drawPath(path, paint);
-  }
+//     canvas.drawPath(path, paint);
+//   }
 
-  @override
-  bool shouldRepaint(BorderPainter oldDelegate) => false;
+//   @override
+//   bool shouldRepaint(BorderPainter oldDelegate) => false;
 
-  @override
-  bool shouldRebuildSemantics(BorderPainter oldDelegate) => false;
-}
+//   @override
+//   bool shouldRebuildSemantics(BorderPainter oldDelegate) => false;
+// }

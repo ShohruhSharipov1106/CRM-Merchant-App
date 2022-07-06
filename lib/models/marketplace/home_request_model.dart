@@ -17,25 +17,22 @@ class HomeRequestModel {
   });
 
   int? totalCount;
-  List<RequestModel>? value;
+  List<Value>? value;
 
   factory HomeRequestModel.fromJson(Map<String, dynamic> json) =>
       HomeRequestModel(
         totalCount: json["totalCount"],
-        value: json["totalCount"] == 0
-            ? []
-            : List<RequestModel>.from(
-                json["value"].map((x) => RequestModel.fromJson(x))),
+        value: List<Value>.from(json["value"].map((x) => Value.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
         "totalCount": totalCount,
-        "value": List<RequestModel>.from(value!.map((x) => x.toJson())),
+        "value": List<dynamic>.from(value!.map((x) => x.toJson())),
       };
 }
 
-class RequestModel {
-  RequestModel({
+class Value {
+  Value({
     this.id,
     this.number,
     this.amount,
@@ -67,33 +64,33 @@ class RequestModel {
 
   String? id;
   int? number;
-  int? amount;
-  int? prepay;
+  num? amount;
+  num? prepay;
   String? companyId;
   String? company;
   String? partnerId;
   String? partner;
-  String? docId;
-  String? doc;
-  int? docBalance;
+  dynamic docId;
+  dynamic doc;
+  num? docBalance;
   bool? docIsActive;
   String? contractorId;
   String? contractor;
   DateTime? requestTime;
-  DateTime? responseTime;
+  dynamic responseTime;
   String? state;
   String? validPhase;
-  String? reasonForCancellationId;
+  dynamic reasonForCancellationId;
   String? reasonForCancellation;
   bool? hasCredit;
-  String? requestNotes;
-  String? responseNotes;
+  dynamic requestNotes;
+  dynamic responseNotes;
   String? createdBy;
   DateTime? createdTime;
   String? modifiedBy;
   DateTime? modifiedTime;
 
-  factory RequestModel.fromJson(Map<String, dynamic> json) => RequestModel(
+  factory Value.fromJson(Map<String, dynamic> json) => Value(
         id: json["id"],
         number: json["number"],
         amount: json["amount"],
@@ -109,7 +106,7 @@ class RequestModel {
         contractorId: json["contractorId"],
         contractor: json["contractor"],
         requestTime: DateTime.parse(json["requestTime"]),
-        responseTime: DateTime.parse(json["responseTime"]),
+        responseTime: json["responseTime"],
         state: json["state"],
         validPhase: json["validPhase"],
         reasonForCancellationId: json["reasonForCancellationId"],
@@ -139,7 +136,7 @@ class RequestModel {
         "contractorId": contractorId,
         "contractor": contractor,
         "requestTime": requestTime!.toIso8601String(),
-        "responseTime": responseTime!.toIso8601String(),
+        "responseTime": responseTime,
         "state": state,
         "validPhase": validPhase,
         "reasonForCancellationId": reasonForCancellationId,

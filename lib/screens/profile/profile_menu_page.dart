@@ -1,5 +1,5 @@
 import 'package:crm_merchant/constants/exports.dart';
-import 'package:crm_merchant/screens/auth/sign_up_page.dart';
+import 'package:crm_merchant/screens/splash/splash_screen_page.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
 class ProfileMenuPage extends StatefulWidget {
@@ -33,20 +33,26 @@ class _ProfileMenuPageState extends State<ProfileMenuPage> {
                 [kWhiteColor]
               ],
               inactiveBgColor: kMainColor,
-              initialLabelIndex: chosenLanguage == const Locale('ru') ? 0 : 1,
+              initialLabelIndex: clientMainData.read("locale") == 'ru' ? 0 : 1,
               totalSwitches: 2,
               changeOnTap: false,
               labels: const ['RU', 'UZ'],
+              animate: true,
+              animationDuration: 100,
               customTextStyles: [Theme.of(context).textTheme.labelMedium],
               radiusStyle: true,
               onToggle: (index) {
+                index == 0
+                    ? clientMainData.write("locale", 'ru')
+                    : clientMainData.write("locale", 'uz');
+
                 Get.updateLocale(index == 0
                     ? chosenLanguage = const Locale('ru')
                     : chosenLanguage = const Locale('uz'));
               },
             ),
             SizedBox(height: kHeight(28.0).h),
-            InkWell(
+            GestureDetector(
               child: Row(
                 children: [
                   SvgPicture.asset(
@@ -74,8 +80,11 @@ class _ProfileMenuPageState extends State<ProfileMenuPage> {
   }
 
   _logOut() {
-    Get.offAll(const SignUpPage());
+    Get.offAll(const SplashScreenPage());
     clientMainData.remove("username");
     clientMainData.remove("password");
+    clientMainData.remove("locale");
+    context.read<SignUpProvider>().nameController.clear();
+    context.read<SignUpProvider>().phoneController.clear();
   }
 }

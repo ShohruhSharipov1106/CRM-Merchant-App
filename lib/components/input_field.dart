@@ -11,7 +11,7 @@ class InputField extends StatefulWidget {
   String hintTitle;
   String maskText;
   Map<String, RegExp> maskFilter;
-  
+
   InputField(
     this.kontext,
     this.kontroller,
@@ -22,7 +22,6 @@ class InputField extends StatefulWidget {
     this.hintTitle,
     this.maskText,
     this.maskFilter, {
-   
     Key? key,
   }) : super(key: key);
 
@@ -37,10 +36,9 @@ class _InputFieldState extends State<InputField> {
   Widget build(BuildContext context) {
     return Container(
       height: kHeight(50.0).h,
-      width: kWidth(368.0).w,
-      margin: EdgeInsets.symmetric(
-        horizontal: kWidth(kInpHorPad).w,
-        vertical: kHeight(kInpVerPad).h,
+      margin: const EdgeInsets.symmetric(
+        horizontal: kInpHorPad,
+        vertical: kInpVerPad,
       ),
       child: TextFormField(
         controller: widget.kontroller,
@@ -56,7 +54,11 @@ class _InputFieldState extends State<InputField> {
             filter: widget.maskFilter,
           )
         ],
-        
+        onChanged: (v) {
+          widget.maxLen == widget.kontroller.text.length
+              ? _focusNode.unfocus()
+              : _focusNode.requestFocus();
+        },
         cursorColor: kBlackTextColor,
         textCapitalization: TextCapitalization.sentences,
         style: Theme.of(context).textTheme.titleMedium,
@@ -94,15 +96,15 @@ class _InputFieldState extends State<InputField> {
           ),
           counterText: "",
           hintText: widget.hintTitle,
-          hintStyle: Theme.of(context).textTheme.titleMedium!.copyWith(
-                color: kBlackTextColor.withOpacity(0.5),
-              ),
+          hintStyle: TextStyle(
+            color: kBlackTextColor.withOpacity(0.5),
+            fontSize: 20.0,
+            fontWeight: FontWeight.w400,
+          ),
           prefixIconConstraints:
               BoxConstraints(minWidth: 0, minHeight: kHeight(0).h),
           isDense: false,
-          contentPadding: EdgeInsets.only(
-            top: kHeight(15.0).h,
-          ),
+          contentPadding: const EdgeInsets.only(top: 14),
           prefixStyle: Theme.of(context).textTheme.titleMedium,
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),

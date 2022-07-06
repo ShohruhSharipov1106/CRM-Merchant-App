@@ -8,7 +8,7 @@ class SendSMSService {
       "message": "Tasdiqlash kodi: $message\nКод подтверждения: $message",
       "ownerId": const Uuid().v1()
     };
-    var result = await ApiData().getData(_apiSend, HttpMethod.post, param);
+    var result = await ApiData().getData(_apiSend, HttpMethod.post, param, true);
     if (result.isSuccess) {
       return result.result!;
     } else {

@@ -65,68 +65,61 @@ class _SignUpPageState extends State<SignUpPage> {
               child: ZoomIn(
                 duration: const Duration(seconds: 1),
                 child: SafeArea(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: kHeight(72.0).h),
-                      Padding(
-                        padding: EdgeInsets.only(left: kWidth(140.0).w),
-                        child: Text(
+                  child: Center(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SizedBox(height: kHeight(72.0).h),
+                        Text(
                           Locales.string(context, "salom"),
                           style: Theme.of(context).textTheme.titleLarge,
                         ),
-                      ),
-                      SizedBox(height: kHeight(80.0).h),
-                      Padding(
-                        padding: EdgeInsets.only(left: kWidth(kMainPadding).w),
-                        child: LocaleText(
-                          context.watch<AddProposalProvider>().isError
-                              ? "error_enter_data"
-                              : "enter_data",
-                          style: Theme.of(context)
-                              .textTheme
-                              .labelMedium!
-                              .copyWith(
-                                  color: context
-                                          .watch<AddProposalProvider>()
-                                          .isError
-                                      ? kMainColor
-                                      : kBlackTextColor),
+                        SizedBox(height: kHeight(80.0).h),
+                        Padding(
+                          padding: EdgeInsets.only(right: kWidth(165).w),
+                          child: LocaleText(
+                            context.watch<AddProposalProvider>().isError
+                                ? "error_enter_data"
+                                : "enter_data",
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelMedium!
+                                .copyWith(
+                                    color: context
+                                            .watch<AddProposalProvider>()
+                                            .isError
+                                        ? kMainColor
+                                        : kBlackTextColor),
+                          ),
                         ),
-                      ),
-                      SizedBox(height: kHeight(10.5).h),
-                      InputField(
-                        context,
-                        contexPro.nameController,
-                        "enter_username",
-                        "error_username",
-                        TextInputType.name,
-                        30,
-                        "* * * * * * * * * * * * * * *",
-                        "##############################",
-                        {"#": RegExp(r'[A-Za-zЁёА-я]')},
-                      ),
-                      InputField(
-                        context,
-                        contexPro.phoneController,
-                        "enter_password",
-                        "error_password",
-                        TextInputType.visiblePassword,
-                        50,
-                        "* * * * * * * * * * * * * * *",
-                        "***************",
-                        {
-                          "*": RegExp(
-                              r'[a-zA-ZЁёА-я0-9\?\!\@\#\$\%\^\&\*\(\)\_\+]')
-                        },
-                      ),
-                      SizedBox(height: kHeight(80.0).h),
-                      Padding(
-                        padding: EdgeInsets.only(
-                            left: _showLoader
-                                ? kWidth(160.0).w
-                                : kWidth(kButHorPad).w),
-                        child: ValueListenableBuilder<TextEditingValue>(
+                        SizedBox(height: kHeight(10.5).h),
+                        InputField(
+                          context,
+                          contexPro.nameController,
+                          "enter_username",
+                          "error_username",
+                          TextInputType.name,
+                          30,
+                          "* * * * * * * * * * * * * * *",
+                          "##############################",
+                          {"#": RegExp(r'[A-Za-zЁёА-я]')},
+                        ),
+                        InputField(
+                          context,
+                          contexPro.phoneController,
+                          "enter_password",
+                          "error_password",
+                          TextInputType.visiblePassword,
+                          50,
+                          "* * * * * * * * * * * * * * *",
+                          "***************",
+                          {
+                            "*": RegExp(
+                                r'[a-zA-ZЁёА-я0-9\?\!\@\#\$\%\^\&\*\(\)\_\+]')
+                          },
+                        ),
+                        SizedBox(height: kHeight(60.0).h),
+                        ValueListenableBuilder<TextEditingValue>(
                           valueListenable:
                               context.watch<SignUpProvider>().nameController,
                           builder: (context, v, child) {
@@ -170,8 +163,8 @@ class _SignUpPageState extends State<SignUpPage> {
                             );
                           },
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),

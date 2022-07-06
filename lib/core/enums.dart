@@ -20,3 +20,18 @@ extension RequestStateExt on RequestState {
     }
   }
 }
+
+enum RegionState { region, city, street }
+
+extension RegionStateExt on RegionState {
+  String get name {
+    switch (this) {
+      case RegionState.region:
+        return "Region";
+      case RegionState.city:
+        return "City";
+      case RegionState.street:
+        return "Street";
+    }
+  }
+}

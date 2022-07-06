@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:crm_merchant/constants/exports.dart';
 import 'package:http/http.dart' as http;
 
-
 class ApiData {
   static const String _url = "crm.creditexpress.uz:6262";
   static const String imageApi = "https://$_url";
@@ -13,12 +12,12 @@ class ApiData {
 
   int getTokenRequest = 0;
 
-  Future<ResponseData<String>> getData(
-      String api, HttpMethod method, Map<String, Object>? params) async {
+  Future<ResponseData<String>> getData(String api, HttpMethod method,
+      Map<String, Object>? params, bool hasBody) async {
     if (method == HttpMethod.get) {
       return await _getMethod(api, params);
     } else {
-      return await _postMethod(api, params);
+      return await _postMethod(api, params, hasBody);
     }
   }
 
@@ -46,14 +45,15 @@ class ApiData {
   }
 
   Future<ResponseData<String>> _postMethod(
-      String api, Map<String, Object>? param) async {
-    var url = _getUri(api, param);
-
+      String api, Map<String, Object>? param, bool hasBody) async {
+    var url = _getUri(api, hasBody ? null : param);
+    print("post url: $url");
+    print("req send: url-> ${url.toString()}, param: $param");
     String? request;
-    if (param != null) {
+    if (param != null && hasBody) {
       request = jsonEncode(param);
     }
-    print("req send: url-> ${url.toString()}, param: $param");
+
     var res = await http.post(url, headers: await _getHeaders(), body: request);
     print("res recieved(${res.statusCode}): ${res.body}");
     if (res.statusCode == 200) {
@@ -64,7 +64,7 @@ class ApiData {
       }
       getTokenRequest = getTokenRequest + 1;
       await getToken();
-      return await _postMethod(api, param);
+      return await _postMethod(api, param, hasBody);
     } else {
       return ResponseData(false, "", res.body);
     }

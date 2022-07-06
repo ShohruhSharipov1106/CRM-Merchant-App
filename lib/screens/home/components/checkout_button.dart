@@ -5,8 +5,10 @@ class CheckOutButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("ozgartir");
     return Visibility(
-      visible: context.watch<HomePageProvider>().isVisible,
+      // visible: context.watch<HomePageProvider>().isVisible,
+
       child: ElevatedButton(
         child: LocaleText(
           "checkout",

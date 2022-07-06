@@ -1,9 +1,12 @@
 import 'package:crm_merchant/constants/exports.dart';
-import 'package:crm_merchant/screens/profile/profile_menu_page.dart';
+import 'package:crm_merchant/core/static_datas.dart';
+import 'package:crm_merchant/screens/profile/profile_drawer_page.dart';
+import 'package:crm_merchant/screens/tariff/tariff_helper.dart';
 import 'package:crm_merchant/services/create_request_service.dart';
+import 'package:crm_merchant/services/upload_file_service.dart';
 import 'package:intl/intl.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
-
+import '../../models/marketplace/create_req_card_model.dart';
 import '../../models/marketplace/get_my_tariffs_model.dart';
 
 // ignore: must_be_immutable
@@ -22,6 +25,7 @@ class _TariffConfirmationPageState extends State<TariffConfirmationPage> {
   final TextEditingController _prepaymentController = TextEditingController();
 
   int _currentCount = 0;
+  bool _showLoader = false;
   ConnectivityResult _connectionStatus = ConnectivityResult.none;
   final Connectivity _connectivity = Connectivity();
   late StreamSubscription<ConnectivityResult> _connectivitySubscription;
@@ -30,6 +34,8 @@ class _TariffConfirmationPageState extends State<TariffConfirmationPage> {
   void initState() {
     super.initState();
     initConnectivity();
+    _prepaymentController.text =
+        (summValue * (selectedTariffsModel?.prepayPercent ?? 0)).toString();
 
     _connectivitySubscription =
         _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
@@ -63,19 +69,13 @@ class _TariffConfirmationPageState extends State<TariffConfirmationPage> {
     });
   }
 
-  int scheduleMonth = DateTime.now().month;
-  int scheduleDay = DateTime.now().day;
-  int scheduleYear = DateTime.now().year;
-
   @override
   Widget build(BuildContext context) {
-    print(scheduleMonth);
-    print(scheduleDay);
-    print(scheduleYear);
+    DateTime _graficDate = DateTime.now();
+
     context.read<AddProposalProvider>().prePaymentSum =
         context.read<AddProposalProvider>().prePaymentSum ??
             summValue * widget.tarifDatas.prepayPercent!;
-
     return _connectionStatus == ConnectivityResult.mobile ||
             _connectionStatus == ConnectivityResult.wifi ||
             _connectionStatus == ConnectivityResult.ethernet
@@ -84,30 +84,38 @@ class _TariffConfirmationPageState extends State<TariffConfirmationPage> {
             body: SafeArea(
               child: SingleChildScrollView(
                 physics: const BouncingScrollPhysics(),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: kHeight(20.0).h),
-                    StepsField(context, 8),
-                    SizedBox(height: kHeight(20.0).h),
-                    TitleOfPage("confirmation", kWidth(150.0).w),
-                    SizedBox(height: kHeight(50.0).h),
-                    SizedBox(
-                      height: kHeight(207.0).h,
-                      child: Row(
+                child: Center(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(height: kHeight(20.0).h),
+                      StepsField(context, 8),
+                      SizedBox(height: kHeight(20.0).h),
+                      TitleOfPage("confirmation"),
+                      SizedBox(height: kHeight(50.0).h),
+                      Row(
                         children: [
                           Container(
                             height: kHeight(206.79).h,
                             width: kWidth(172.0).w,
-                            margin: EdgeInsets.only(
-                              left: kWidth(42.0).w,
-                              right: kWidth(30.0).w,
+                            child: faceUint8List != null
+                                ? ClipRRect(
+                                    borderRadius: BorderRadius.circular(30.0),
+                                    child: Image.memory(
+                                      faceUint8List!,
+                                      fit: BoxFit.fill,
+                                    ),
+                                  )
+                                : null,
+                            margin: const EdgeInsets.only(
+                              left: 40,
+                              right: 25,
                             ),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(30.0),
                               color: kWhiteColor,
                               border: Border.all(
-                                color: kBlackTextColor,
+                                color: kWhiteColor,
                                 width: 1.0,
                               ),
                               image: const DecorationImage(
@@ -127,69 +135,85 @@ class _TariffConfirmationPageState extends State<TariffConfirmationPage> {
                                 _informationTitle(context, "passportNumber"),
                                 TextSpan(
                                     text:
-                                        "${context.watch<AddProposalProvider>().serialNumberOfpassport.text.removeAllWhitespace}\n\n"),
+                                        "${context.watch<AddProposalProvider>().serialNumberOfpassport.text.removeAllWhitespace.toUpperCase()}\n\n"),
                                 _informationTitle(context, "birthday"),
                                 TextSpan(
                                     text:
                                         "${context.watch<AddProposalProvider>().dateOfBirth.text.replaceAll('/', '.')}\n\n"),
-                                _informationTitle(context, "first_prepayment"),
                                 WidgetSpan(
-                                  child: Padding(
-                                    padding: EdgeInsets.only(
-                                      top: kHeight(5.0).h,
-                                    ),
-                                    child: SizedBox(
-                                      height: kHeight(35.0).h,
-                                      width: kWidth(160.0).w,
-                                      child: TextField(
-                                        keyboardType: TextInputType.number,
-                                        controller: _prepaymentController,
-                                        onSubmitted: (v) => context
-                                            .read<AddProposalProvider>()
-                                            .changePrePay(
-                                              _prepaymentController,
-                                              summValue *
-                                                  widget.tarifDatas
-                                                      .prepayPercent!,
-                                              summValue,
-                                            ),
-                                        style: Theme.of(context)
+                                  child: SizedBox(
+                                    height: kHeight(60.0).h,
+                                    width: kWidth(160.0).w,
+                                    child: TextField(
+                                      keyboardType: TextInputType.number,
+                                      controller: _prepaymentController,
+                                      onSubmitted: (v) {
+                                        num _prepayed = num.parse(
+                                            _prepaymentController.text);
+                                        if (_prepayed >=
+                                            summValue *
+                                                (selectedTariffsModel
+                                                        ?.prepayPercent ??
+                                                    0)) {
+                                          setState(() {
+                                            calculateDaily(_prepayed);
+                                          });
+                                        }
+                                      },
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headlineLarge!
+                                          .copyWith(
+                                            fontSize: 18.0,
+                                            color: num.parse(
+                                                        _prepaymentController
+                                                            .text) >=
+                                                    summValue *
+                                                        (selectedTariffsModel
+                                                                ?.prepayPercent ??
+                                                            0)
+                                                ? kBlackTextColor
+                                                : kMainColor,
+                                          ),
+                                      decoration: InputDecoration(
+                                        label: AutoSizeText(
+                                          Locales.string(
+                                              context, "first_prepayment"),
+                                        ),
+                                        floatingLabelBehavior:
+                                            FloatingLabelBehavior.always,
+                                        labelStyle: Theme.of(context)
+                                            .textTheme
+                                            .labelMedium!
+                                            .copyWith(fontSize: 10.0),
+                                        hintText: NumberFormat(
+                                                '###,###,###,###,###,###')
+                                            .format(summValue == 0
+                                                ? 0
+                                                : (context
+                                                    .read<AddProposalProvider>()
+                                                    .prePaymentSum))
+                                            .replaceAll(",", " "),
+                                        hintStyle: Theme.of(context)
                                             .textTheme
                                             .headlineLarge!
                                             .copyWith(fontSize: 18.0),
-                                        decoration: InputDecoration(
-                                          hintText: NumberFormat(
-                                                  '###,###,###,###,###,###')
-                                              .format(summValue == 0
-                                                  ? 0
-                                                  : (context
-                                                      .read<
-                                                          AddProposalProvider>()
-                                                      .prePaymentSum))
-                                              .replaceAll(",", " "),
-                                          hintStyle: Theme.of(context)
-                                              .textTheme
-                                              .headlineLarge!
-                                              .copyWith(fontSize: 18.0),
-                                          suffixIconConstraints: BoxConstraints(
-                                            maxHeight: kHeight(50.0).h,
-                                            maxWidth: kWidth(50.0).w,
-                                          ),
-                                          contentPadding:
-                                              const EdgeInsets.symmetric(
-                                                  horizontal: 0, vertical: 0),
-                                          border: InputBorder.none,
-                                          isDense: true,
-                                          suffixIcon: Material(
-                                            elevation: 5.0,
-                                            shape: const CircleBorder(),
-                                            color: kYellowButtonColor,
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(5.0),
-                                              child: SvgPicture.asset(
-                                                "assets/icons/pen-icon.svg",
-                                              ),
+                                        suffixIconConstraints: BoxConstraints(
+                                          maxHeight: kHeight(50.0).h,
+                                          maxWidth: kWidth(50.0).w,
+                                        ),
+                                        contentPadding:
+                                            const EdgeInsets.symmetric(
+                                                horizontal: 0, vertical: 0),
+                                        border: InputBorder.none,
+                                        suffixIcon: Material(
+                                          elevation: 5.0,
+                                          shape: const CircleBorder(),
+                                          color: kYellowButtonColor,
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(5.0),
+                                            child: SvgPicture.asset(
+                                              "assets/icons/pen-icon.svg",
                                             ),
                                           ),
                                         ),
@@ -202,12 +226,12 @@ class _TariffConfirmationPageState extends State<TariffConfirmationPage> {
                           ),
                         ],
                       ),
-                    ),
-                    SizedBox(height: kHeight(20.0).h),
-                    _graficPayment(context),
-                    SizedBox(height: kHeight(47.0).h),
-                    _showModalBottom(),
-                  ],
+                      SizedBox(height: kHeight(20.0).h),
+                      _graficPayment(context, _graficDate),
+                      SizedBox(height: kHeight(47.0).h),
+                      _showModalBottom(),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -215,17 +239,14 @@ class _TariffConfirmationPageState extends State<TariffConfirmationPage> {
         : const NoInternetPage();
   }
 
-  Padding _graficPayment(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 44),
-      child: SizedBox(
-        width: kWidth(340.0).w,
-        child: Column(
-          children: [
-            _graficPaymentTitleBody(context),
-            _graficPaymentMainBody(context),
-          ],
-        ),
+  SizedBox _graficPayment(BuildContext context, DateTime _graficDate) {
+    return SizedBox(
+      width: kWidth(340.0).w,
+      child: Column(
+        children: [
+          _graficPaymentTitleBody(context),
+          _graficPaymentMainBody(context, _graficDate),
+        ],
       ),
     );
   }
@@ -250,7 +271,7 @@ class _TariffConfirmationPageState extends State<TariffConfirmationPage> {
     );
   }
 
-  Container _graficPaymentMainBody(BuildContext context) {
+  Container _graficPaymentMainBody(BuildContext context, DateTime _graficDate) {
     return Container(
       width: kWidth(340.0).w,
       height: kHeight(225.0).h,
@@ -268,41 +289,12 @@ class _TariffConfirmationPageState extends State<TariffConfirmationPage> {
             height: kHeight(178.0).h,
             child: ScrollablePositionedList.builder(
               itemScrollController: _itemScrollController,
-              itemBuilder: (_, __) => _paymentSchedule(
-                  context,
-                  __ + 1,
-                  scheduleDay > 27
-                      ? ((scheduleMonth == 1 ||
-                                  scheduleMonth == 3 ||
-                                  scheduleMonth == 5 ||
-                                  scheduleMonth == 7 ||
-                                  scheduleMonth == 8 ||
-                                  scheduleMonth == 10 ||
-                                  scheduleMonth == 12) &&
-                              scheduleDay == 31)
-                          ? 31
-                          : ((scheduleDay == 30 || scheduleDay == 31) &&
-                                  (scheduleMonth == 4 ||
-                                      scheduleMonth == 6 ||
-                                      scheduleMonth == 9 ||
-                                      scheduleMonth == 11))
-                              ? 30
-                              : (scheduleMonth == 2 &&
-                                      ((scheduleYear % 4 == 0 ||
-                                              scheduleYear % 100 == 0) &&
-                                          scheduleYear % 400 != 0) &&
-                                      (scheduleDay == 30 ||
-                                          scheduleDay == 31 ||
-                                          scheduleDay == 29))
-                                  ? 29
-                                  : (scheduleMonth == 2 &&
-                                          (scheduleDay == 30 ||
-                                              scheduleDay == 31 ||
-                                              scheduleDay == 29 ||
-                                              scheduleDay == 28)
-                                      ? 28
-                                      : scheduleDay)
-                      : scheduleDay),
+              itemBuilder: (BuildContext _, int index) {
+                DateTime currentDate = addMonths(_graficDate, index);
+                DateTime nextDate = addMonths(_graficDate, index + 1);
+                int days = (nextDate.difference(currentDate)).inDays;
+                return _paymentSchedule(context, index + 1, nextDate, days);
+              },
               itemCount: widget.tarifDatas.monthsCount!,
               physics: _currentCount < widget.tarifDatas.monthsCount! - 5
                   ? const BouncingScrollPhysics()
@@ -339,118 +331,155 @@ class _TariffConfirmationPageState extends State<TariffConfirmationPage> {
     );
   }
 
-  Padding _showModalBottom() {
-    return Padding(
-      padding: EdgeInsets.only(left: kWidth(kButHorPad).w),
-      child: MainButton(
-        context,
-        "confirm",
-        () {
-          if (_prepaymentController.text.toString() == ' ' ||
-              _prepaymentController.text.isEmpty) {
-            _prepaymentController.text = NumberFormat('###,###,###,###,###,###')
-                .format(summValue * widget.tarifDatas.markup!)
-                .replaceAll(",", " ");
-            _scaffoldKey.currentState!.showBottomSheet(
-              (context) => Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: kWidth(40.0).w,
-                  vertical: kHeight(30.0).h,
-                ),
-                height: kHeight(382.0).h,
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(30.0),
-                  ),
-                  color: kWhiteColor,
-                ),
-                child: Column(
-                  children: [
-                    LocaleText(
-                      "success_proposal",
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleMedium!
-                          .copyWith(fontSize: 24.0),
-                    ),
-                    SizedBox(height: kHeight(10.0).h),
-                    LocaleText(
-                      "send_sms_proposal",
-                      style: Theme.of(context).textTheme.labelMedium,
-                    ),
-                    SizedBox(height: kHeight(20.0).h),
-                    MainButton(
-                      context,
-                      "complete",
-                      () {
-                        CreateRequestService.postProductsToApi(context);
-                        Get.offAll(const ProfileMenuPage());
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            );
-          } else if (int.parse(_prepaymentController.text.removeAllWhitespace) <
-              (summValue * widget.tarifDatas.markup!) * 0.1) {
-          } else {
-            _scaffoldKey.currentState!.showBottomSheet(
-              (context) => Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: kWidth(40.0).w,
-                  vertical: kHeight(30.0).h,
-                ),
-                height: kHeight(382.0).h,
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(30.0),
-                  ),
-                  color: kWhiteColor,
-                ),
-                child: Column(
-                  children: [
-                    LocaleText(
-                      "success_proposal",
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleMedium!
-                          .copyWith(fontSize: 24.0),
-                    ),
-                    SizedBox(height: kHeight(10.0).h),
-                    LocaleText(
-                      "send_sms_proposal",
-                      style: Theme.of(context).textTheme.labelMedium,
-                    ),
-                    SizedBox(height: kHeight(20.0).h),
-                    MainButton(
-                      context,
-                      "complete",
-                      () {
-                        Get.offAll(const ProfileMenuPage());
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            );
-          }
-        },
-      ),
+  MainButton _showModalBottom() {
+    dynamic ownerId;
+    return MainButton(
+      context,
+      "confirm",
+      () {
+        setState(() {
+          _showLoader = true;
+        });
+        for (var i = 0; i < StaticData.cards.length; i++) {
+          createReqCards.add(
+            CreateReqCardModel(
+              contractorId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+              holderName: StaticData.cards[i].holderName,
+              number: StaticData.cards[i].number,
+              phone: StaticData.cards[i].phone,
+              ps: StaticData.cards[i].holderName,
+              token: StaticData.cards[i].cardToken,
+              validity: DateTime(
+                  2000 + int.parse(StaticData.cards[i].expire!.substring(3, 5)),
+                  int.parse(StaticData.cards[i].expire!.substring(0, 2)),
+                  1),
+            ),
+          );
+        }
+
+        setState(() {
+          _showLoader = true;
+        });
+        var ctxRead = context.read<AddProposalProvider>();
+        CreateRequestService.postDatasToApi(
+          ctxRead.partnerId!,
+          ctxRead.name.text,
+          ctxRead.surname.text,
+          ctxRead.dadname.text,
+          ctxRead.gender,
+          ctxRead.nationality!,
+          ctxRead.pinfl.text,
+          ctxRead.tin.text,
+          ctxRead.passData!.substring(0, 2),
+          ctxRead.passData!.substring(2),
+          ctxRead.issuedDateDatetime,
+          ctxRead.expiryDateDatetime,
+          ctxRead.givenBy.text,
+          ctxRead.birthDayDateTime,
+          ctxRead.permanentAddress!,
+          ctxRead.temporaryAddress!,
+          ctxRead.addProposalPhoneNumber.text.removeAllWhitespace.substring(1),
+        )
+            .then(
+              (value) => {
+                ownerId = value,
+                if (_prepaymentController.text.toString() != ' ' ||
+                    _prepaymentController.text.isNotEmpty)
+                  {
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (context) => Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: kWidth(40.0).w,
+                          vertical: kHeight(30.0).h,
+                        ),
+                        height: kHeight(382.0).h,
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: kBlackTextColor.withOpacity(0.5),
+                              spreadRadius: 5,
+                              blurRadius: 20,
+                              offset: const Offset(0, 3),
+                            ),
+                          ],
+                          borderRadius: const BorderRadius.vertical(
+                            top: Radius.circular(30.0),
+                          ),
+                          color: kWhiteColor,
+                        ),
+                        child: Column(
+                          children: [
+                            LocaleText(
+                              "success_proposal",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium!
+                                  .copyWith(fontSize: 24.0),
+                            ),
+                            SizedBox(height: kHeight(10.0).h),
+                            LocaleText(
+                              "send_sms_proposal",
+                              style: Theme.of(context).textTheme.labelMedium,
+                            ),
+                            SizedBox(height: kHeight(20.0).h),
+                            MainButton(
+                              context,
+                              "complete",
+                              faceUint8List != null
+                                  ? () async {
+                                      await UploadFileService.uploadFile(
+                                              ownerId, 1, faceBase64!)
+                                          .then((value) => {
+                                                Get.to(
+                                                    const ProfileDrawerPage()),
+                                                setState(() {
+                                                  _showLoader = false;
+                                                })
+                                              });
+                                    }
+                                  : () async {
+                                      await UploadFileService.uploadFile(
+                                          ownerId, 1, pasportBase64!);
+                                      await UploadFileService.uploadFile(
+                                          ownerId, 2, propiskiBase64!);
+                                      await UploadFileService.uploadFile(
+                                          ownerId, 3, selfieBase64!);
+                                      Get.back();
+                                      setState(() {
+                                        _showLoader = false;
+                                      });
+                                    },
+                              showLoader: _showLoader,
+                            ),
+                          ],
+                        ),
+                      ),
+                      barrierColor: Colors.transparent,
+                      isDismissible: false,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(30.0),
+                        ),
+                      ),
+                    )
+                  }
+              },
+            )
+            .onError((error, stackTrace) =>
+                {context.read<AddProposalProvider>().hasError()})
+            .whenComplete(() => setState(() {
+                  _showLoader = false;
+                }));
+      },
+      showLoader: _showLoader,
     );
   }
 
   SizedBox _paymentSchedule(
-    BuildContext context,
-    int month,
-    int dayNumb,
-  ) {
-    if (scheduleMonth == 12) {
-      scheduleMonth = 1;
-      scheduleYear = scheduleYear + 1;
-    } else {
-      scheduleMonth = scheduleMonth + 1;
-    }
-
+      BuildContext context, int index, DateTime date, int days) {
+    final DateFormat formatter = DateFormat('dd.MM.yyyy');
+    final String formatted = formatter.format(date);
     return SizedBox(
       height: kHeight(31.0).h,
       child: Row(
@@ -459,34 +488,33 @@ class _TariffConfirmationPageState extends State<TariffConfirmationPage> {
         children: [
           SizedBox(width: kWidth(12.0).w),
           Text(
-            month.toString(),
+            index.toString(),
             style: TextStyle(
               color: kBlackTextColor.withOpacity(0.5),
               fontSize: 18.0,
               fontWeight: FontWeight.w700,
             ),
           ),
-          SizedBox(width: kWidth(17.0).w),
+          const Spacer(flex: 1),
           Text(
-            "${dayNumb < 10 ? "0$dayNumb" : dayNumb}.${scheduleMonth - 1 < 10 ? (scheduleMonth == 1 ? "0$scheduleMonth" : "0${scheduleMonth - 1}") : (scheduleMonth == 12 ? scheduleMonth : scheduleMonth - 1)}.$scheduleYear",
+            formatted,
             style: Theme.of(context).textTheme.labelMedium,
           ),
-          SizedBox(width: kWidth(72.0).w),
-          _prepaymentShow(context),
+          const Spacer(flex: 3),
+          _prepaymentShow(context, days),
+          const Spacer(flex: 1),
         ],
       ),
     );
   }
 
-  Text _prepaymentShow(BuildContext context) {
+  Text _prepaymentShow(BuildContext context, int days) {
     return Text(
-      NumberFormat('###,###,###,###,###,###')
-          .format(summValue == 0
-              ? 0
-              : ((summValue -
-                      context.watch<AddProposalProvider>().prePaymentSum!) *
-                  widget.tarifDatas.markup!))
-          .replaceAll(",", " "),
+      dailyAmount * days < 0
+          ? "0"
+          : NumberFormat('###,###,###,###,###,###')
+              .format(dailyAmount * days)
+              .replaceAll(",", " "),
       style: Theme.of(context).textTheme.labelMedium,
     );
   }

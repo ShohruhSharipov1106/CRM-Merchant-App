@@ -12,29 +12,35 @@ class SelectLangPage extends StatefulWidget {
 class _SelectLangPageState extends State<SelectLangPage> {
   @override
   Widget build(BuildContext context) {
+    clientMainData.hasData("locale")
+        ? null
+        : clientMainData.write("locale", "uz");
     return Scaffold(
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: kWidth(50.0).w),
+      body: Center(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(height: kHeight(100.0).h),
-            TitleOfPage("choose_language", 0),
+            TitleOfPage("choose_language"),
             SizedBox(height: kHeight(60.0).h),
             SvgPicture.asset("assets/icons/language.svg"),
             SizedBox(height: kHeight(55.0).h),
             Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 _langButton(context, "Русский",
-                    chosenLanguage == const Locale('ru'), 'ru'),
+                    clientMainData.read("locale") == 'ru', 'ru'),
                 SizedBox(width: kWidth(20.0).w),
                 _langButton(context, "O'zbek",
-                    chosenLanguage == const Locale('uz'), 'uz'),
+                    clientMainData.read("locale") == 'uz', 'uz'),
               ],
             ),
             SizedBox(height: kHeight(100.0).h),
             MainButton(context, "continue", () {
+              clientMainData.hasData('locale')
+                  ? Get.updateLocale(Locale(clientMainData.read("locale")))
+                  : Get.updateLocale(const Locale('uz'));
+
               Get.off(const SignUpPage());
             }),
           ],
@@ -63,7 +69,7 @@ class _SelectLangPageState extends State<SelectLangPage> {
         setState(() {});
         chosenLanguage = Locale(lang);
         Get.updateLocale(chosenLanguage);
-        clientMainData.writeInMemory('locale', lang);
+        clientMainData.write('locale', lang);
       },
     );
   }

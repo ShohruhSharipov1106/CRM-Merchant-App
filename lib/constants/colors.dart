@@ -12,3 +12,5 @@ const Color kGreyLabelColor = Color(0xffBFBFBF);
 const Color kUnSelectedStepColor = Color(0xffEBEBEB);
 const Color kErrorAnimationColor = Color(0xffE6E6E6);
 const Color kUnselectedLangColor = Color(0xffC4C4C4);
+const Color kGreenButtonColor = Color(0xff5DBF74);
+const Color kDividerColor = Color(0xff959697);

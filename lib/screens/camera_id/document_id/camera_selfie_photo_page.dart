@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:crm_merchant/constants/exports.dart';
 import 'package:crm_merchant/screens/add_proposal/full_personal_information_page.dart';
 
@@ -9,80 +11,194 @@ class CameraSelfiePhotoPage extends StatefulWidget {
 }
 
 class _CameraSelfiePhotoPageState extends State<CameraSelfiePhotoPage> {
+  File? _scannedImage;
+
+  openImageScanner(BuildContext context) async {
+    var image = await DocumentScannerFlutter.launch(
+      context,
+      labelsConfig: {
+        ScannerLabelsConfig.ANDROID_NEXT_BUTTON_LABEL:
+            Locales.string(context, 'next'),
+        ScannerLabelsConfig.ANDROID_OK_LABEL: "OK",
+        ScannerLabelsConfig.PICKER_CAMERA_LABEL:
+            Locales.string(context, 'camera'),
+        ScannerLabelsConfig.PICKER_GALLERY_LABEL:
+            Locales.string(context, 'galery'),
+        ScannerLabelsConfig.ANDROID_BMW_LABEL:
+            Locales.string(context, 'b_and_m'),
+        ScannerLabelsConfig.ANDROID_ORIGINAL_LABEL:
+            Locales.string(context, 'orginal'),
+        ScannerLabelsConfig.ANDROID_ROTATE_LEFT_LABEL:
+            Locales.string(context, 'left'),
+        ScannerLabelsConfig.ANDROID_ROTATE_RIGHT_LABEL:
+            Locales.string(context, 'right'),
+        ScannerLabelsConfig.ANDROID_SAVE_BUTTON_LABEL:
+            Locales.string(context, "save"),
+        ScannerLabelsConfig.ANDROID_LOADING_MESSAGE:
+            Locales.string(context, 'loading'),
+        ScannerLabelsConfig.ANDROID_SCANNING_MESSAGE:
+            Locales.string(context, 'scanning'),
+      },
+    );
+    if (image != null) {
+      _scannedImage = image;
+      setState(() {});
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kBlackTextColor,
-      appBar: AppBar(
-        leading: IconButton(
-          onPressed: () => Get.back(),
-          icon: const Icon(
-            Icons.arrow_back_ios,
-            color: kWhiteColor,
-            size: 24.0,
-          ),
-        ),
-      ),
+      resizeToAvoidBottomInset: false,
+      appBar: _appBar(),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Center(
-            child: Text(
-              Locales.string(context, "identification_by_passport") +
-                  "\n" +
-                  Locales.string(context, "selfie_photo"),
-              style: const TextStyle(
-                fontSize: 24.0,
-                color: kWhiteColor,
-                fontWeight: FontWeight.w700,
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ),
+          _title(context),
           const SizedBox(height: 10),
-          LocaleText(
-            "identification_by_passport_subtitle",
-            style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                  fontSize: 10.0,
-                  color: kWhiteColor,
-                ),
-            textAlign: TextAlign.center,
-          ),
+          _subtitle(context),
           Padding(
             padding: const EdgeInsets.only(
               top: 20,
-              bottom: 50,
               left: 16,
               right: 16,
             ),
             child: CustomPaint(
-              foregroundPainter: BorderPainter(),
-              child: Container(
-                height: kHeight(450.0).h,
-                width: kWidth(368.0).w,
-                margin: const EdgeInsets.symmetric(
-                  vertical: 15,
-                  horizontal: 14,
-                ),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(30.0),
-                  color: kWhiteColor,
-                ),
+              foregroundPainter: BorderPainter(_scannedImage),
+              child: Stack(
+                children: [
+                  Container(
+                    height: kHeight(515.0).h,
+                    width: kWidth(368.0).w,
+                    margin: EdgeInsets.symmetric(
+                      vertical: kHeight(15.0).h,
+                      horizontal: kWidth(14.0).w,
+                    ),
+                    decoration: BoxDecoration(
+                      color: kWhiteColor,
+                      borderRadius: BorderRadius.circular(30.0),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(30.0),
+                      child: _scannedImage != null
+                          ? Image.file(
+                              _scannedImage!,
+                              fit: BoxFit.cover,
+                            )
+                          : null,
+                    ),
+                  ),
+                  Positioned(
+                    child: Visibility(
+                      visible: _scannedImage != null ? true : false,
+                      child: IconButton(
+                        onPressed: () async {
+                          setState(() {
+                            _scannedImage!.delete();
+                            _scannedImage = null;
+                          });
+                        },
+                        icon: const Icon(
+                          Icons.delete,
+                          color: kWhiteColor,
+                          size: 24.0,
+                        ),
+                      ),
+                    ),
+                    right: kWidth(30.0).w,
+                    top: kHeight(25.0).h,
+                  ),
+                ],
               ),
             ),
           ),
-          const SizedBox(height: 10),
-          MainButton(context, "take_photo", () {
-            Get.to(const FullPersonalInformationPage());
-          }),
+          const Spacer(),
+          MainButton(
+            context,
+            _scannedImage != null ? "next" : "take_photo",
+            _scannedImage != null
+                ? () async {
+                    Uint8List _bytes = _scannedImage!.readAsBytesSync();
+                    String uint8ListTob64(Uint8List uint8list) {
+                      String base64String = base64Encode(uint8list);
+                      String header = "data:image/png;base64,";
+                      return header + base64String;
+                    }
+
+                    Future<Uint8List> uint8ListComporessList(
+                        Uint8List list) async {
+                      var result = await FlutterImageCompress.compressWithList(
+                        list,
+                        minHeight: 1080,
+                        minWidth: 720,
+                        quality: 72,
+                        rotate: 270,
+                        format: CompressFormat.png,
+                      );
+                      return result;
+                    }
+
+                    Uint8List compressUint8List =
+                        await uint8ListComporessList(_bytes);
+
+                    selfieBase64 = uint8ListTob64(compressUint8List);
+
+                    Get.to(const FullPersonalInformationPage());
+                  }
+                : () {
+                    openImageScanner(context);
+                  },
+          ),
+          const Spacer(),
         ],
+      ),
+    );
+  }
+
+  LocaleText _subtitle(BuildContext context) {
+    return LocaleText(
+      "identification_by_passport_subtitle",
+      style: Theme.of(context).textTheme.labelMedium!.copyWith(
+            fontSize: 10.0,
+            color: kWhiteColor,
+          ),
+      textAlign: TextAlign.center,
+    );
+  }
+
+  AutoSizeText _title(BuildContext context) {
+    return AutoSizeText(
+      Locales.string(context, "identification_by_passport") +
+          "\n" +
+          Locales.string(context, "selfie_photo"),
+      style: TextStyle(
+        fontSize: clientMainData.read("locale") == 'uz' ? 20.0 : 24.0,
+        color: kWhiteColor,
+        fontWeight: FontWeight.w700,
+      ),
+      textAlign: TextAlign.center,
+    );
+  }
+
+  AppBar _appBar() {
+    return AppBar(
+      leading: IconButton(
+        onPressed: () => Get.back(),
+        icon: const Icon(
+          Icons.arrow_back_ios,
+          color: kWhiteColor,
+          size: 24.0,
+        ),
       ),
     );
   }
 }
 
 class BorderPainter extends CustomPainter {
+  final File? _scannedImage;
+  BorderPainter(this._scannedImage);
   @override
   void paint(Canvas canvas, Size size) {
     double sh = size.height; // for convenient shortage
@@ -90,7 +206,7 @@ class BorderPainter extends CustomPainter {
     double cornerSide = sh * 0.1; // desirable value for corners side
 
     Paint paint = Paint()
-      ..color = kWhiteColor
+      ..color = _scannedImage != null ? kGreenLabelColor : kWhiteColor
       ..strokeWidth = 2.0
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round;

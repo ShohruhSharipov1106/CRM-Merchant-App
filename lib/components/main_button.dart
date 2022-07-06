@@ -1,4 +1,5 @@
 import 'package:crm_merchant/constants/exports.dart';
+import 'package:flutter/cupertino.dart';
 
 // ignore: must_be_immutable
 class MainButton extends StatelessWidget {
@@ -18,13 +19,7 @@ class MainButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return showLoader
-        ? Center(
-            child: Lottie.asset(
-              "assets/images/lottie/loading_indicator.json",
-              height: kHeight(90.0).h,
-              width: kWidth(90.0).w,
-            ),
-          )
+        ? Center(child: CupertinoActivityIndicator(radius: kHeight(16.0).h))
         : ElevatedButton(
             child: Text(
               Locales.string(kontext, buttonTitle),

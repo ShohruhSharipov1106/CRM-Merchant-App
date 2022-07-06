@@ -20,8 +20,14 @@ class AddProposalProvider extends ChangeNotifier {
   TextEditingController givenBy = TextEditingController();
   TextEditingController givenDate = TextEditingController();
   TextEditingController expiryDate = TextEditingController();
-  String? birthDate;
+  TextEditingController homeNumber = TextEditingController();
+  TextEditingController apartmentNumber = TextEditingController();
+  TextEditingController orientr = TextEditingController();
+  TextEditingController temporaryhomeNumber = TextEditingController();
+  TextEditingController temporaryapartmentNumber = TextEditingController();
+  TextEditingController temporaryorientr = TextEditingController();
   DateTime? birthDayDateTime;
+  String? partnerId;
   String? nationality;
   String? fullName;
   String? passData;
@@ -46,23 +52,21 @@ class AddProposalProvider extends ChangeNotifier {
   String? temporaryAddressRegionId;
   String? temporaryAddressCountryId;
   String? temporaryAddressDistrictId;
-  String? temporaryAddressDateFrom;
-  String? temporaryAddressDateTill;
   String? responseId;
-  String gender = 'Male';
+  String gender = "Male";
 
-  String male = 'Male';
-  String female = 'Female';
+  String male = "Male";
+  String female = "Female";
   String addressOfResidence = 'place_of_residence';
   String placeOfResidencevalue = 'place_of_residence';
   String another = 'another';
   bool isAccessButton = false;
   double? prePaymentSum;
   bool isError = false;
+  bool isApartment = false;
+  bool temporaryisApartment = false;
 
-
-
-
+  int itemListLength = 0;
 
   late Map clientDatas = {
     "marketplaceId": "string",
@@ -90,18 +94,8 @@ class AddProposalProvider extends ChangeNotifier {
     },
 
     // EDIT IT
-    
-    "cards": [
-      {
-        "contractorId": StaticData.cards[0].id,
-        "number": StaticData.cards[0].number,
-        "validity": StaticData.cards[0].expire,
-        "token": StaticData.cards[0].cardToken,
-        "holderName": StaticData.cards[0].holderName,
-        "phone": StaticData.cards[0].phone,
-        "ps": StaticData.cards[0].ps
-      }
-    ],
+
+    "cards": List<dynamic>.from(StaticData.cards.map((x) => x.toJson())),
     "products": [
       {
         "productCode": "string",
@@ -114,10 +108,6 @@ class AddProposalProvider extends ChangeNotifier {
       }
     ]
   };
-
-
-
-
 
   changePrePay(
       TextEditingController _kontroller, double prePercentSum, int sumItems) {
@@ -133,7 +123,7 @@ class AddProposalProvider extends ChangeNotifier {
   }
 
   changeGender() {
-    gender == 'male' ? gender = female : gender = male;
+    gender == "Male" ? gender = female : gender = male;
     notifyListeners();
   }
 
@@ -164,7 +154,6 @@ class AddProposalProvider extends ChangeNotifier {
     pinfl.text = value.profile!.commonData!.pinfl.toString();
     gender =
         value.profile!.commonData!.gender.toString() == "1" ? male : female;
-    birthDate = value.profile!.commonData!.birthDate.toString();
     birthDayDateTime = value.profile!.commonData!.birthDateValue!;
     nationality = value.profile!.commonData!.nationality.toString();
     passData = value.profile!.docData!.passData.toString();
@@ -210,10 +199,6 @@ class AddProposalProvider extends ChangeNotifier {
         value.profile!.address!.temporaryRegistration!.countryId.toString();
     temporaryAddressDistrictId =
         value.profile!.address!.temporaryRegistration!.districtId.toString();
-    temporaryAddressDateFrom =
-        value.profile!.address!.temporaryRegistration!.dateFrom.toString();
-    temporaryAddressDateTill =
-        value.profile!.address!.temporaryRegistration!.dateTill.toString();
     notifyListeners();
   }
 
@@ -222,5 +207,15 @@ class AddProposalProvider extends ChangeNotifier {
       isAccessButton = isAccess;
       notifyListeners();
     }
+  }
+
+  changeApartmentValue() {
+    isApartment = !isApartment;
+    notifyListeners();
+  }
+
+  changeTemporaryApartmentValue() {
+    temporaryisApartment = !temporaryisApartment;
+    notifyListeners();
   }
 }

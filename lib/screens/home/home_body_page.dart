@@ -44,7 +44,7 @@ class _HomeBodyPageState extends State<HomeBodyPage>
         leading: Row(
           children: [
             const Spacer(),
-            InkWell(
+            GestureDetector(
               onTap: () {
                 widget.drawerController.toggle!();
               },

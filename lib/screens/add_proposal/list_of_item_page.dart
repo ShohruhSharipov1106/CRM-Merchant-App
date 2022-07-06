@@ -15,9 +15,14 @@ class _ListOfItemState extends State<ListOfItem> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          onPressed: () => setState(() {
-            Get.back();
-          }),
+          onPressed: () => Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: ((context) => const MakeProposalPage()),
+            ),
+          ).then(
+            (value) => setState(() {}),
+          ),
           icon: const Icon(
             Icons.arrow_back_ios,
             color: kBlackTextColor,
@@ -63,17 +68,21 @@ class _ListOfItemState extends State<ListOfItem> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  "${itemList[index][0]}\n${itemList[index][1]} сум",
+                                  "${itemList[index].productName}\n${itemList[index].price} сум",
                                   style:
                                       Theme.of(context).textTheme.labelMedium,
                                 ),
-                                InkWell(
+                                GestureDetector(
                                   child: SvgPicture.asset(
                                       "assets/icons/delete-icon.svg"),
                                   onTap: () {
-                                    setState(() {});
                                     summ.removeAt(index);
-                                    itemList.remove(itemList[index]);
+                                    itemList.removeAt(index);
+
+                                    context
+                                        .read<AddProposalProvider>()
+                                        .itemListLength = itemList.length;
+                                    setState(() {});
                                   },
                                 ),
                               ],
@@ -98,7 +107,7 @@ class _ListOfItemState extends State<ListOfItem> {
                       style: Theme.of(context).textTheme.headlineLarge,
                     ),
                     Text(
-                      " - ${NumberFormat('###,###,###,###,###,###').format(summValue).replaceAll(",", " ")}  ",
+                      " - ${NumberFormat('###,###,###,###,###,###').format(summ.reduce((value, element) => value + element)).replaceAll(",", " ")}  ",
                       style: Theme.of(context).textTheme.headlineLarge,
                     ),
                     LocaleText(

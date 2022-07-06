@@ -11,8 +11,8 @@ class IndexOfPage extends StatelessWidget {
         vertical: kHeight(10.0).h,
       ),
       child: SizedBox(
-        height: kHeight(14.0),
-        width: kWidth(390.0),
+        height: kHeight(14.0).h,
+        width: kWidth(390.0).w,
       ),
     );
   }

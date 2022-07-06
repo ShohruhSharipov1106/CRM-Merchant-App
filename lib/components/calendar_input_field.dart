@@ -35,28 +35,30 @@ class _CustomInputFieldState extends State<CalendarInputField> {
     return Container(
       height: kHeight(50.0).h,
       width: kWidth(368.0).w,
-      margin: EdgeInsets.symmetric(
-        horizontal: kWidth(kInpHorPad).w,
-        vertical: kHeight(kInpVerPad).h,
+      margin: const EdgeInsets.symmetric(
+        horizontal: kInpHorPad,
+        vertical: kInpVerPad,
       ),
-      child: TextFormField(
-        controller: widget.kontroller,
-        keyboardType: TextInputType.datetime,
-        textAlign: TextAlign.start,
-        focusNode: _focusNode,
-        maxLength: 12,
-        maxLengthEnforcement: MaxLengthEnforcement.enforced,
-        textAlignVertical: TextAlignVertical.top,
-        inputFormatters: [
-          MaskTextInputFormatter(
-            mask: widget.maskText,
-            filter: {"*": RegExp(r'[0-9]')},
-          )
-        ],
-        cursorColor: kBlackTextColor,
-        textCapitalization: TextCapitalization.sentences,
-        style: Theme.of(context).textTheme.titleMedium,
-        decoration: InputDecoration(
+      child: GestureDetector(
+        child: TextFormField(
+          controller: widget.kontroller,
+          keyboardType: TextInputType.datetime,
+          textAlign: TextAlign.start,
+          focusNode: _focusNode,
+          enabled: false,
+          maxLength: 12,
+          maxLengthEnforcement: MaxLengthEnforcement.enforced,
+          textAlignVertical: TextAlignVertical.top,
+          inputFormatters: [
+            MaskTextInputFormatter(
+              mask: widget.maskText,
+              filter: {"*": RegExp(r'[0-9]')},
+            )
+          ],
+          cursorColor: kBlackTextColor,
+          textCapitalization: TextCapitalization.sentences,
+          style: Theme.of(context).textTheme.titleMedium,
+          decoration: InputDecoration(
             floatingLabelBehavior: FloatingLabelBehavior.always,
             labelText: widget.kontext.watch<AddProposalProvider>().isError
                 ? Locales.string(context, widget.errorTitle)
@@ -118,31 +120,36 @@ class _CustomInputFieldState extends State<CalendarInputField> {
               padding: EdgeInsets.only(
                 right: kWidth(10.0).w,
               ),
-              child: InkWell(
-                child: SvgPicture.asset(
-                  "assets/icons/calendar.svg",
-                ),
-                onTap: () {
-                  DatePicker.showDatePicker(
-                    context,
-                    minDateTime: widget.minDate,
-                    initialDateTime: DateTime.now(),
-                    maxDateTime: widget.maxDate,
-                    dateFormat: widget.dateFormat,
-                    onConfirm: (v, i) {
-                      String formats = DateFormat(widget.dateFormat).format(
-                        DateTime(v.year, v.month, v.day),
-                      );
-                      widget.kontroller.text = formats;
-                    },
-                  );
-                },
+              child: SvgPicture.asset(
+                "assets/icons/calendar.svg",
               ),
             ),
             suffixIconConstraints: BoxConstraints(
               maxHeight: kHeight(25.0).h,
               maxWidth: kWidth(40.0).w,
-            )),
+            ),
+          ),
+        ),
+        onTap: () {
+          DatePicker.showDatePicker(
+            context,
+            minDateTime: widget.minDate,
+            pickerTheme: const DateTimePickerTheme(
+              confirm: LocaleText("ready"),
+              cancel: LocaleText("cancel"),
+            ),
+            onMonthChangeStartWithFirstDate: true,
+            initialDateTime: DateTime.now(),
+            maxDateTime: widget.maxDate,
+            dateFormat: widget.dateFormat,
+            onConfirm: (v, i) {
+              String formats = DateFormat(widget.dateFormat).format(
+                DateTime(v.year, v.month, v.day),
+              );
+              widget.kontroller.text = formats;
+            },
+          );
+        },
       ),
     );
   }

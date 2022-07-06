@@ -5,8 +5,8 @@ import 'package:crm_merchant/models/marketplace/product_model.dart';
 import '../models/marketplace/create_request_model.dart';
 
 class StaticData {
-  static List<RequestModel> requests = [];
-  static CreateRequest createRequestModel = CreateRequest();
+  static List<Value> requests = [];
+  static CreateRequestModel createRequestModel = CreateRequestModel();
   static List<CardModel> cards = [];
   static List<ProductModel> products = [];
 
@@ -16,7 +16,7 @@ class StaticData {
     }
   }
 
-  static addProduct() {
-    
+  static addProduct(ProductModel model) {
+    products.add(model);
   }
 }

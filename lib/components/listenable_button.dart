@@ -1,4 +1,5 @@
 import 'package:crm_merchant/constants/exports.dart';
+import 'package:flutter/cupertino.dart';
 
 // ignore: must_be_immutable
 class ListenableButton extends StatelessWidget {
@@ -24,11 +25,8 @@ class ListenableButton extends StatelessWidget {
       valueListenable: inputController,
       builder: (context, value, child) {
         return showLoader
-            ? Lottie.asset(
-              "assets/images/lottie/loading_indicator.json",
-              height: kHeight(100.0).h,
-              width: kWidth(100.0).w,
-            )
+            ? Center(
+                child: CupertinoActivityIndicator(radius: kHeight(16.0).h))
             : ElevatedButton(
                 child: Text(
                   Locales.string(kontext, buttonTitle),

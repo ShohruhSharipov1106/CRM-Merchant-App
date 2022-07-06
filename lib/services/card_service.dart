@@ -11,7 +11,7 @@ class CardService {
       "card": number.removeAllWhitespace,
       "expire": dateParams[1] + dateParams[0]
     };
-    var result = await ApiData().getData(_apiSend, HttpMethod.post, param);
+    var result = await ApiData().getData(_apiSend, HttpMethod.post, param, false);
     if (result.isSuccess) {
       return CardModel.fromJson(jsonDecode(result.result!));
     } else {
@@ -21,7 +21,7 @@ class CardService {
 
   static Future<CardModel> sendConfirmCard(String token, String code) async {
     Map<String, Object> param = {"cardToken": token, "code": code};
-    var result = await ApiData().getData(_apiConfirm, HttpMethod.post, param);
+    var result = await ApiData().getData(_apiConfirm, HttpMethod.post, param, false);
     if (result.isSuccess) {
       return CardModel.fromJson(jsonDecode(result.result!));
     } else {

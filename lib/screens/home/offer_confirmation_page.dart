@@ -41,21 +41,31 @@ class _OfferConfirmationPageState extends State<OfferConfirmationPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: GestureDetector(
+          child: const Icon(
+            Icons.arrow_back_ios_outlined,
+            size: 21.0,
+            color: kBlackTextColor,
+          ),
+          onTap: () => Navigator.pop(context),
+        ),
+      ),
       body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: kHeight(72.0).h),
-            _mainTitle(context),
-            SizedBox(height: kHeight(99.0).h),
-            _title(context),
-            _smsCode(context),
-            Padding(
-              padding: EdgeInsets.only(
-                left: kWidth(140.0).w,
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
+        child: Center(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const SizedBox(height: 20),
+              _mainTitle(context),
+              const SizedBox(height: 80),
+              _title(context),
+              const SizedBox(height: 10),
+              _smsCode(context),
+              const SizedBox(height: 10),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Countdown(
                     animation: StepTween(
@@ -63,7 +73,7 @@ class _OfferConfirmationPageState extends State<OfferConfirmationPage>
                       end: 0,
                     ).animate(_controller!),
                   ),
-                  InkWell(
+                  GestureDetector(
                     child: LocaleText(
                       context.watch<AddProposalProvider>().isError
                           ? "resend_sms"
@@ -75,6 +85,7 @@ class _OfferConfirmationPageState extends State<OfferConfirmationPage>
                       ),
                     ),
                     onTap: () {
+                      smsChecker.clear();
                       final int _sendSMSAgain = Random().nextInt(8999) + 1000;
                       widget._smsCode = _sendSMSAgain;
                       SendSMSService.sendSmsToClient(
@@ -90,72 +101,26 @@ class _OfferConfirmationPageState extends State<OfferConfirmationPage>
                   ),
                 ],
               ),
-            ),
-            SizedBox(height: kHeight(140.0).h),
-            _button(),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Padding _title(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: kMainPadding),
-      child: LocaleText(
-        context.watch<AddProposalProvider>().isError
-            ? "error_sms_code"
-            : "enter_sms_verification_code",
-        style: Theme.of(context).textTheme.labelMedium!.copyWith(
-              color: context.watch<AddProposalProvider>().isError
-                  ? kMainColor
-                  : kBlackTextColor,
-            ),
-      ),
-    );
-  }
-
-  Padding _mainTitle(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(left: kWidth(100.0).w),
-      child: LocaleText(
-        "offer_confirmation",
-        style: Theme.of(context).textTheme.headlineLarge,
-      ),
-    );
-  }
-
-  Padding _smsCode(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(
-        left: kWidth(99.0).w,
-        bottom: kHeight(15.0).h,
-        top: kHeight(15.0).h,
-      ),
-      child: Pinput(
-        controller: smsChecker,
-        preFilledWidget: Text(
-          "*",
-          style: TextStyle(
-            color: kBlackTextColor.withOpacity(0.5),
-            fontSize: 64.0,
+              const SizedBox(height: 90),
+              _button(),
+              const SizedBox(height: 15),
+            ],
           ),
         ),
-        showCursor: false,
-        closeKeyboardWhenCompleted: false,
-        defaultPinTheme: PinTheme(
-          width: kWidth(50.0).w,
-          height: kHeight(70.0).h,
-          decoration: BoxDecoration(
-            color: kWhiteColor,
-            borderRadius: BorderRadius.circular(10.0),
-            border: Border.all(
-              color: kBlackTextColor,
-              width: 1.0,
-            ),
-          ),
-          textStyle: Theme.of(context).textTheme.titleMedium!.copyWith(
-                fontSize: 48.0,
+      ),
+    );
+  }
+
+  SizedBox _title(BuildContext context) {
+    return SizedBox(
+      width: 100.w,
+      child: Padding(
+        padding: const EdgeInsets.only(left: 16),
+        child: LocaleText(
+          context.watch<AddProposalProvider>().isError
+              ? "error_sms_code"
+              : "enter_sms_verification_code",
+          style: Theme.of(context).textTheme.labelMedium!.copyWith(
                 color: context.watch<AddProposalProvider>().isError
                     ? kMainColor
                     : kBlackTextColor,
@@ -165,23 +130,63 @@ class _OfferConfirmationPageState extends State<OfferConfirmationPage>
     );
   }
 
-  Padding _button() {
-    return Padding(
-      padding: EdgeInsets.only(left: kWidth(kButHorPad).w),
-      child: ListenableButton(
-        context,
-        'continue',
-        () => smsChecker.text == widget._smsCode.toString()
-            ? {
-                Get.off(const AddProposalCardPage()),
-                context.read<AddProposalProvider>().hasnotError(),
-              }
-            : {
-                context.read<AddProposalProvider>().hasError(),
-              },
-        smsChecker,
-        4,
+  LocaleText _mainTitle(BuildContext context) {
+    return LocaleText(
+      "offer_confirmation",
+      style: Theme.of(context).textTheme.headlineLarge,
+    );
+  }
+
+  Pinput _smsCode(BuildContext context) {
+    return Pinput(
+      controller: smsChecker,
+      mainAxisAlignment: MainAxisAlignment.center,
+      preFilledWidget: Text(
+        "*",
+        style: TextStyle(
+          color: kBlackTextColor.withOpacity(0.5),
+          fontSize: 64.0,
+        ),
       ),
+      separator: const SizedBox(width: 10),
+      showCursor: false,
+      closeKeyboardWhenCompleted: false,
+      defaultPinTheme: PinTheme(
+        width: 50,
+        height: 60,
+        decoration: BoxDecoration(
+          color: kWhiteColor,
+          borderRadius: BorderRadius.circular(10.0),
+          border: Border.all(
+            color: kBlackTextColor,
+            width: 1.0,
+          ),
+        ),
+        textStyle: Theme.of(context).textTheme.titleMedium!.copyWith(
+              fontSize: 48.0,
+              color: context.watch<AddProposalProvider>().isError &&
+                      smsChecker.length == 4
+                  ? kMainColor
+                  : kBlackTextColor,
+            ),
+      ),
+    );
+  }
+
+  ListenableButton _button() {
+    return ListenableButton(
+      context,
+      'continue',
+      () => smsChecker.text == widget._smsCode.toString()
+          ? {
+              Get.off(const AddProposalCardPage()),
+              context.read<AddProposalProvider>().hasnotError(),
+            }
+          : {
+              context.read<AddProposalProvider>().hasError(),
+            },
+      smsChecker,
+      4,
     );
   }
 }

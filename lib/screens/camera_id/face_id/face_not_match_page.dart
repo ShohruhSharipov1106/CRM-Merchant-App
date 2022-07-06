@@ -1,8 +1,6 @@
 import 'package:crm_merchant/constants/exports.dart';
-import 'package:crm_merchant/screens/add_proposal/passport_identification_page.dart';
 import 'package:crm_merchant/screens/camera_id/document_id/camera_passport_id_page.dart';
 import 'package:crm_merchant/screens/camera_id/face_id/camera_face_id_page.dart';
-
 
 class FaceNotMatch extends StatelessWidget {
   const FaceNotMatch({Key? key}) : super(key: key);
@@ -54,23 +52,17 @@ class FaceNotMatch extends StatelessWidget {
                 .copyWith(fontSize: 15.0),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 20.0),
+          const SizedBox(height: 50.0),
           MainButton(
             context,
             "take_photo",
             () => Get.off(const CameraFaceIDPage()),
           ),
-          const SizedBox(height: 15.0),
+          const SizedBox(height: 30.0),
           MainButton(
             context,
             "take_passport_photo",
             () => Get.to(const CameraPassportIDPage()),
-          ),
-          const SizedBox(height: 15.0),
-          MainButton(
-            context,
-            "upload_passport_photo",
-            () => Get.to(const PassportIdentificationPage()),
           ),
         ],
       ),

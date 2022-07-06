@@ -5,7 +5,7 @@ class GetTariffService {
   static const String _apiGet = "api/marketplace/GetMyTariffs";
 
   static Future<List<GetMyTariffsModel>> getMyTariffs() async {
-    var result = await ApiData().getData(_apiGet, HttpMethod.post, null);
+    var result = await ApiData().getData(_apiGet, HttpMethod.post, null, false);
     if (result.isSuccess) {
       return List<GetMyTariffsModel>.from((json.decode(result.result!) as List)
           .map((v) => GetMyTariffsModel.fromJson(v))).toList();

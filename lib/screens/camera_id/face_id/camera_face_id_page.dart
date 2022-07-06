@@ -1,16 +1,10 @@
 import 'dart:io';
 import 'dart:ui' as ui;
-import 'dart:typed_data';
-import 'package:crm_merchant/screens/add_proposal/identification_page.dart';
-import 'package:crm_merchant/screens/camera_id/face_id/camera_view.dart';
-import 'package:crm_merchant/screens/camera_id/face_id/face_not_match_page.dart';
+import 'package:crm_merchant/screens/add_proposal/passport_page.dart';
 import 'package:crm_merchant/screens/camera_id/painters/face_detector_painter.dart';
-import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image/image.dart' as imglib;
 import 'package:crm_merchant/constants/exports.dart';
 import 'package:crm_merchant/services/face_id_service.dart';
-import 'package:device_info_plus/device_info_plus.dart';
-import 'package:merge_images/merge_images.dart';
 
 class CameraFaceIDPage extends StatefulWidget {
   const CameraFaceIDPage({Key? key}) : super(key: key);
@@ -93,7 +87,7 @@ class _CameraFaceIDPageState extends State<CameraFaceIDPage> {
             backgroundColor: kBlackTextColor,
             appBar: AppBar(
               leading: IconButton(
-                onPressed: () => Get.back(),
+                onPressed: () => Get.off(const AddProposalPassportPage()),
                 icon: const Icon(
                   Icons.arrow_back_ios,
                   color: kWhiteColor,
@@ -129,11 +123,8 @@ class _CameraFaceIDPageState extends State<CameraFaceIDPage> {
                     color: kBlackTextColor,
                   ),
                   child: ClipRRect(
-                    borderRadius: BorderRadius.all(
-                      Radius.elliptical(
-                        kWidth(396.0).w,
-                        kHeight(565.0).h,
-                      ),
+                    borderRadius: const BorderRadius.all(
+                      Radius.elliptical(396, 565),
                     ),
                     child: takePicture
                         ? takeImage
@@ -149,65 +140,70 @@ class _CameraFaceIDPageState extends State<CameraFaceIDPage> {
                   ),
                 ),
                 _subtitleText(context),
-                SizedBox(height: kHeight(30).h),
+                SizedBox(height: kHeight(15).h),
                 MainButton(
                   context,
                   "take_photo",
-                  () async {
-                    setState(() {
-                      _showloader = true;
-                    });
-                    if (takePicture) {
-                      setState(() {
-                        takePicture = false;
-                        _showloader = true;
-                      });
-                    } else {
-                      setState(() {
-                        takePicture = true;
-                        _showloader = true;
-                      });
-                      if ((imageDatas?.length ?? 0) > 0) {
-                        takeImage =
-                            (await convertYUV420toImageColor(imgCamera!))!;
-                      }
-                      ui.Image image =
-                          await ImagesMergeHelper.loadImageFromProvider(
-                              takeImage.image);
+                  hasFace
+                      ? () async {
+                          setState(() {
+                            _showloader = true;
+                          });
+                          if (takePicture) {
+                            setState(() {
+                              takePicture = false;
+                              _showloader = true;
+                            });
+                          } else {
+                            setState(() {
+                              takePicture = true;
+                              _showloader = true;
+                            });
+                            if ((imageDatas?.length ?? 0) > 0) {
+                              takeImage = (await convertYUV420toImageColor(
+                                  imgCamera!))!;
+                            }
+                            ui.Image image =
+                                await ImagesMergeHelper.loadImageFromProvider(
+                                    takeImage.image);
 
-                      bytes = await ImagesMergeHelper.imageToUint8List(image);
+                            bytes =
+                                await ImagesMergeHelper.imageToUint8List(image);
 
-                      String uint8ListTob64(Uint8List uint8list) {
-                        String base64String = base64Encode(uint8list);
-                        String header = "data:image/png;base64,";
-                        return header + base64String;
-                      }
+                            String uint8ListTob64(Uint8List uint8list) {
+                              String base64String = base64Encode(uint8list);
+                              String header = "data:image/png;base64,";
+                              return header + base64String;
+                            }
 
-                      Future<Uint8List> uint8ListComporessList(
-                          Uint8List list) async {
-                        var result =
-                            await FlutterImageCompress.compressWithList(
-                          list,
-                          minHeight: 1080,
-                          minWidth: 720,
-                          quality: 72,
-                          rotate: 270,
-                          format: CompressFormat.png,
-                        );
-                        return result;
-                      }
+                            Future<Uint8List> uint8ListComporessList(
+                                Uint8List list) async {
+                              var result =
+                                  await FlutterImageCompress.compressWithList(
+                                list,
+                                minHeight: 1080,
+                                minWidth: 720,
+                                quality: 72,
+                                rotate: 270,
+                                format: CompressFormat.png,
+                              );
+                              return result;
+                            }
 
-                      Uint8List compressUint8List =
-                          await uint8ListComporessList(bytes!);
+                            Uint8List compressUint8List =
+                                await uint8ListComporessList(bytes!);
+                            faceUint8List = compressUint8List;
 
-                      _base64 = uint8ListTob64(compressUint8List);
-                      await _sendFaceApi(_base64!).whenComplete(
-                        () => setState(() {
-                          _showloader = false;
-                        }),
-                      );
-                    }
-                  },
+                            _base64 = uint8ListTob64(compressUint8List);
+                            faceBase64 = _base64;
+                            await _sendFaceApi(_base64!).whenComplete(
+                              () => setState(() {
+                                _showloader = false;
+                              }),
+                            );
+                          }
+                        }
+                      : () {},
                   showLoader: _showloader,
                 ),
               ],
@@ -335,17 +331,17 @@ class _CameraFaceIDPageState extends State<CameraFaceIDPage> {
       "${context.read<AddProposalProvider>().dateOfBirth.text.substring(6)}-${context.read<AddProposalProvider>().dateOfBirth.text.substring(3, 5)}-${context.read<AddProposalProvider>().dateOfBirth.text.substring(0, 2)}T00:00:00.000Z",
       _base64,
       deviceId!,
-    )
-        .then((value) => {
-              print(value),
-              if (value.resultCode == 1 || value.resultCode == 200)
-                {
-                  context.read<AddProposalProvider>().getClientDatas(value),
-                  Get.to(const IdentificationPage())
-                }
-              else
-                {Get.to(const FaceNotMatch())}
-            })
-        .onError((error, stackTrace) => {Get.to(const FaceNotMatch())});
+    ).then((value) => {
+          if (value.resultCode == 1 || value.resultCode == 200)
+            {
+              context.read<AddProposalProvider>().getClientDatas(value),
+              Get.to(const IdentificationPage())
+            }
+          else
+            {Get.to(const FaceNotMatch())}
+        });
+    print("onError kerak");
+    // .onError((error, stackTrace) =>
+    // { Get.to(const FaceNotMatch())});
   }
 }

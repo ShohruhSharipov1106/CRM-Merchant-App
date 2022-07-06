@@ -7,15 +7,11 @@ class InternetErrorPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.only(
-            left: kWidth(72.0).w,
-            top: kHeight(100.0).h,
-          ),
+        child: Center(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              TitleOfPage("no_internet_title", kWidth(0.0).w),
+              TitleOfPage("no_internet_title"),
               SizedBox(height: kHeight(150.0).h),
               SvgPicture.asset(
                 "assets/icons/error-internet.svg",

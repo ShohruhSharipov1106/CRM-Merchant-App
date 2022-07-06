@@ -2,24 +2,35 @@ import 'package:crm_merchant/constants/exports.dart';
 import 'package:crm_merchant/screens/home/components/checkout_button.dart';
 
 // ignore: must_be_immutable
-class FullInformation extends StatelessWidget {
-  String? situationColor;
-  int numb;
-  String dateProposal;
-  String amount;
-  String createdBy;
-  String reasonCancellation;
-  String customer;
+class FullInformation extends StatefulWidget {
+  String? situationColorFull;
+  int numbFull;
+  String dateProposalFull;
+  String amountFull;
+  String createdByFull;
+  String reasonCancellationFull;
+  String customerFull;
+  bool isVisible;
 
-  FullInformation(this.situationColor, this.numb, this.dateProposal,
-      this.amount, this.createdBy, this.reasonCancellation, this.customer,
+  FullInformation(
+      this.situationColorFull,
+      this.numbFull,
+      this.dateProposalFull,
+      this.amountFull,
+      this.createdByFull,
+      this.reasonCancellationFull,
+      this.customerFull,
+      this.isVisible,
       {Key? key})
       : super(key: key);
 
   @override
+  State<FullInformation> createState() => _FullInformationState();
+}
+
+class _FullInformationState extends State<FullInformation> {
+  @override
   Widget build(BuildContext context) {
-    HomePageProvider ctxWatchHomeProvider = context.watch<HomePageProvider>();
-    HomePageProvider ctxReadHomeProvider = context.read<HomePageProvider>();
 
     return Stack(
       children: [
@@ -34,8 +45,6 @@ class FullInformation extends StatelessWidget {
             top: 20,
             bottom: 5,
           ),
-          //height: ctxWatchHomeProvider.mainContainerHeight,
-          //width: ctxWatchHomeProvider.mainContainerWidth,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -43,17 +52,18 @@ class FullInformation extends StatelessWidget {
               Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  _informations(context, "date_proposal", dateProposal),
+                  _informations(
+                      context, "date_proposal", widget.dateProposalFull),
                   const SizedBox(
                     height: 11,
                   ),
                   _informations(
                     context,
                     "proposal_amount",
-                    amount.toString(),
+                    widget.amountFull.toString(),
                   ),
                   Column(
-                    children: ctxWatchHomeProvider.isVisible
+                    children: widget.isVisible
                         ? [
                             const SizedBox(
                               height: 11,
@@ -64,16 +74,16 @@ class FullInformation extends StatelessWidget {
                             _informations(
                               context,
                               "created",
-                              createdBy,
+                              widget.createdByFull,
                             ),
                             const SizedBox(
                               height: 11,
                             ),
-                            situationColor == "Declined"
+                            widget.situationColorFull == "Declined"
                                 ? _informations(
                                     context,
                                     "cause",
-                                    reasonCancellation,
+                                    widget.reasonCancellationFull,
                                   )
                                 : const SizedBox(),
                             const SizedBox(
@@ -82,9 +92,9 @@ class FullInformation extends StatelessWidget {
                             _informations(
                               context,
                               "customer",
-                              customer,
+                              widget.customerFull,
                             ),
-                            situationColor == "Confirmed"
+                            widget.situationColorFull == "Confirmed"
                                 ? const CheckOutButton()
                                 : const SizedBox(),
                           ]
@@ -93,8 +103,21 @@ class FullInformation extends StatelessWidget {
                   const SizedBox(
                     height: 5,
                   ),
-                  _hideUnhideText(
-                      context, ctxWatchHomeProvider, ctxReadHomeProvider),
+                  GestureDetector(
+                    child: LocaleText(
+                      widget.isVisible ? "hide" : "more",
+                      style: const TextStyle(
+                        fontSize: 12.0,
+                        fontWeight: FontWeight.w400,
+                        color: kGreyLabelColor,
+                      ),
+                    ),
+                    onTap: () {
+                      setState(() {
+                        widget.isVisible = !widget.isVisible;
+                      });
+                    },
+                  ),
                 ],
               ),
             ],
@@ -110,27 +133,6 @@ class FullInformation extends StatelessWidget {
         ),
         _chipField(context),
       ],
-    );
-  }
-
-  InkWell _hideUnhideText(
-      BuildContext context,
-      HomePageProvider ctxWatchHomeProvider,
-      HomePageProvider ctxReadHomeProvider) {
-    return InkWell(
-      child: Text(
-        ctxWatchHomeProvider.hideText,
-        style: const TextStyle(
-          fontSize: 10.0,
-          fontWeight: FontWeight.w400,
-          color: kGreyLabelColor,
-        ),
-      ),
-      splashColor: kGreenLabelColor,
-      onTap: () =>
-          ctxWatchHomeProvider.hideText == Locales.string(context, 'hide')
-              ? ctxReadHomeProvider.increaseSize()
-              : ctxReadHomeProvider.decreaseSize(),
     );
   }
 
@@ -168,22 +170,22 @@ class FullInformation extends StatelessWidget {
             TextSpan(
               children: [
                 TextSpan(
-                  text: "№$numb  ",
+                  text: "№${widget.numbFull}  ",
                   style: Theme.of(context)
                       .textTheme
                       .labelMedium!
                       .copyWith(fontWeight: FontWeight.w700),
                 ),
                 TextSpan(
-                  text: situationColor == "Confirmed"
+                  text: widget.situationColorFull == "Confirmed"
                       ? Locales.string(context, "approved")
-                      : situationColor == 'Declined'
+                      : widget.situationColorFull == 'Declined'
                           ? Locales.string(context, "denied")
                           : Locales.string(context, "under_consideration"),
                   style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                        color: situationColor == "Confirmed"
+                        color: widget.situationColorFull == "Confirmed"
                             ? kGreenLabelColor
-                            : situationColor == 'Declined'
+                            : widget.situationColorFull == 'Declined'
                                 ? kMainColor
                                 : kGreyLabelColor,
                       ),

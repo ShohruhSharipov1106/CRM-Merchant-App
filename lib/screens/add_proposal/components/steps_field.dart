@@ -1,4 +1,5 @@
 import 'package:crm_merchant/constants/exports.dart';
+
 // ignore: must_be_immutable
 class StepsField extends StatelessWidget {
   BuildContext kontext;
@@ -14,21 +15,17 @@ class StepsField extends StatelessWidget {
         children: [
           Container(
             height: kHeight(30.0).h,
-            padding: EdgeInsets.only(left: kWidth(kMainPadding).w),
+            padding: const EdgeInsets.only(left: kMainPadding),
             child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                InkWell(
+                GestureDetector(
                   child: const Icon(
                     Icons.arrow_back_ios_outlined,
                     size: 21.0,
                   ),
-                  onTap: () {
-                    Get.back();
-                  },
+                  onTap: () => Navigator.pop(context),
                 ),
-                SizedBox(width: kWidth(150.0).w),
+                const Spacer(flex: 21),
                 Text.rich(
                   TextSpan(
                     children: [
@@ -38,7 +35,7 @@ class StepsField extends StatelessWidget {
                             .textTheme
                             .labelMedium!
                             .copyWith(
-                              fontWeight: FontWeight.w900,
+                              fontWeight: FontWeight.w700,
                               color:
                                   kontext.watch<AddProposalProvider>().isError
                                       ? kMainColor
@@ -49,15 +46,16 @@ class StepsField extends StatelessWidget {
                     ],
                   ),
                   style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                        fontWeight: FontWeight.w900,
+                        fontWeight: FontWeight.w700,
                       ),
                 ),
+                const Spacer(flex: 25),
               ],
             ),
           ),
           Container(
             height: kHeight(5.0).h,
-            padding: EdgeInsets.only(left: kWidth(kMainPadding).w),
+            padding: const EdgeInsets.only(left: kMainPadding),
             child: Row(
               children: [
                 _stepBox(step, 1),

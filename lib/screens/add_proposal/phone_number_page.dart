@@ -69,7 +69,8 @@ class _AddProposalPhoneNumberPageState
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     SizedBox(height: kHeight(20.0).h),
-                    StepsField(context, 1),
+                    StepsField(context, 1,
+                        hasError: context.read<HasErrorProvider>().phoneError),
                     SizedBox(height: kHeight(20.0).h),
                     TitleOfPage("create_zayavka"),
                     SizedBox(height: kHeight(25.0).h),
@@ -121,11 +122,11 @@ class _AddProposalPhoneNumberPageState
       child: Padding(
         padding: const EdgeInsets.only(left: 16),
         child: LocaleText(
-          context.watch<AddProposalProvider>().isError
+          context.read<HasErrorProvider>().phoneError
               ? "error_client_phone_number"
               : "client_phone_number",
           style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                color: context.watch<AddProposalProvider>().isError
+                color: context.read<HasErrorProvider>().phoneError
                     ? kMainColor
                     : kBlackTextColor,
               ),
@@ -145,6 +146,7 @@ class _AddProposalPhoneNumberPageState
       "+ 998** *** ** ** ",
       "+ 998## ### ## ##",
       {"#": RegExp(r'[0-9]')},
+      hasError: context.watch<HasErrorProvider>().phoneError,
     );
   }
 
@@ -155,26 +157,11 @@ class _AddProposalPhoneNumberPageState
           height: kHeight(183.63).h,
           width: kWidth(229.3).w,
           child: SvgPicture.asset(
-            "assets/icons/phone_page_main_icon.svg",
-            color: context.watch<AddProposalProvider>().isError
-                ? kErrorAnimationColor
-                : kMainColor,
+            !context.read<HasErrorProvider>().phoneError
+                ? "assets/icons/phone_page_main_icon.svg"
+                : "assets/icons/phone_page_main_icon_error.svg",
           ),
         ),
-        // Positioned(
-        //   child: ElasticInRight(
-        //     duration: const Duration(seconds: 5),
-        //     child: SvgPicture.asset(
-        //       context.watch<AddProposalProvider>().isError
-        //           ? "assets/icons/error-document.svg"
-        //           : "assets/icons/document.svg",
-        //       height: kHeight(174.21).h,
-        //       width: kWidth(156.0).w,
-        //     ),
-        //   ),
-        //   left: -kWidth(3.0).w,
-        //   bottom: -kHeight(4.0).h,
-        // ),
       ],
     );
   }
@@ -192,10 +179,10 @@ class _AddProposalPhoneNumberPageState
     )
         .then((value) => {
               Get.to(OfferConfirmationPage(_checkSMS)),
-              context.read<AddProposalProvider>().hasnotError()
+              context.read<HasErrorProvider>().hasNotError()
             })
         .onError((error, stackTrace) =>
-            {context.read<AddProposalProvider>().hasError()})
+            {context.read<HasErrorProvider>().hasPhoneError()})
         .whenComplete(() => {
               setState(() {
                 _showLoader = false;

@@ -1,14 +1,16 @@
 import 'package:crm_merchant/constants/exports.dart';
 import 'package:crm_merchant/screens/add_proposal/sms_confirmation_page.dart';
 
-class AddProposalCardPage extends StatefulWidget {
-  const AddProposalCardPage({Key? key}) : super(key: key);
+class AddProposalAnotherCardPage extends StatefulWidget {
+  const AddProposalAnotherCardPage({Key? key}) : super(key: key);
 
   @override
-  State<AddProposalCardPage> createState() => _AddProposalCardPageState();
+  State<AddProposalAnotherCardPage> createState() =>
+      _AddProposalAnotherCardPageState();
 }
 
-class _AddProposalCardPageState extends State<AddProposalCardPage> {
+class _AddProposalAnotherCardPageState
+    extends State<AddProposalAnotherCardPage> {
   late bool _showLoader = false;
   ConnectivityResult _connectionStatus = ConnectivityResult.none;
   final Connectivity _connectivity = Connectivity();
@@ -58,16 +60,25 @@ class _AddProposalCardPageState extends State<AddProposalCardPage> {
             _connectionStatus == ConnectivityResult.ethernet
         ? Scaffold(
             resizeToAvoidBottomInset: false,
+            appBar: AppBar(
+              leading: GestureDetector(
+                child: const Icon(
+                  Icons.arrow_back_ios_outlined,
+                  size: 21.0,
+                  color: kBlackTextColor,
+                ),
+                onTap: () => Navigator.pop(context),
+              ),
+            ),
             body: SafeArea(
               child: Center(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SizedBox(height: kHeight(20.0).h),
-                    StepsField(context, 2,
-                        hasError: context.read<HasErrorProvider>().cardError),
-                    SizedBox(height: kHeight(20.0).h),
-                    TitleOfPage("enter_your_details"),
+                    TitleOfPage(
+                      "enter_your_details",
+                    ),
                     SizedBox(height: kHeight(5.0).h),
                     _titleAnimation(context),
                     SizedBox(height: kHeight(20.0).h),

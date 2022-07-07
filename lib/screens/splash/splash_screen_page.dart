@@ -130,103 +130,56 @@ class _SplashScreenPageState extends State<SplashScreenPage>
   //   super.dispose();
   // }
 
-  ConnectivityResult _connectionStatus = ConnectivityResult.none;
-  final Connectivity _connectivity = Connectivity();
-  late StreamSubscription<ConnectivityResult> _connectivitySubscription;
-
-  @override
-  void initState() {
-    super.initState();
-    initConnectivity();
-
-    _connectivitySubscription =
-        _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
-  }
-
-  @override
-  void dispose() {
-    _connectivitySubscription.cancel();
-    super.dispose();
-  }
-
-  Future<void> initConnectivity() async {
-    late ConnectivityResult result;
-    try {
-      result = await _connectivity.checkConnectivity();
-    } on PlatformException catch (e) {
-      debugPrint("Couldn't check connectivity status error: $e");
-      return;
-    }
-
-    if (!mounted) {
-      return Future.value(null);
-    }
-
-    return _updateConnectionStatus(result);
-  }
-
-  Future<void> _updateConnectionStatus(ConnectivityResult result) async {
-    setState(() {
-      _connectionStatus = result;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    return _connectionStatus == ConnectivityResult.mobile ||
-            _connectionStatus == ConnectivityResult.wifi ||
-            _connectionStatus == ConnectivityResult.ethernet
-        ? Scaffold(
-            body: AnimatedSplashScreen(
-              splash: SvgPicture.asset("assets/icons/main-splash.svg"),
-              splashTransition: SplashTransition.scaleTransition,
-              curve: Curves.decelerate,
-              nextScreen: clientMainData.hasData('username') &&
-                      clientMainData.hasData('password')
-                  ? const ProfileDrawerPage()
-                  : const SelectLangPage(),
-              function: () => ApiData().getToken(
-                username: clientMainData.read("username"),
-                passpord: clientMainData.read("password"),
-              ),
-              backgroundColor: kWhiteColor,
-            ),
-          )
+    return AnimatedSplashScreen(
+      splash: SvgPicture.asset("assets/icons/main-splash.svg"),
+      splashTransition: SplashTransition.scaleTransition,
+      curve: Curves.decelerate,
+      nextScreen: clientMainData.hasData('username') &&
+              clientMainData.hasData('password')
+          ? const ProfileDrawerPage()
+          : const SelectLangPage(),
+      function: () => ApiData().getToken(
+        username: clientMainData.read("username"),
+        passpord: clientMainData.read("password"),
+      ),
+      backgroundColor: kWhiteColor,
+    );
 
-        //   SafeArea(
-        //     child: Stack(
-        //       children: [
-        //         Center(
-        //           child: SizedBox(
-        //             height: 100.h,
-        //             width: 100.w,
-        //           ),
-        //         ),
-        //         Positioned(
-        //           child: Text(
-        //             "Credit\nExpress",
-        //             style: Theme.of(context)
-        //                 .textTheme
-        //                 .titleLarge!
-        //                 .copyWith(fontSize: 36.0),
-        //           ),
-        //           left: _sequenceAnimation!["positionTextWidth"].value,
-        //           bottom: _sequenceAnimation!["positionTextHeight"].value,
-        //         ),
-        //         Positioned(
-        //           child: SvgPicture.asset(
-        //             "assets/icons/main_icon.svg",
-        //             fit: BoxFit.cover,
-        //             height: _sequenceAnimation!["heightSzb"].value,
-        //             width: _sequenceAnimation!["widthSzb"].value,
-        //           ),
-        //           right: _sequenceAnimation!["positionSzbWidth"].value,
-        //           bottom: _sequenceAnimation!["positionSzbHeight"].value,
-        //         ),
-        //       ],
-        //     ),
-        //   ),
-        // )
-        : const NoInternetPage();
+    //   SafeArea(
+    //     child: Stack(
+    //       children: [
+    //         Center(
+    //           child: SizedBox(
+    //             height: 100.h,
+    //             width: 100.w,
+    //           ),
+    //         ),
+    //         Positioned(
+    //           child: Text(
+    //             "Credit\nExpress",
+    //             style: Theme.of(context)
+    //                 .textTheme
+    //                 .titleLarge!
+    //                 .copyWith(fontSize: 36.0),
+    //           ),
+    //           left: _sequenceAnimation!["positionTextWidth"].value,
+    //           bottom: _sequenceAnimation!["positionTextHeight"].value,
+    //         ),
+    //         Positioned(
+    //           child: SvgPicture.asset(
+    //             "assets/icons/main_icon.svg",
+    //             fit: BoxFit.cover,
+    //             height: _sequenceAnimation!["heightSzb"].value,
+    //             width: _sequenceAnimation!["widthSzb"].value,
+    //           ),
+    //           right: _sequenceAnimation!["positionSzbWidth"].value,
+    //           bottom: _sequenceAnimation!["positionSzbHeight"].value,
+    //         ),
+    //       ],
+    //     ),
+    //   ),
+    // )
   }
 }

@@ -11,6 +11,7 @@ class InputField extends StatefulWidget {
   String hintTitle;
   String maskText;
   Map<String, RegExp> maskFilter;
+  bool hasError;
 
   InputField(
     this.kontext,
@@ -22,6 +23,7 @@ class InputField extends StatefulWidget {
     this.hintTitle,
     this.maskText,
     this.maskFilter, {
+    this.hasError = false,
     Key? key,
   }) : super(key: key);
 
@@ -54,7 +56,11 @@ class _InputFieldState extends State<InputField> {
             filter: widget.maskFilter,
           )
         ],
+        onTap: () {
+          context.read<HasErrorProvider>().hasNotError();
+        },
         onChanged: (v) {
+          widget.hasError = false;
           widget.maxLen == widget.kontroller.text.length
               ? _focusNode.unfocus()
               : _focusNode.requestFocus();
@@ -64,7 +70,7 @@ class _InputFieldState extends State<InputField> {
         style: Theme.of(context).textTheme.titleMedium,
         decoration: InputDecoration(
           floatingLabelBehavior: FloatingLabelBehavior.always,
-          labelText: widget.kontext.watch<AddProposalProvider>().isError
+          labelText: widget.hasError
               ? Locales.string(context, widget.errorTitle)
               : Locales.string(context, widget.labelTitle),
           errorBorder: OutlineInputBorder(
@@ -86,9 +92,7 @@ class _InputFieldState extends State<InputField> {
               : const TextStyle(fontSize: 0.0, height: 0),
           labelStyle: Theme.of(context).textTheme.titleMedium!.copyWith(
                 fontSize: 12.0,
-                color: widget.kontext.watch<AddProposalProvider>().isError
-                    ? kMainColor
-                    : kBlackTextColor,
+                color: widget.hasError ? kMainColor : kBlackTextColor,
               ),
           prefixIcon: Text(
             "   ",

@@ -155,10 +155,9 @@ class _TariffConfirmationPageState extends State<TariffConfirmationPage> {
                                                 (selectedTariffsModel
                                                         ?.prepayPercent ??
                                                     0)) {
-                                          setState(() {
-                                            calculateDaily(_prepayed);
-                                          });
+                                          calculateDaily(_prepayed);
                                         }
+                                        setState(() {});
                                       },
                                       style: Theme.of(context)
                                           .textTheme
@@ -431,7 +430,10 @@ class _TariffConfirmationPageState extends State<TariffConfirmationPage> {
                                       await UploadFileService.uploadFile(
                                               ownerId, 1, faceBase64!)
                                           .then((value) => {
-                                                Get.to(
+                                                context
+                                                    .read<AddProposalProvider>()
+                                                    .clearProviderData(),
+                                                Get.offAll(
                                                     const ProfileDrawerPage()),
                                                 setState(() {
                                                   _showLoader = false;
@@ -466,8 +468,7 @@ class _TariffConfirmationPageState extends State<TariffConfirmationPage> {
                   }
               },
             )
-            .onError((error, stackTrace) =>
-                {context.read<AddProposalProvider>().hasError()})
+            .onError((error, stackTrace) => {})
             .whenComplete(() => setState(() {
                   _showLoader = false;
                 }));

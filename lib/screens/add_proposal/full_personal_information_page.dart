@@ -343,7 +343,7 @@ class _FullPersonalInformationPageState
                                       .temporaryAddress;
                             }
 
-                           checkValidate();
+                            checkValidate();
                             Get.to(const IdentificationPage());
                           },
                               context
@@ -451,7 +451,7 @@ class _FullPersonalInformationPageState
       "**  **  ****",
       'dd MM yyyy',
       DateTime(1900),
-      DateTime.now(),
+      DateTime(2021, 12, 31),
     );
   }
 
@@ -566,7 +566,6 @@ class _FullPersonalInformationPageState
 
   CalendarInputField _givenDate(BuildContext context) {
     context.watch<AddProposalProvider>().givenDate.addListener(checkValidate);
-
     return CalendarInputField(
       context,
       context.watch<AddProposalProvider>().givenDate,
@@ -575,13 +574,12 @@ class _FullPersonalInformationPageState
       "**  **  ****",
       'dd MM yyyy',
       DateTime(1900),
-      DateTime.now(),
+      DateTime(2021, 12, 31),
     );
   }
 
   CalendarInputField _expiryDate(BuildContext context) {
     context.watch<AddProposalProvider>().expiryDate.addListener(checkValidate);
-
     return CalendarInputField(
       context,
       context.watch<AddProposalProvider>().expiryDate,

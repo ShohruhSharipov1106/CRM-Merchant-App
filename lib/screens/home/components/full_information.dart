@@ -31,80 +31,79 @@ class FullInformation extends StatefulWidget {
 class _FullInformationState extends State<FullInformation> {
   @override
   Widget build(BuildContext context) {
-
     return Stack(
       children: [
-        Container(
-          margin: const EdgeInsets.symmetric(
-            horizontal: kMainPadding,
-            vertical: 15,
-          ),
-          padding: const EdgeInsets.only(
-            left: 20,
-            right: 20,
-            top: 20,
-            bottom: 5,
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  _informations(
-                      context, "date_proposal", widget.dateProposalFull),
-                  const SizedBox(
-                    height: 11,
-                  ),
-                  _informations(
-                    context,
-                    "proposal_amount",
-                    widget.amountFull.toString(),
-                  ),
-                  Column(
-                    children: widget.isVisible
-                        ? [
-                            const SizedBox(
-                              height: 11,
-                            ),
-                            const SizedBox(
-                              height: 11,
-                            ),
-                            _informations(
-                              context,
-                              "created",
-                              widget.createdByFull,
-                            ),
-                            const SizedBox(
-                              height: 11,
-                            ),
-                            widget.situationColorFull == "Declined"
-                                ? _informations(
-                                    context,
-                                    "cause",
-                                    widget.reasonCancellationFull,
-                                  )
-                                : const SizedBox(),
-                            const SizedBox(
-                              height: 11,
-                            ),
-                            _informations(
-                              context,
-                              "customer",
-                              widget.customerFull,
-                            ),
-                            widget.situationColorFull == "Confirmed"
-                                ? const CheckOutButton()
-                                : const SizedBox(),
-                          ]
-                        : [],
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  GestureDetector(
-                    child: LocaleText(
+        GestureDetector(
+          child: Container(
+            margin: const EdgeInsets.symmetric(
+              horizontal: kMainPadding,
+              vertical: 15,
+            ),
+            padding: const EdgeInsets.only(
+              left: 20,
+              right: 20,
+              top: 20,
+              bottom: 5,
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    _informations(
+                        context, "date_proposal", widget.dateProposalFull),
+                    const SizedBox(
+                      height: 11,
+                    ),
+                    _informations(
+                      context,
+                      "proposal_amount",
+                      widget.amountFull.toString(),
+                    ),
+                    Column(
+                      children: widget.isVisible
+                          ? [
+                              const SizedBox(
+                                height: 11,
+                              ),
+                              const SizedBox(
+                                height: 11,
+                              ),
+                              _informations(
+                                context,
+                                "created",
+                                widget.createdByFull,
+                              ),
+                              const SizedBox(
+                                height: 11,
+                              ),
+                              widget.situationColorFull == "Declined"
+                                  ? _informations(
+                                      context,
+                                      "cause",
+                                      widget.reasonCancellationFull,
+                                    )
+                                  : const SizedBox(),
+                              const SizedBox(
+                                height: 11,
+                              ),
+                              _informations(
+                                context,
+                                "customer",
+                                widget.customerFull,
+                              ),
+                              widget.situationColorFull == "Confirmed"
+                                  ? const CheckOutButton()
+                                  : const SizedBox(),
+                            ]
+                          : [],
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    LocaleText(
                       widget.isVisible ? "hide" : "more",
                       style: const TextStyle(
                         fontSize: 12.0,
@@ -112,24 +111,24 @@ class _FullInformationState extends State<FullInformation> {
                         color: kGreyLabelColor,
                       ),
                     ),
-                    onTap: () {
-                      setState(() {
-                        widget.isVisible = !widget.isVisible;
-                      });
-                    },
-                  ),
-                ],
+                  ],
+                ),
+              ],
+            ),
+            decoration: const BoxDecoration(
+              color: kWhiteColor,
+              borderRadius: BorderRadius.only(
+                topRight: Radius.circular(30.0),
+                bottomLeft: Radius.circular(30.0),
+                bottomRight: Radius.circular(30.0),
               ),
-            ],
-          ),
-          decoration: const BoxDecoration(
-            color: kWhiteColor,
-            borderRadius: BorderRadius.only(
-              topRight: Radius.circular(30.0),
-              bottomLeft: Radius.circular(30.0),
-              bottomRight: Radius.circular(30.0),
             ),
           ),
+          onTap: () {
+            setState(() {
+              widget.isVisible = !widget.isVisible;
+            });
+          },
         ),
         _chipField(context),
       ],

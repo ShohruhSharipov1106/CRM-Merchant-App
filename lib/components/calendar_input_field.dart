@@ -11,6 +11,7 @@ class CalendarInputField extends StatefulWidget {
   String dateFormat;
   DateTime minDate;
   DateTime maxDate;
+  bool hasError;
   CalendarInputField(
     this.kontext,
     this.kontroller,
@@ -20,6 +21,7 @@ class CalendarInputField extends StatefulWidget {
     this.dateFormat,
     this.minDate,
     this.maxDate, {
+    this.hasError = false,
     Key? key,
   }) : super(key: key);
 
@@ -60,7 +62,7 @@ class _CustomInputFieldState extends State<CalendarInputField> {
           style: Theme.of(context).textTheme.titleMedium,
           decoration: InputDecoration(
             floatingLabelBehavior: FloatingLabelBehavior.always,
-            labelText: widget.kontext.watch<AddProposalProvider>().isError
+            labelText: widget.hasError
                 ? Locales.string(context, widget.errorTitle)
                 : Locales.string(context, widget.labelTitle),
             errorBorder: OutlineInputBorder(
@@ -82,9 +84,7 @@ class _CustomInputFieldState extends State<CalendarInputField> {
                 : const TextStyle(fontSize: 0.0, height: 0),
             labelStyle: Theme.of(context).textTheme.titleMedium!.copyWith(
                   fontSize: 12.0,
-                  color: widget.kontext.watch<AddProposalProvider>().isError
-                      ? kMainColor
-                      : kBlackTextColor,
+                  color: widget.hasError ? kMainColor : kBlackTextColor,
                 ),
             prefixIcon: Text(
               "   ",
@@ -138,10 +138,9 @@ class _CustomInputFieldState extends State<CalendarInputField> {
               confirm: LocaleText("ready"),
               cancel: LocaleText("cancel"),
             ),
-            onMonthChangeStartWithFirstDate: true,
-            initialDateTime: DateTime.now(),
             maxDateTime: widget.maxDate,
             dateFormat: widget.dateFormat,
+            initialDateTime: DateTime(2020, 6, 15),
             onConfirm: (v, i) {
               String formats = DateFormat(widget.dateFormat).format(
                 DateTime(v.year, v.month, v.day),

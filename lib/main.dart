@@ -1,6 +1,10 @@
 import 'package:crm_merchant/constants/exports.dart';
+import 'package:crm_merchant/providers/has_error_provider.dart';
+import 'package:crm_merchant/screens/add_proposal/card_page.dart';
 import 'package:crm_merchant/screens/add_proposal/full_personal_information_page.dart';
 import 'package:crm_merchant/screens/add_proposal/make_proposal_page.dart';
+import 'package:crm_merchant/screens/add_proposal/passport_page.dart';
+import 'package:crm_merchant/screens/add_proposal/phone_number_page.dart';
 import 'package:crm_merchant/screens/splash/splash_screen_page.dart';
 import 'package:crm_merchant/screens/tariff/tariff_confirmation_page.dart';
 import 'package:crm_merchant/screens/tariff/tariff_main_page.dart';
@@ -17,6 +21,7 @@ Future<void> main() async {
       providers: [
         ChangeNotifierProvider(create: (_) => SignUpProvider()),
         ChangeNotifierProvider(create: (_) => AddProposalProvider()),
+        ChangeNotifierProvider(create: (_) => HasErrorProvider()),
       ],
       child: const MyApp(),
     ),
@@ -41,7 +46,6 @@ class MyApp extends StatelessWidget {
               locale: clientMainData.hasData('locale')
                   ? Locale(clientMainData.read('locale'))
                   : const Locale('uz'),
-          
               theme: ThemeData(
                 fontFamily: "Roboto",
                 textTheme: const TextTheme(
@@ -81,7 +85,7 @@ class MyApp extends StatelessWidget {
                   backgroundColor: Colors.transparent,
                 ),
               ),
-              home: const SplashScreenPage());
+              home: const AddProposalPhoneNumberPage());
         });
       },
     );

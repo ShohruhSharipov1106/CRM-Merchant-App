@@ -62,11 +62,68 @@ class AddProposalProvider extends ChangeNotifier {
   String another = 'another';
   bool isAccessButton = false;
   double? prePaymentSum;
-  bool isError = false;
   bool isApartment = false;
   bool temporaryisApartment = false;
 
   int itemListLength = 0;
+
+  clearProviderData() {
+    addProposalPhoneNumber.clear();
+    cardNumber.clear();
+    cardExpirationDate.clear();
+    serialNumberOfpassport.clear();
+    dateOfBirth.clear();
+    namingThings.clear();
+    summThings.clear();
+    name.clear();
+    surname.clear();
+    dadname.clear();
+    tin.clear();
+    pinfl.clear();
+    placeOfResidence.clear();
+    givenBy.clear();
+    givenDate.clear();
+    expiryDate.clear();
+    homeNumber.clear();
+    apartmentNumber.clear();
+    orientr.clear();
+    temporaryhomeNumber.clear();
+    temporaryapartmentNumber.clear();
+    temporaryorientr.clear();
+    birthDayDateTime = null;
+    partnerId = null;
+    nationality = null;
+    fullName = null;
+    passData = null;
+    expiryDateDatetime = null;
+    issuedDateDatetime = null;
+    permanentAddress = null;
+    temporaryAddress = null;
+    permanentAddressRegion = null;
+    permanentAddressAddress = null;
+    permanentAddressCountry = null;
+    permanentAddressCadastre = null;
+    permanentAddressDistrict = null;
+    permanentAddressRegionId = null;
+    permanentAddressCountryId = null;
+    permanentAddressDistrictId = null;
+    permanentAddressRegistrationDate = null;
+    temporaryAddressRegion = null;
+    temporaryAddressAddress = null;
+    temporaryAddressCountry = null;
+    temporaryAddressCadastre = null;
+    temporaryAddressDistrict = null;
+    temporaryAddressRegionId = null;
+    temporaryAddressCountryId = null;
+    temporaryAddressDistrictId = null;
+    responseId = null;
+    gender = "Male";
+    addressOfResidence = 'place_of_residence';
+    isAccessButton = false;
+    prePaymentSum = null;
+    isApartment = false;
+    temporaryisApartment = false;
+  }
 
   late Map clientDatas = {
     "marketplaceId": "string",
@@ -134,15 +191,7 @@ class AddProposalProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  hasError() {
-    isError = true;
-    notifyListeners();
-  }
-
-  hasnotError() {
-    isError = false;
-    notifyListeners();
-  }
+  
 
   getClientDatas(FaceIdModel value) {
     responseId = value.responseId.toString();

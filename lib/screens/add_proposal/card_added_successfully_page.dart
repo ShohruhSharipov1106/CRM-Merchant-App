@@ -1,5 +1,6 @@
 import 'package:crm_merchant/constants/exports.dart';
 import 'package:crm_merchant/core/static_datas.dart';
+import 'package:crm_merchant/screens/add_proposal/another_card_page.dart';
 import 'package:crm_merchant/screens/add_proposal/card_page.dart';
 import 'package:crm_merchant/screens/add_proposal/passport_page.dart';
 
@@ -98,7 +99,7 @@ class CardAddedSuccessfullyPage extends StatelessWidget {
                                 .read<AddProposalProvider>()
                                 .cardExpirationDate
                                 .clear();
-                            Get.to(const AddProposalCardPage());
+                            Get.to(const AddProposalAnotherCardPage());
                           },
                         ),
                       ),

@@ -70,7 +70,7 @@
     "date_of_given":"Дата выдачи",
     "validity":"Срок действия",
     "pass_identification":"Пройдите идентификацию",
-    "passport_page_subtitle":"Введите номер паспорта и дату рождения.",
+    "passport_page_subtitle":"Введите номер паспорта и дату рождения. Затем сделайте селфи с\nкамеры для идентификации",
     "passport_details":"Введите паспортные данные",
     "serial_number_passport":"Введите серийный номер паспорта (AA 1234567)",
     "serial_number_passport_error":"Неверный срок действия карты ",

@@ -41,6 +41,7 @@ class _AddProposalSmsConfirmationPageState
   }
 
   bool _showloader = false;
+  final FocusNode _focusNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +54,8 @@ class _AddProposalSmsConfirmationPageState
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(height: kHeight(20.0).h),
-              StepsField(context, 3),
+              StepsField(context, 3,
+                  hasError: context.read<HasErrorProvider>().cardSMSError),
               const SizedBox(height: 10),
               TitleOfPage("confirmation"),
               const SizedBox(height: 5),
@@ -72,7 +74,7 @@ class _AddProposalSmsConfirmationPageState
               const SizedBox(height: 15),
               _headText(context),
               const SizedBox(height: 10),
-              _smsCodeField(context),
+              _smsCodeField(context, _focusNode),
               const SizedBox(height: 10),
               _unreceivedSmsField(),
               const SizedBox(height: 50),
@@ -111,7 +113,7 @@ class _AddProposalSmsConfirmationPageState
         ),
         GestureDetector(
           child: LocaleText(
-            context.watch<AddProposalProvider>().isError
+            context.read<HasErrorProvider>().cardSMSError
                 ? "resend_sms"
                 : "sms_not_received",
             style: TextStyle(
@@ -133,10 +135,10 @@ class _AddProposalSmsConfirmationPageState
                           .cardExpirationDate
                           .text,
                       Get.to(AddProposalSmsConfirmationPage(value)),
-                      context.read<AddProposalProvider>().hasnotError()
+                      context.read<HasErrorProvider>().hasNotError(),
                     })
                 .onError((error, stackTrace) =>
-                    {context.read<AddProposalProvider>().hasError()});
+                    {context.read<HasErrorProvider>().hasCardSMSError()});
           },
         ),
       ],
@@ -149,11 +151,11 @@ class _AddProposalSmsConfirmationPageState
       child: Padding(
         padding: const EdgeInsets.only(left: 16.0),
         child: LocaleText(
-          context.watch<AddProposalProvider>().isError
+          context.read<HasErrorProvider>().cardSMSError
               ? "error_sms_code"
               : "enter_sms_verification_code",
           style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                color: context.watch<AddProposalProvider>().isError
+                color: context.read<HasErrorProvider>().cardSMSError
                     ? kMainColor
                     : kBlackTextColor,
               ),
@@ -172,7 +174,7 @@ class _AddProposalSmsConfirmationPageState
             "assets/icons/main_icon.svg",
             height: kHeight(122.06).h,
             width: kWidth(131.12).w,
-            color: context.watch<AddProposalProvider>().isError
+            color: context.read<HasErrorProvider>().cardSMSError
                 ? kErrorAnimationColor
                 : kMainColor,
           ),
@@ -181,7 +183,7 @@ class _AddProposalSmsConfirmationPageState
           child: BounceInDown(
             duration: const Duration(seconds: 5),
             child: SvgPicture.asset(
-              context.watch<AddProposalProvider>().isError
+              context.read<HasErrorProvider>().cardSMSError
                   ? "assets/icons/error-sms.svg"
                   : "assets/icons/sms.svg",
               height: kHeight(80.0).h,
@@ -195,9 +197,10 @@ class _AddProposalSmsConfirmationPageState
     );
   }
 
-  Pinput _smsCodeField(BuildContext context) {
+  Pinput _smsCodeField(BuildContext context, FocusNode focusNode) {
     return Pinput(
       controller: smsChecker,
+      focusNode: focusNode,
       preFilledWidget: Text(
         "*",
         style: TextStyle(
@@ -205,6 +208,13 @@ class _AddProposalSmsConfirmationPageState
           fontSize: 64.0,
         ),
       ),
+      onChanged: (v) {
+        if (smsChecker.length != 4) {
+          context.read<HasErrorProvider>().hasNotError();
+        } else if (smsChecker.length == 4) {
+          focusNode.unfocus();
+        }
+      },
       showCursor: false,
       closeKeyboardWhenCompleted: true,
       separator: const SizedBox(width: 10),
@@ -221,7 +231,7 @@ class _AddProposalSmsConfirmationPageState
         ),
         textStyle: Theme.of(context).textTheme.titleMedium!.copyWith(
               fontSize: 48.0,
-              color: context.watch<AddProposalProvider>().isError &&
+              color: context.read<HasErrorProvider>().cardSMSError &&
                       smsChecker.length == 4
                   ? kMainColor
                   : kBlackTextColor,
@@ -237,10 +247,10 @@ class _AddProposalSmsConfirmationPageState
               value.expire = widget.model.expire,
               StaticData.addCard(value),
               Get.off(const CardAddedSuccessfullyPage()),
-              context.read<AddProposalProvider>().hasnotError(),
+              context.read<HasErrorProvider>().hasNotError(),
             })
         .catchError(
-            (error) => {context.read<AddProposalProvider>().hasError()});
+            (error) => {context.read<HasErrorProvider>().hasCardSMSError()});
   }
 }
 
@@ -255,7 +265,7 @@ class Countdown extends AnimatedWidget {
     Duration clockTimer = Duration(seconds: animation.value);
     String timerText = clockTimer.inSeconds.remainder(60).toString();
     return Visibility(
-      visible: timerText == "0" || context.watch<AddProposalProvider>().isError
+      visible: timerText == "0" || context.read<HasErrorProvider>().cardSMSError
           ? false
           : true,
       child: Text(

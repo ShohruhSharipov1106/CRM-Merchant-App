@@ -270,13 +270,11 @@ class _MakeProposalPageState extends State<MakeProposalPage> {
                   summValue = summ.sum;
                   context.read<AddProposalProvider>().itemListLength =
                       itemList.length;
-                  context.read<AddProposalProvider>().namingThings.clear();
-                  context.read<AddProposalProvider>().summThings.clear();
-                  Get.to(const TariffMainPage());
-                  context.read<AddProposalProvider>().hasnotError();
                 }
+                context.read<AddProposalProvider>().namingThings.clear();
+                context.read<AddProposalProvider>().summThings.clear();
+                Get.to(const TariffMainPage());
               } else {
-                context.read<AddProposalProvider>().hasError();
               }
             },
             context.watch<AddProposalProvider>().summThings,
@@ -292,11 +290,7 @@ class _MakeProposalPageState extends State<MakeProposalPage> {
         padding: const EdgeInsets.only(left: 16.0),
         child: LocaleText(
           "fullfill_proposal",
-          style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                color: context.watch<AddProposalProvider>().isError
-                    ? kMainColor
-                    : kBlackTextColor,
-              ),
+          style: Theme.of(context).textTheme.labelMedium
         ),
       ),
     );

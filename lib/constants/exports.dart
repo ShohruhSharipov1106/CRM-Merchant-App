@@ -54,3 +54,4 @@ export 'package:document_scanner_flutter/configs/configs.dart';
 export 'package:document_scanner_flutter/document_scanner_flutter.dart';
 export 'package:liquid_progress_indicator/liquid_progress_indicator.dart';
 export 'package:auto_size_text/auto_size_text.dart';
+export 'package:crm_merchant/providers/has_error_provider.dart';

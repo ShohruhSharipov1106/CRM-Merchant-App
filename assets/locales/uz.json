@@ -70,7 +70,7 @@
     "date_of_given":"Berilgan sana",
     "validity":"Amal qilish muddati",
     "pass_identification":"Identifikatsiyasiga o'tish", 
-    "passport_page_subtitle":"Pasport raqamingiz va tug'ilgan kuningizni kiriting",
+    "passport_page_subtitle":"Pasport raqamingiz va tug'ilgan kuningizni kiriting. Keyin identifikatsiya qilish\nuchun kameradan selfi tushing",
     "passport_details":"Pasport ma'lumotlarini kiriting",
     "serial_number_passport":"Pasportning seriya raqamini kiriting (AA 1234567)",
     "serial_number_passport_error":"Kartaning amal qilish muddati noto‘g‘ri",

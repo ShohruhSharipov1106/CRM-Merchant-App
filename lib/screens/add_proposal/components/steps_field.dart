@@ -4,7 +4,9 @@ import 'package:crm_merchant/constants/exports.dart';
 class StepsField extends StatelessWidget {
   BuildContext kontext;
   int step;
-  StepsField(this.kontext, this.step, {Key? key}) : super(key: key);
+  bool hasError;
+  StepsField(this.kontext, this.step, {this.hasError = false, Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -36,10 +38,7 @@ class StepsField extends StatelessWidget {
                             .labelMedium!
                             .copyWith(
                               fontWeight: FontWeight.w700,
-                              color:
-                                  kontext.watch<AddProposalProvider>().isError
-                                      ? kMainColor
-                                      : kBlackTextColor,
+                              color: hasError ? kMainColor : kBlackTextColor,
                             ),
                       ),
                       const TextSpan(text: "/8"),

@@ -38,73 +38,82 @@ class _OfferConfirmationPageState extends State<OfferConfirmationPage>
     _controller!.forward();
   }
 
+  final FocusNode _focusNode = FocusNode();
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: GestureDetector(
-          child: const Icon(
-            Icons.arrow_back_ios_outlined,
-            size: 21.0,
-            color: kBlackTextColor,
-          ),
-          onTap: () => Navigator.pop(context),
-        ),
-      ),
-      body: SafeArea(
-        child: Center(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const SizedBox(height: 20),
-              _mainTitle(context),
-              const SizedBox(height: 80),
-              _title(context),
-              const SizedBox(height: 10),
-              _smsCode(context),
-              const SizedBox(height: 10),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Countdown(
-                    animation: StepTween(
-                      begin: levelClock,
-                      end: 0,
-                    ).animate(_controller!),
-                  ),
-                  GestureDetector(
-                    child: LocaleText(
-                      context.watch<AddProposalProvider>().isError
-                          ? "resend_sms"
-                          : "sms_not_received",
-                      style: TextStyle(
-                        color: kBlackTextColor.withOpacity(0.5),
-                        fontSize: 12.0,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                    onTap: () {
-                      smsChecker.clear();
-                      final int _sendSMSAgain = Random().nextInt(8999) + 1000;
-                      widget._smsCode = _sendSMSAgain;
-                      SendSMSService.sendSmsToClient(
-                        context
-                            .read<AddProposalProvider>()
-                            .addProposalPhoneNumber
-                            .text
-                            .removeAllWhitespace
-                            .substring(1),
-                        _sendSMSAgain.toString(),
-                      );
-                    },
-                  ),
-                ],
+    return WillPopScope(
+      onWillPop: () {
+        return Future.value(true);
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          leading: GestureDetector(
+              child: const Icon(
+                Icons.arrow_back_ios_outlined,
+                size: 21.0,
+                color: kBlackTextColor,
               ),
-              const SizedBox(height: 90),
-              _button(),
-              const SizedBox(height: 15),
-            ],
+              onTap: () {
+                context.read<HasErrorProvider>().hasNotError();
+                Navigator.pop(context);
+              }),
+        ),
+        body: SafeArea(
+          child: Center(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const SizedBox(height: 20),
+                _mainTitle(context),
+                const SizedBox(height: 80),
+                _title(context),
+                const SizedBox(height: 10),
+                _smsCode(context, _focusNode),
+                const SizedBox(height: 10),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Countdown(
+                      animation: StepTween(
+                        begin: levelClock,
+                        end: 0,
+                      ).animate(_controller!),
+                    ),
+                    GestureDetector(
+                      child: LocaleText(
+                        context.read<HasErrorProvider>().phoneSMSError
+                            ? "resend_sms"
+                            : "sms_not_received",
+                        style: TextStyle(
+                          color: kBlackTextColor.withOpacity(0.5),
+                          fontSize: 12.0,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      onTap: () {
+                        smsChecker.clear();
+                        final int _sendSMSAgain = Random().nextInt(8999) + 1000;
+                        widget._smsCode = _sendSMSAgain;
+                        SendSMSService.sendSmsToClient(
+                          context
+                              .read<AddProposalProvider>()
+                              .addProposalPhoneNumber
+                              .text
+                              .removeAllWhitespace
+                              .substring(1),
+                          _sendSMSAgain.toString(),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 90),
+                _button(),
+                const SizedBox(height: 15),
+              ],
+            ),
           ),
         ),
       ),
@@ -117,11 +126,11 @@ class _OfferConfirmationPageState extends State<OfferConfirmationPage>
       child: Padding(
         padding: const EdgeInsets.only(left: 16),
         child: LocaleText(
-          context.watch<AddProposalProvider>().isError
+          context.watch<HasErrorProvider>().phoneSMSError
               ? "error_sms_code"
               : "enter_sms_verification_code",
           style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                color: context.watch<AddProposalProvider>().isError
+                color: context.read<HasErrorProvider>().phoneSMSError
                     ? kMainColor
                     : kBlackTextColor,
               ),
@@ -137,7 +146,7 @@ class _OfferConfirmationPageState extends State<OfferConfirmationPage>
     );
   }
 
-  Pinput _smsCode(BuildContext context) {
+  Pinput _smsCode(BuildContext context, FocusNode focusNode) {
     return Pinput(
       controller: smsChecker,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -148,9 +157,17 @@ class _OfferConfirmationPageState extends State<OfferConfirmationPage>
           fontSize: 64.0,
         ),
       ),
+      focusNode: focusNode,
       separator: const SizedBox(width: 10),
       showCursor: false,
       closeKeyboardWhenCompleted: false,
+      onChanged: (v) {
+        if (smsChecker.length != 4) {
+          context.read<HasErrorProvider>().hasNotError();
+        } else if (smsChecker.length == 4) {
+          focusNode.unfocus();
+        }
+      },
       defaultPinTheme: PinTheme(
         width: 50,
         height: 60,
@@ -164,7 +181,7 @@ class _OfferConfirmationPageState extends State<OfferConfirmationPage>
         ),
         textStyle: Theme.of(context).textTheme.titleMedium!.copyWith(
               fontSize: 48.0,
-              color: context.watch<AddProposalProvider>().isError &&
+              color: context.read<HasErrorProvider>().phoneSMSError &&
                       smsChecker.length == 4
                   ? kMainColor
                   : kBlackTextColor,
@@ -180,10 +197,10 @@ class _OfferConfirmationPageState extends State<OfferConfirmationPage>
       () => smsChecker.text == widget._smsCode.toString()
           ? {
               Get.off(const AddProposalCardPage()),
-              context.read<AddProposalProvider>().hasnotError(),
+              context.read<HasErrorProvider>().hasNotError(),
             }
           : {
-              context.read<AddProposalProvider>().hasError(),
+              context.read<HasErrorProvider>().hasPhoneSMSError(),
             },
       smsChecker,
       4,
@@ -202,9 +219,10 @@ class Countdown extends AnimatedWidget {
     Duration clockTimer = Duration(seconds: animation.value);
     String timerText = clockTimer.inSeconds.remainder(60).toString();
     return Visibility(
-      visible: timerText == "0" || context.watch<AddProposalProvider>().isError
-          ? false
-          : true,
+      visible:
+          timerText == "0" || context.read<HasErrorProvider>().phoneSMSError
+              ? false
+              : true,
       child: Text(
         timerText + " " + Locales.string(context, "sekund") + "  ",
         style: TextStyle(

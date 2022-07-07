@@ -54,9 +54,9 @@ class AddProposalPassportPage extends StatelessWidget {
                         .length ==
                     9) {
               Get.to(const CameraFaceIDPage());
-              context.read<AddProposalProvider>().hasnotError();
+              context.read<HasErrorProvider>().hasNotError();
             } else {
-              context.read<AddProposalProvider>().hasError();
+              context.read<HasErrorProvider>().hasPassportError();
             }
           },
           context.watch<AddProposalProvider>().dateOfBirth,
@@ -75,7 +75,8 @@ class AddProposalPassportPage extends StatelessWidget {
       "**/**/****",
       "dd/MM/yyyy",
       DateTime(1900),
-      DateTime.now(),
+      DateTime(2021, 12, 31),
+      hasError: context.read<HasErrorProvider>().passportError,
     );
   }
 
@@ -93,6 +94,7 @@ class AddProposalPassportPage extends StatelessWidget {
         "#": RegExp(r'[A-Za-zЁёА-я]'),
         "*": RegExp(r'[0-9]'),
       },
+      hasError: context.read<HasErrorProvider>().passportError,
     );
   }
 
@@ -102,11 +104,11 @@ class AddProposalPassportPage extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.only(left: 16.0),
         child: LocaleText(
-          context.watch<AddProposalProvider>().isError
+          context.read<HasErrorProvider>().passportError
               ? "error_passport_details"
               : "passport_details",
           style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                color: context.watch<AddProposalProvider>().isError
+                color: context.read<HasErrorProvider>().passportError
                     ? kMainColor
                     : kBlackTextColor,
               ),
@@ -136,7 +138,7 @@ class AddProposalPassportPage extends StatelessWidget {
             "assets/icons/main_icon.svg",
             height: kHeight(122.06).h,
             width: kWidth(131.12).w,
-            color: context.watch<AddProposalProvider>().isError
+            color: context.read<HasErrorProvider>().passportError
                 ? kErrorAnimationColor
                 : kMainColor,
           ),
@@ -145,7 +147,7 @@ class AddProposalPassportPage extends StatelessWidget {
           child: FadeInRight(
             duration: const Duration(seconds: 5),
             child: SvgPicture.asset(
-              context.watch<AddProposalProvider>().isError
+              context.read<HasErrorProvider>().passportError
                   ? "assets/icons/error-passport.svg"
                   : "assets/icons/passport.svg",
               height: kHeight(88.87).h,

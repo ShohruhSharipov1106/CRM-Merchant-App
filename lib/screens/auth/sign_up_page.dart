@@ -78,7 +78,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         Padding(
                           padding: EdgeInsets.only(right: kWidth(165).w),
                           child: LocaleText(
-                            context.watch<AddProposalProvider>().isError
+                            context.read<HasErrorProvider>().signUpError
                                 ? "error_enter_data"
                                 : "enter_data",
                             style: Theme.of(context)
@@ -86,8 +86,8 @@ class _SignUpPageState extends State<SignUpPage> {
                                 .labelMedium!
                                 .copyWith(
                                     color: context
-                                            .watch<AddProposalProvider>()
-                                            .isError
+                                            .read<HasErrorProvider>()
+                                            .signUpError
                                         ? kMainColor
                                         : kBlackTextColor),
                           ),
@@ -103,6 +103,8 @@ class _SignUpPageState extends State<SignUpPage> {
                           "* * * * * * * * * * * * * * *",
                           "##############################",
                           {"#": RegExp(r'[A-Za-zЁёА-я]')},
+                          hasError:
+                              context.watch<HasErrorProvider>().signUpError,
                         ),
                         InputField(
                           context,
@@ -117,6 +119,8 @@ class _SignUpPageState extends State<SignUpPage> {
                             "*": RegExp(
                                 r'[a-zA-ZЁёА-я0-9\?\!\@\#\$\%\^\&\*\(\)\_\+]')
                           },
+                          hasError:
+                              context.watch<HasErrorProvider>().signUpError,
                         ),
                         SizedBox(height: kHeight(60.0).h),
                         ValueListenableBuilder<TextEditingValue>(
@@ -149,11 +153,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                             .read<SignUpProvider>()
                                             .phoneController
                                             .text,
-
-                                        
                                         await signin(),
-
-                                        
                                       }
                                     : () {};
                               },
@@ -188,7 +188,7 @@ class _SignUpPageState extends State<SignUpPage> {
       await clientMainData.write("password", _password);
       Get.off(const ProfileDrawerPage());
     } else {
-      context.read<AddProposalProvider>().hasError();
+      context.read<HasErrorProvider>().hasSignUpError();
     }
     return true;
   }
